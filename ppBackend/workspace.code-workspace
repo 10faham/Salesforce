@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"editorRuler.foreground": "#dbd7d74d"
+		}
+	}
+}
