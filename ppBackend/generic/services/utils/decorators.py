@@ -31,7 +31,7 @@ def logging(view_function):
 
 
 def keys_validator(required_fields=[], optional_fields=[],
-                   request_form_data=False):
+                   request_form_data=True):
 
     def decorator(view_function):
 

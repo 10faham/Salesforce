@@ -15,6 +15,9 @@ class UserController(Controller):
 
     @classmethod
     def create_controller(cls, data):
+        data[constants.USER__ROLE] = constants.DEFAULT_ROLE_OBJECTS[int(data[constants.USER__ROLE])]
+        user_manager = cls.db_read_single_record(read_filter={constants.USER__NAME : data[constants.USER__MANAGER]})
+        data[constants.USER__MANAGER] = user_manager[constants.ID]
         is_valid, error_messages, obj = cls.db_insert_record(
             data=data, db_commit=False)
         if is_valid:
@@ -137,3 +140,34 @@ class UserController(Controller):
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS, response_message=response_codes.MESSAGE_LOGOUT_SUCCESS
         )
+
+    @classmethod
+    def get_user_childs(cls, user, search_depth=4, return_self=True):
+        user_level__dict = {
+            constants.ADMIN: 4,
+            constants.GM: 3,
+            constants.DGM: 2,
+            constants.AM: 1,
+            constants.AGENT: 0,
+            constants.DGM_AGENT: 0,
+            constants.DGM_LANCER: 0,
+            constants.AM_LANCER: 0
+        }
+        user_level = user_level__dict[user[constants.USER__ROLE]
+                                      [constants.USER__ROLE__NAME]]
+        if user_level > search_depth:
+            user_level = search_depth
+        if user_level == 4:
+            return cls.db_read_records(read_filter={})
+        user__childs_list = [cls.db_read_records(
+            read_filter={constants.USER__MANAGER: user})]
+        for _ in range(user_level-1):
+            current_level_childs = cls.db_read_records(read_filter={
+                constants.USER__MANAGER+"__in": user__childs_list[0]})
+            user__childs_list.insert(0, current_level_childs)
+        user__childs = []
+        for list_childs in user__childs_list:
+            user__childs.extend(list_childs)
+        if return_self:
+            user__childs.append(user)
+        return user__childs

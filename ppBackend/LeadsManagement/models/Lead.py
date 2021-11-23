@@ -6,6 +6,7 @@
 from ppBackend.generic import models
 from ppBackend.generic import db
 from ppBackend.generic.services.utils import constants
+from ppBackend.UserManagement.models.User import User
 
 
 class Leads(models.Model):
@@ -13,20 +14,27 @@ class Leads(models.Model):
     def validation_rules(cls):
         return {
             constants.LEAD__FIRST_NAME: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
-            constants.LEAD__LAST_NAME: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
+            constants.LEAD__LAST_NAME: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__NIC: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__PHONE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__LANDLINE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
+            # constants.LEAD__PHONE_NUMBER: [{"rule": "datatype", "datatype": list},
+            #                                {"rule": "collection_format", "datatype": list,
+            #                                 "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
+            # constants.LEAD__LANDLINE_NUMBER: [{"rule": "datatype", "datatype": list},
+            #                                   {"rule": "collection_format", "datatype": list,
+            #                                   "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
             constants.LEAD__EMAIL_ADDRESS: [{"rule": "email"}, {"rule": "datatype", "datatype": str}],
-            constants.LEAD__ADDRESS: [{"rule": "datatype", "datatype": dict},
-                                      {"rule": "collection_format", "datatype": dict,
-                                       "validation_rules": {
-                                           "key": [{"rule": "required"},
-                                                   {"rule": "choices", "options": constants.LEAD__ADDRESS__KEY_LIST}],
-                                           "value": [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
-                                       }}],
-            constants.LEAD__PROJECT: [{"rule": "datatype", "datetype": str}],
-            constants.LEAD__SOURCE: [{"rule": "datatype", "datetype": str}],
+            constants.LEAD__ADDRESS: [{"rule": "datatype", "datatype": str}],
+            # constants.LEAD__ADDRESS: [{"rule": "datatype", "datatype": dict},
+            #                           {"rule": "collection_format", "datatype": dict,
+            #                            "validation_rules": {
+            #                                "key": [{"rule": "required"},
+            #                                        {"rule": "choices", "options": constants.LEAD__ADDRESS__KEY_LIST}],
+            #                                "value": [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
+            #                            }}],
+            constants.LEAD__PROJECT: [{"rule": "datatype", "datatype": str}],
+            constants.LEAD__SOURCE: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__STATUS: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__STATUS__LIST}],
             constants.LEAD__GENDER: [{"rule": "required"}, {"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
@@ -38,16 +46,19 @@ class Leads(models.Model):
 
     @ classmethod
     def update_validation_rules(cls): return {
-            constants.LEAD__FIRST_NAME: [{"rule": "nonexistent"}],
+        constants.LEAD__FIRST_NAME: [{"rule": "nonexistent"}],
     }
 
     first_name = db.StringField(required=True)
-    last_name = db.StringField(required=True)
+    last_name = db.StringField()
     nic = db.StringField()
+    # phone_number = db.ListField(db.StringField())
+    # landline_number = db.ListField(db.StringField())
     phone_number = db.StringField()
     landline_number = db.StringField()
     email_address = db.StringField()
-    address = db.DictField(db.StringField())
+    address = db.StringField()
+    # address = db.DictField(db.StringField())
     project = db.StringField()
     lead_source = db.StringField()
     lead_status = db.StringField(required=True)
@@ -79,4 +90,5 @@ class Leads(models.Model):
             constants.LEAD__CLIENT_CATEGORY: self[constants.LEAD__CLIENT_CATEGORY],
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
             constants.STATUS: self[constants.STATUS],
+            constants.CREATED_BY: self.created_by.fetch().name
         }

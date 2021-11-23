@@ -57,6 +57,20 @@
             "user_role_id": 6
         },
         {
+            "manager": 3,
+            "name": "dgm_lancer",
+            "rights": [],
+            "title": "DGM Freelancer",
+            "user_role_id": 7
+        },
+        {
+            "manager": 4,
+            "name": "am_lancer",
+            "rights": [],
+            "title": "AM freelancer",
+            "user_role_id": 8
+        },
+        {
             "manager": null,
             "name": "default",
             "rights": [],

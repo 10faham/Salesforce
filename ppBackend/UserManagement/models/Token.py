@@ -34,7 +34,7 @@ class Token(models.Model):
     def update_validation_rules(self): return{
     }
     access_token = db.StringField(required=True, unique=True)
-    user = db.ReferenceField(User, required=True)
+    user = db.LazyReferenceField(User, required=True)
     purpose = db.StringField(required=True)
     expiry_time = db.IntField(required=True)
     is_expired = db.BooleanField(default=False)
@@ -43,7 +43,7 @@ class Token(models.Model):
     def display(self):
         return {
             constants.TOKEN__ACCESS_TOKEN: self.access_token,
-            constants.TOKEN__USER: self.user.display(),
+            constants.TOKEN__USER: self.user.fetch().display(),
             constants.TOKEN__PURPOSE: self.purpose,
             constants.TOKEN__EXPIRY_TIME: self.expiry_time,
             constants.TOKEN__IS_EXPIRED: self.is_expired,

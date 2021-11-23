@@ -1,7 +1,7 @@
 # Python imports
 
 # Framework imports
-from flask import Blueprint
+from flask import Blueprint, redirect, url_for, redirect, render_template
 
 # Local imports
 from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
@@ -12,24 +12,25 @@ leads_bp = Blueprint("leads_bp", __name__)
 
 @leads_bp.route("/create", methods=["POST"])
 @decorators.is_authenticated
-@decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
     constants.REQUIRED_FIELDS_LIST__LEAD,
     constants.OPTIONAL_FIELDS_LIST__LEAD,
 )
-def create_view(data):
-    return LeadController.create_controller(data=data)
+def leads_create_view(data):
+    res =  LeadsController.create_controller(data=data)
+    return redirect(url_for('addlead_view'))
 
 
 @leads_bp.route("/read", methods=["GET"])
 @decorators.is_authenticated
-@decorators.roles_allowed([constants.ROLE_ID_ADMIN])
+# @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
     [],
     constants.ALL_FIELDS_LIST__LEAD,
 )
 def read_view(data):
-    return LeadController.read_controller(data=data)
+    res = LeadsController.read_controller(data=data)
+    return render_template("viewleads.html", **res)
 
 
 @leads_bp.route("/update", methods=["PUT"])
@@ -40,4 +41,4 @@ def read_view(data):
     constants.ALL_FIELDS_LIST__LEAD,
 )
 def update_view(data):
-    return LeadController.update_controller(data=data)
+    return LeadsController.update_controller(data=data)

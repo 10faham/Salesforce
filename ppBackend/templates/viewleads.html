@@ -1,0 +1,113 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    {% if response_code == 200 %}
+    sessionStorage.setItem("leadsObj", '{{response_data|tojson}}')
+    // document.location = "/home"
+    {% else %}
+    console.log({{response_data|tojson}})
+    {% endif %}
+  
+  </script>
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+
+
+                        <div class="row">
+							<div class="col-xs-12">
+								<div class="page-title-box">
+                                    <h4 class="page-title">View All Leads </h4>
+                                    <div class="clearfix"></div>
+                                </div>
+							</div>
+						</div>
+                        <!-- end row -->
+
+
+
+                        <div class="row">
+							<div class="col-sm-12">
+								<div class="card-box">
+                                    {% for name in response_data %}
+                                    <div class="row">
+											<div class="demo-box m-t-20">
+                                                <h4 class="m-t-0 header-title"><b>{{name[0]}} {{session}}</b></h4>
+
+												<div class="table-responsive">
+                                                    <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>First Name</th>
+                                                                <th>Last Name</th>
+                                                                <th>Project</th>
+                                                                <th>Level</th>
+                                                                <th>Status</th>
+                                                                <th>Source</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for count in range(name[1]|length) %}
+
+                                                            <tr>
+                                                                <th scope="row">{{count + 1}}</th>
+                                                                <td>{{name[1][count]['first_name']}}</td>
+                                                                <td>{{name[1][count]['last_name']}}</td>
+                                                                <td>{{name[1][count]['project']}}</td>
+                                                                <td>{{name[1][count]['lead_level']}}</td>
+                                                                <td>{{name[1][count]['lead_status']}}</td>
+                                                                <td>{{name[1][count]['lead_source']}}</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+											</div>
+
+									</div>
+                                    <!--- end row -->
+                                    {% endfor %}
+
+								</div> <!-- end card-box -->
+							</div> <!-- end col -->
+						</div>
+                        <!-- end row -->
+
+
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                <footer class="footer text-right">
+                    2021 © PropPioneers
+                </footer>
+
+            </div>
+
+
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
+
+<script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    response_data = "{{response_data}}"
+    // document.location = "/home"
+  console.log({{response_data}})
+  
+  </script>
+
+{% endblock %}

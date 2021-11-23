@@ -89,6 +89,9 @@ DGM = "dgm"
 AM = "am"
 AGENT = "agent"
 DGM_AGENT = "dgm_agent"
+DGM_LANCER = "dgm_lancer"
+AM_LANCER = "am_lancer"
+
 
 # USER ROLE IDS
 ROLE_ID_ADMIN = 1
@@ -97,6 +100,8 @@ ROLE_ID_DGM = 3
 ROLE_ID_AM = 4
 ROLE_ID_AGENT = 5
 ROLE_ID_DGM_AGENT = 6
+ROLE_ID_DGM_LANCER = 7
+ROLE_ID_AM_LANCER = 8
 
 # ENDING
 
@@ -164,7 +169,8 @@ USER__ROLE__NAME = "name"
 USER__ROLE__TITLE = "title"
 USER__ROLE__RIGHTS = "rights"
 USER__ROLE__MANAGER = "manager"
-
+USER__ROLE__MANAGER_ID = "manager_id"
+USER__ROLE__MANAGER_NAME = "manager_name"
 
 USER__NEW_PASSWORD = "new_password"
 USER__OLD_PASSWORD = "old_password"
@@ -192,14 +198,15 @@ LEAD__ADDRESS__KEY_LIST = ["Home", "Office"]
 LEAD__PROJECT = "project"
 LEAD__SOURCE = "lead_source"
 LEAD__STATUS = "lead_status"
-LEAD__STATUS__LIST = ["Intrested", "Not Intrested"]
+LEAD__STATUS__LIST = ["Interested", "Not Interested"]
 LEAD__GENDER = "gender"
 LEAD__COUNTRY = "country"
 LEAD__CITY = "city"
 LEAD__CLIENT_CATEGORY = "client_category"
 LEAD__CLIENT_CATEGORY__LIST = ["Investor", "User", "Agent"]
 LEAD__LEVEL = "lead_level"
-LEAD__LEVEL__LIST = ["Hot", "Moderate", "Cold"]
+LEAD__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
+LEAD__USER = "user"
 # Required, Optional Fields Lists
 # User
 LOGIN_REQUIRED_FIELDS_LIST = [USER__EMAIL_ADDRESS, USER__PASSWORD]
@@ -214,7 +221,9 @@ REQUIRED_FIELDS_LIST__USER = [
 ]
 OPTIONAL_FIELDS_LIST__USER = [
     USER__EMAIL_ADDRESS,
-    USER__PHONE_NUMBER]
+    USER__PHONE_NUMBER,
+    # USER__ROLE__MANAGER_NAME,
+    USER__MANAGER]
 REQUIRED_UPDATE_FIELDS_LIST__USER = list(
     set(REQUIRED_FIELDS_LIST__USER + [ID])
     - set([USER__PASSWORD, USER__EMAIL_ADDRESS, USER__PHONE_NUMBER])

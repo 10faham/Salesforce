@@ -1,9 +1,11 @@
 # Framework Imports
 from flask import jsonify
 
+from ppBackend.generic.services.utils import response_codes
 
-def get_response_object(response_code, response_data=None,
-                        response_message=None):
+
+def get_response_object(response_code=response_codes.CODE_SUCCESS, response_data=None,
+                        response_message=response_codes.MESSAGE_SUCCESS):
 
     response = {
         "response_code": response_code
@@ -16,4 +18,6 @@ def get_response_object(response_code, response_data=None,
         response.update({
             "response_message": response_message
         })
-    return jsonify(response)
+
+    # return jsonify(response)
+    return response

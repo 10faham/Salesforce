@@ -1,11 +1,11 @@
 # Python imports
 
 # Framework imports
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 # Local imports
 from ppBackend.UserManagement.controllers.UserController import UserController
-from ppBackend.generic.services.utils import constants, decorators, common_utils
+from ppBackend.generic.services.utils import constants, decorators, response_codes, response_utils
 
 users_bp = Blueprint("users_bp", __name__)
 
@@ -43,11 +43,24 @@ def update_view(data):
     return UserController.update_controller(data=data)
 
 
-@users_bp.route("/login", methods=["POST"])
+@users_bp.route("/", methods=["GET"])
+@decorators.logging
+@decorators.keys_validator()
+def logined_user_view(data):
+    return render_template("login.html", Response=response_utils.get_response_object())
+
+
+@users_bp.route("/", methods=["POST"])
 @decorators.logging
 @decorators.keys_validator(constants.LOGIN_REQUIRED_FIELDS_LIST, [])
 def login_user_view(data):
-    return UserController.login_controller(data=data)
+    res = UserController.login_controller(data=data)
+    return render_template("login.html", **res)
+    # if res['response_code'] != response_codes.CODE_SUCCESS:
+    #     return redirect(url_for('dashboard_view'), Response=res)
+    # else:
+    #     return render_template("failed.html", Response=res)
+
 
 @users_bp.route("/logout", methods=["PATCH"])
 @decorators.logging

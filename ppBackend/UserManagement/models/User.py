@@ -86,7 +86,6 @@ class User(models.Model):
     nic = db.StringField(required=True)
     role = db.DictField(required=True)
     manager = db.LazyReferenceField('User')
-
     def __str__(self):
         return str(self.pk)
 

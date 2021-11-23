@@ -1,5 +1,6 @@
 # Framework imports
 from flask import Flask
+from flask import render_template
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 # Local imports
