@@ -7,7 +7,7 @@ from flask import jsonify
 from ppBackend import app
 from ppBackend.generic.services.utils import constants
 from ppBackend.UserManagement.views.users import users_bp
-from ppBackend.LeadManagement.views.leads import leads_bp
+from ppBackend.LeadsManagement.views.leads import leads_bp
 
 
 @app.route("/", methods=["GET"])

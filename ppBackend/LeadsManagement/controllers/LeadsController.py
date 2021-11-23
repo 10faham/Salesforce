@@ -5,12 +5,12 @@
 # Local imports
 from ppBackend import config
 from ppBackend.generic.controllers import Controller
-from ppBackend.LeadManagement.models.Lead import Lead
+from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
 
 
-class LeadController(Controller):
-    Model = Lead
+class LeadsController(Controller):
+    Model = Leads
 
     @classmethod
     def create_controller(cls, data):

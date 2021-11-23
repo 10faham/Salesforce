@@ -4,7 +4,7 @@
 from flask import Blueprint
 
 # Local imports
-from ppBackend.LeadManagement.controllers.LeadController import LeadController
+from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
 from ppBackend.generic.services.utils import constants, decorators, common_utils
 
 leads_bp = Blueprint("leads_bp", __name__)

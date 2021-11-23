@@ -8,7 +8,7 @@ from ppBackend.generic import db
 from ppBackend.generic.services.utils import constants
 
 
-class User(models.Model):
+class Leads(models.Model):
     @classmethod
     def validation_rules(cls):
         return {
