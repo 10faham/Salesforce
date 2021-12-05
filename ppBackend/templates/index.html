@@ -35,16 +35,17 @@
     <script src="{{ url_for('static', filename='js/jquery.slimscroll.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.scrollTo.min.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/switchery/switchery.min.js') }}"></script>
+    <script>
+        const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
 
-
+    </script>
+    {% block scripthead %}
+    {% endblock %}
 </head>
 
 
 <body class="fixed-left">
-    <script>
-        const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
-        const leadsObj = JSON.parse(sessionStorage.getItem('leadsObj'))
-    </script>
+
     <!-- Begin page -->
     <div id="wrapper">
 
@@ -182,11 +183,12 @@
     <script>
         var resizefunc = [];
     </script>
-
+        {% block scriptfooter %}
+        {% endblock %}
 
     <script>
         console.log(TokenObj)
-        console.log(leadsObj)
+
 
         if (TokenObj.user.role.user_role_id == 1) {
             $("#sidebar-menu-item").append(`<li class="has_sub">

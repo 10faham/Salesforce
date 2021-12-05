@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
-{% block content %}
 
+{% block scripthead %}
 <script>
     response_code = parseInt("{{response_code}}")
     response_message = "{{response_message}}"
@@ -11,8 +11,12 @@
     {% else %}
     console.log({{response_data|tojson}})
     {% endif %}
+    const leadsObj = JSON.parse(sessionStorage.getItem('leadsObj'))
   
-  </script>
+</script>
+{% endblock %}
+
+{% block content %}
             <!-- ============================================================== -->
             <!-- Start right Content here -->
             <!-- ============================================================== -->
@@ -36,47 +40,7 @@
 
                         <div class="row">
 							<div class="col-sm-12">
-								<div class="card-box">
-                                    {% for name in response_data %}
-                                    <div class="row">
-											<div class="demo-box m-t-20">
-                                                <h4 class="m-t-0 header-title"><b>{{name[0]}}</b></h4>
-
-												<div class="table-responsive">
-                                                    <table class="table m-0 table-colored-bordered table-bordered-primary">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>First Name</th>
-                                                                <th>Last Name</th>
-                                                                <th>Project</th>
-                                                                <th>Level</th>
-                                                                <th>Status</th>
-                                                                <th>Source</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for count in range(name[1]|length) %}
-
-                                                            <tr>
-                                                                <th scope="row">{{count + 1}}</th>
-                                                                <td>{{name[1][count]['first_name']}}</td>
-                                                                <td>{{name[1][count]['last_name']}}</td>
-                                                                <td>{{name[1][count]['project']}}</td>
-                                                                <td>{{name[1][count]['lead_level']}}</td>
-                                                                <td>{{name[1][count]['lead_status']}}</td>
-                                                                <td>{{name[1][count]['lead_source']}}</td>
-                                                            </tr>
-                                                            {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-											</div>
-
-									</div>
-                                    <!--- end row -->
-                                    {% endfor %}
+								<div id="lead-row" class="card-box">
 
 								</div> <!-- end card-box -->
 							</div> <!-- end col -->
@@ -100,14 +64,92 @@
             <!-- End Right content here -->
             <!-- ============================================================== -->
 
+ {% endblock %}
 
-<script>
-    response_code = parseInt("{{response_code}}")
-    response_message = "{{response_message}}"
-    response_data = "{{response_data}}"
-    // document.location = "/home"
-  console.log({{response_data}})
-  
-  </script>
+ {% block scriptfooter %}
+ 
+ <script>
+     console.log(leadsObj)
+
+       leadsObj.forEach((element1, j) => {
+        if (element1[0] === TokenObj.user.name) {
+            $("#lead-row").append(`<div  class="row">
+                <div class="demo-box m-t-20">
+                    <h4 class="m-t-0 header-title"><b>` + element1[0] + `</b></h4>
+                    <div class="table-responsive">
+                        <table class="table m-0 table-colored-bordered table-bordered-primary">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Project</th>
+                                    <th>Level</th>
+                                    <th>Status</th>
+                                    <th>Source</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="lead-detail"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`)
+            element1[1].forEach((item, k) => {
+                $("#lead-detail").append(`<tr>
+                    <th scope="row">`+(k+1)+`</th>
+                    <td>` + item.first_name + `</td>
+                    <td>`+item.phone_number + `</td>
+                    <td>`+item.email_address + `</td>
+                    <td>`+item.project + `</td>
+                    <td>`+item.lead_level + `</td>
+                    <td>`+item.lead_status + `</td>
+                    <td>`+item.lead_source + `</td>
+                </tr>`)            
+        })}});
+
+       leadsObj.forEach((element1, j) => {
+        if (element1[0] !== TokenObj.user.name) {
+            $("#lead-row").append(`<div  class="row">
+                <div class="demo-box m-t-20">
+                    <h4 class="m-t-0 header-title"><b>` + element1[0] + `</b></h4>
+                    <div class="table-responsive">
+                        <table class="table m-0 table-colored-bordered table-bordered-primary">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Project</th>
+                                    <th>Level</th>
+                                    <th>Status</th>
+                                    <th>Source</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="lead-detail`+j+`"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`)
+            ele = "#lead-detail"+j
+            element1[1].forEach((item, k) => {
+                $(ele).append(`<tr>
+                    <th scope="row">`+(k+1)+`</th>
+                    <td>` + item.first_name + `</td>
+                    <td>`+item.project + `</td>
+                    <td>`+item.lead_level + `</td>
+                    <td>`+item.lead_status + `</td>
+                    <td>`+item.lead_source + `</td>
+                </tr>`)            
+        })}});
+     //if (TokenObj.user.name == 1)
+     //     response_code = parseInt("{{response_code}}")
+     //     response_message = "{{response_message}}"
+     //     response_data = "{{response_data}}"
+     //     // document.location = "/home"
+     //   console.log({{response_data}})
+     
+</script>
 
 {% endblock %}
