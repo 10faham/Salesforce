@@ -39,6 +39,7 @@ class Leads(models.Model):
             constants.LEAD__GENDER: [{"rule": "required"}, {"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
+            constants.LEAD__COMMENT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__CLIENT_CATEGORY: [{"rule": "choices", "options": constants.LEAD__CLIENT_CATEGORY}],
             constants.LEAD__LEVEL: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__LEVEL__LIST}],
 
@@ -67,6 +68,7 @@ class Leads(models.Model):
     city = db.StringField(required=True)
     client_category = db.StringField()
     lead_level = db.StringField(required=True)
+    lead_comment = db.StringField()
 
     def __str__(self):
         return str(self.pk)
@@ -89,6 +91,7 @@ class Leads(models.Model):
             constants.LEAD__CITY: self[constants.LEAD__CITY],
             constants.LEAD__CLIENT_CATEGORY: self[constants.LEAD__CLIENT_CATEGORY],
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
+            constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self.created_by.fetch().name
         }

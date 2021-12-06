@@ -207,6 +207,7 @@ LEAD__CLIENT_CATEGORY__LIST = ["Investor", "User", "Agent"]
 LEAD__LEVEL = "lead_level"
 LEAD__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
 LEAD__USER = "user"
+LEAD__COMMENT = "lead_comment"
 # Required, Optional Fields Lists
 # User
 LOGIN_REQUIRED_FIELDS_LIST = [USER__EMAIL_ADDRESS, USER__PASSWORD]
@@ -250,7 +251,8 @@ OPTIONAL_FIELDS_LIST__LEAD = [
     LEAD__PROJECT,
     LEAD__SOURCE,
     LEAD__GENDER,
-    LEAD__CLIENT_CATEGORY
+    LEAD__CLIENT_CATEGORY,
+    LEAD__COMMENT
 ]
 REQUIRED_UPDATE_FIELDS_LIST__LEAD = list(
     set(REQUIRED_FIELDS_LIST__LEAD + [ID]) - set([LEAD__FIRST_NAME])
