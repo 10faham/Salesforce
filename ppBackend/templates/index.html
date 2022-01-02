@@ -39,6 +39,15 @@
         const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
 
     </script>
+    <script>
+        response_code = parseInt("{{response_code}}")
+        {% if response_code == 401 %}
+            document.location = "/"
+        {% endif %}
+        {% if response_code == 5001 %}
+            document.location = "/"
+        {% endif %}
+    </script>
     {% block scripthead %}
     {% endblock %}
 </head>

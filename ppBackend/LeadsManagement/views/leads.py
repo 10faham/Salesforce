@@ -17,8 +17,9 @@ leads_bp = Blueprint("leads_bp", __name__)
     constants.OPTIONAL_FIELDS_LIST__LEAD,
 )
 def leads_create_view(data):
-    res =  LeadsController.create_controller(data=data)
-    return redirect(url_for('addlead_view'))
+    res = LeadsController.create_controller(data=data)
+    # return redirect(url_for('addlead_view', **res))
+    return render_template("./addlead.html", **res)
 
 
 @leads_bp.route("/read", methods=["GET"])

@@ -40,7 +40,7 @@ class Leads(models.Model):
             constants.LEAD__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__COMMENT: [{"rule": "datatype", "datatype": str}],
-            constants.LEAD__CLIENT_CATEGORY: [{"rule": "choices", "options": constants.LEAD__CLIENT_CATEGORY}],
+            constants.LEAD__CLIENT_CATEGORY: [{"rule": "choices", "options": constants.LEAD__CLIENT_CATEGORY__LIST}],
             constants.LEAD__LEVEL: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__LEVEL__LIST}],
 
         }

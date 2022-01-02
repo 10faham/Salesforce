@@ -42,8 +42,9 @@ if ENVIRONMENT == "STAGING":
     FUNCTION_LOGGING = True
     static_data_path = os.path.join(
         current_dir_path, "static/static_data.json")
-    MONGO_DB_URI = f"mongodb+srv://{MONGO_DB_USER}:{MONGO_DB_PASSWORD}@clusterX.aq4vs.mongodb.net/ppbackend?"\
-        "retryWrites=true&w=majority"
+    MONGO_DB_URI = f"mongodb://10.1.0.8:27017/ppbackend"
+    # MONGO_DB_URI = f"mongodb+srv://{MONGO_DB_USER}:{MONGO_DB_PASSWORD}@clusterX.aq4vs.mongodb.net/ppbackend?"\
+    #     "retryWrites=true&w=majority"
 
 DEFAULT_ADMIN_NAME = "Admin"
 DEFAULT_ADMIN_EMAIL = "admin@mail.com"

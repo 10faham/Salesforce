@@ -27,9 +27,11 @@ class LeadsController(Controller):
             })
             if already_exists:
                 # TODO
+                print('duplicate number**********************************')
                 return response_utils.get_response_object(
                     response_code=response_codes.CODE_USER_ALREADY_EXIST,
-                    response_message=""
+                    response_message=response_codes.MESSAGE_ALREADY_EXISTS_DATA,
+                    response_data=already_exists
                 )
             obj.save()
             return response_utils.get_response_object(
@@ -37,6 +39,8 @@ class LeadsController(Controller):
                 response_message=response_codes.MESSAGE_SUCCESS,
                 response_data=obj.display()
             )
+        print('validation failed ********************************')
+        print(error_messages)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_VALIDATION_FAILED,
             response_message=response_codes.MESSAGE_VALIDATION_FAILED,
