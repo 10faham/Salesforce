@@ -3,12 +3,11 @@
 # Framework imports
 
 # Local imports
-from mongoengine import queryset
-from ppBackend import config
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
+from ppBackend import config
 
 
 class LeadsController(Controller):
@@ -49,17 +48,18 @@ class LeadsController(Controller):
 
     @classmethod
     def read_controller(cls, data):
-        user_childs = UserController.get_user_childs(user=common_utils.current_user(), return_self=True)
+        user_childs = UserController.get_user_childs(
+            user=common_utils.current_user(), return_self=True)
         lead_dataset = []
         for user in user_childs:
             queryset = cls.db_read_records(read_filter={
-            constants.CREATED_BY: user, **data})
-            lead_dataset.append([user.name, [obj.display() for obj in queryset]])
+                constants.CREATED_BY: user, **data})
+            lead_dataset.append([user.name, [obj.display()
+                                for obj in queryset]])
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=lead_dataset)
-        
 
     @classmethod
     def update_controller(cls, data):
@@ -87,7 +87,7 @@ class LeadsController(Controller):
     @classmethod
     def suspend_controller(cls, data):
         _, _, obj = cls.db_update_single_record(
-            read_filter=data[constants.ID],
+            read_filter={constants.ID: data[constants.ID]},
             update_filter={
                 constants.STATUS: constants.OBJECT_STATUS_SUSPENDED},
             update_mode=constants.UPDATE_MODE__PARTIAL,

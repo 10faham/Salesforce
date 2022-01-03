@@ -93,6 +93,7 @@ MESSAGE_OUT_OF_STOCK = "The Product '{}' is out of stock the current quantity of
 MESSAGE_PARAM_FORMAT_INCORRECT = "The Field {} should be in format {}"
 MESSAGE_CANNOT_SUSPEND_HAS_CHILD = "{} Suspend Failed, Record has Children first suspend them."
 MESSAGE_LOCATION_NOT_IN_ASSIGNED = "The Location '{}' is not assigned to '{}' "
+MESSAGE_HAS_TO_BE_LESS_THAN = "{} has to be less than {}"
 # MESSAGE_ID_PARAMETER_MISSING = "Id parameter is missing"
 # MESSAGE_INVALID_CALL = "Invalid call"
 # MESSAGE_RELATIVE_MISSING_PARAMETERS = "Some Relative parameters are missing"

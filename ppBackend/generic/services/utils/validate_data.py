@@ -1,15 +1,14 @@
 # Python imports
 import re
-
+# Framework imports
 from flask_mongoengine import BaseQuerySet
 # Local imports
 from ppBackend.generic.services.utils import common_utils, constants
-from ppBackend.config import config
 
 # TODO Add Rules : URL
 
 
-def validate_data(data, validation_rules={}):
+def validate_data(raw_data, validation_rules={}, return_data=True):
     """
         Validate data with respect to validation_rules and operation type
         :param data: Dict obj of data to be validated
@@ -18,22 +17,35 @@ def validate_data(data, validation_rules={}):
         updating existing record
         :return:
         """
-    if type(data) is str:
-        data = common_utils.json_to_dict(data)
+    global data
+    if type(raw_data) is str:
+        data = common_utils.json_to_dict(raw_data)
+    else:
+        data = raw_data
     error_list = []
     for key in validation_rules:
         if validation_rules[key]:
             rules = validation_rules[key]
             error_list.extend(validate_single_data(data, key, rules))
-    return not (len(error_list) > 0), error_list
+    return_list = [not (len(error_list) > 0), error_list]
+    if return_data:
+        return_list.append(data)
+    return return_list
 
 
-def validate_single_data(data, key, rules):
+def validate_single_data(data, key, rules, main_data=None):
+    """
+    param data:
+    param key:
+    param rule:
+    param main_data: Only required when using this function with collection_format to send the main data obj aswell so
+                        to pass as parameter to some rule functions
+    """
     error_list = []
     # Setting Default False as that we dont know for sure
     # if the data.get(key) is not None
     is_data_key_none = False
-    if not data.get(key):
+    if data.get(key) in [None, "", [], {}, ()]:
         is_data_key_none = True
     for rule in rules:
         function = rule["rule"]
@@ -61,7 +73,7 @@ def validate_single_data(data, key, rules):
         # Rules which require the data to be not None
         if not is_data_key_none:
             if function == "unique":
-                func_return = unique(data, key, rule)
+                func_return = unique(data, key, rule, main_data)
                 if not func_return[0]:
                     error_list.append({key: func_return[1]})
             if function == "exists":
@@ -96,6 +108,10 @@ def validate_single_data(data, key, rules):
                 func_return = date_format(data, key)
                 if not func_return[0]:
                     error_list.append({key: func_return[1]})
+            if function == "url":
+                func_return = url(data, key)
+                if not func_return[0]:
+                    error_list.append({key: func_return[1]})
             if function == "choices":
                 func_return = choices(data, key, rule)
                 if not func_return[0]:
@@ -112,39 +128,63 @@ def validate_single_data(data, key, rules):
                 func_return = collection_format(data, key, rule)
                 if not func_return[0]:
                     error_list.append({key: func_return[1]})
+            if function == "fetch_obj":
+                func_return = fetch_obj(data, key, rule)
+                if not func_return[0]:
+                    error_list.append({key: func_return[1]})
+            if function == "lowercase":
+                func_return = lowercase(data, key)
+                if not func_return[0]:
+                    error_list.append({key: func_return[1]})
+            if function == "regex":
+                func_return = regex(data, key, rule)
+                if not func_return[0]:
+                    error_list.append({key: func_return[1]})
+            if function == "convert_to_epooch":
+                func_return = convert_to_epooch(data, key, rule)
+                if not func_return[0]:
+                    error_list.append({key: func_return[1]})
     return error_list
 
 
 def required(data, key):
-    if data.get(key) not in [None, ""]:
+    if data.get(key) not in [None, "", [], {}, ()]:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["REQUIRED"]
-                .format(key.title())]
+        return [False, constants.VALIDATION_MESSAGES["REQUIRED"].format(key.title())]
 
 
 def nonexistent(data, key):
     if data.get(key) in [None, ""]:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["NONEXISTENT"]
-                .format(key.title())]
+        return [False, constants.VALIDATION_MESSAGES["NONEXISTENT"].format(key.title())]
 
 
-def unique(data, key, rule):
+def unique(data, key, rule, main_data=None):
+    """
+    param data:
+    param key:
+    param rule:
+    param main_data: Only required when using this function with collection_format to send the main data obj aswell to
+                        check for UID existence
+    """
     model = rule["Model"]
     field = rule["Field"]
     obj = None
     if(type(model) != BaseQuerySet):
-        obj = model.objects(**{field: data[key]}).first()
+        obj = model.objects(**{field: data[key],
+                               constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
     else:
-        obj = model.filter(**{field: data[key]}).first()
+        obj = model.filter(**{field: data[key],
+                              constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
     if (obj is None):
         return [True, ""]
     else:
-        if data.get(constants.ID):
-            if data[constants.ID] == obj[constants.ID]:
-                return [True, ""]
+        if data.get(constants.UID) and data[constants.UID] == obj[constants.UID]:
+            return [True, ""]
+        elif main_data and main_data.get(constants.UID) and main_data.get(constants.UID) == obj[constants.UID]:
+            return [True, ""]
         return [False, constants.VALIDATION_MESSAGES["UNIQUE"].format(field.title())]
 
 
@@ -153,15 +193,16 @@ def exists(data, key, rule):
     field = rule["Field"]
     obj = None
     if(type(model) != BaseQuerySet):
-        obj = model.objects(**{field: data[key]}).first()
+        obj = model.objects(**{field: data[key],
+                               constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
     else:
-        obj = model.filter(**{field: data[key]}).first()
+        obj = model.filter(**{field: data[key],
+                              constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
         model = model._document
     if (obj):
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["EXISTS"]
-                .format(model.__name__, field.title())]
+        return [False, constants.VALIDATION_MESSAGES["EXISTS"].format(model.__name__, field.title())]
 
 
 def password(data, key):
@@ -177,8 +218,7 @@ def email(data, key):
     if email_regex.match(str(data[key])):
         return [True, ""]
     else:
-        return [False,
-                constants.VALIDATION_MESSAGES["EMAIL"].format(key.title())]
+        return [False, constants.VALIDATION_MESSAGES["EMAIL"].format(key.title())]
 
 
 def uid(data, key):
@@ -186,42 +226,57 @@ def uid(data, key):
     if re.search(uid_regex, data[key], re.IGNORECASE):
         return [True, ""]
     else:
-        return [False,
-                constants.VALIDATION_MESSAGES["UID"].format(key.title())]
+        return [False, constants.VALIDATION_MESSAGES["UID"].format(key.title())]
 
 
 def phone_number(data, key):
-    phone_number_regex = re.compile(r'^\+(?:[0-9]●?){6,14}[0-9]$')
+    phone_number_regex = re.compile(r'^\+|0{1,}(?:[0-9]●?){6,14}[0-9]$')
     if phone_number_regex.match(str(data[key])):
         return [True, ""]
     else:
-        return [False,constants.VALIDATION_MESSAGES["PHONE_NUMBER"].format(
-                    key.title())]
+        return [False, constants.VALIDATION_MESSAGES["PHONE_NUMBER"].format(key.title())]
 
 
 def datatype(data, key, rule):
     required_datatype = rule["datatype"]
-    if type(data[key]) is required_datatype:
+    if type(required_datatype) is not list:
+        required_datatype = [required_datatype]
+    if type(data[key]) in required_datatype:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["DATATYPE"]
-                .format(str(key).title(), required_datatype)]
+        return [False, constants.VALIDATION_MESSAGES["DATATYPE"].format(str(key).title(), required_datatype)]
 
 
 def datetime_format(data, key):
     if common_utils.format_datetime(data[key]):
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["DATETIME_FORMAT"]
-                .format(key.title())]
+        return [False, constants.VALIDATION_MESSAGES["DATETIME_FORMAT"].format(key.title())]
 
 
 def date_format(data, key):
     if common_utils.format_date(data[key]):
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["DATE_FORMAT"].format(
-            key.title())]
+        return [False, constants.VALIDATION_MESSAGES["DATE_FORMAT"].format(key.title())]
+
+
+def url(data, key):
+    url_regex = re.compile(
+        r"((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+    if url_regex.match(str(data[key])):
+        return [True, ""]
+    else:
+        return [False, constants.VALIDATION_MESSAGES["URL"].format(key.title())]
+
+
+def regex(data, key, rule):
+    regular_expression = rule["regex"]
+    if re.search(regular_expression, data[key]):
+        return [True, ""]
+    else:
+        return [False,
+                constants.VALIDATION_MESSAGES["REGEX"].format(key.title())]
 
 
 def choices(data, key, rule):
@@ -229,8 +284,7 @@ def choices(data, key, rule):
     if data[key] in parameter_list:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["CHOICES"]
-                .format(key.title(), parameter_list)]
+        return [False, constants.VALIDATION_MESSAGES["CHOICES"].format(key.title(), parameter_list)]
 
 
 def length(data, key, rule):
@@ -238,8 +292,7 @@ def length(data, key, rule):
     if len(data[key]) == required_length:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["LENGTH"].format(
-            key.title(), required_length)]
+        return [False, constants.VALIDATION_MESSAGES["LENGTH"].format(key.title(), required_length)]
 
 
 def max_length(data, key, rule):
@@ -250,8 +303,7 @@ def max_length(data, key, rule):
     if key_length <= required_max_length:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["MAX_LENGTH"].format(
-            key.title(), required_max_length)]
+        return [False, constants.VALIDATION_MESSAGES["MAX_LENGTH"].format(key.title(), required_max_length)]
 
 
 def min_length(data, key, rule):
@@ -259,8 +311,12 @@ def min_length(data, key, rule):
     if len(data[key]) >= required_min_length:
         return [True, ""]
     else:
-        return [False, constants.VALIDATION_MESSAGES["MIN_LENGTH"].format(
-            key.title(), required_min_length)]
+        return [False, constants.VALIDATION_MESSAGES["MIN_LENGTH"].format(key.title(), required_min_length)]
+
+
+def lowercase(data, key):
+    data[key] = data[key].lower()
+    return [True, ""]
 
 
 def collection_format(data, key, rule):
@@ -273,18 +329,17 @@ def collection_format(data, key, rule):
         error_messages_key = []
         error_messages_value = []
         for count, element_key in enumerate(elements):
-            error_message_key = validate_single_data(
-                {element_key: element_key}, element_key, first_key)
-            error_message_value = validate_single_data(
-                elements, element_key, first_value)
+            error_message_key = validate_single_data(data={element_key: element_key},
+                                                     key=element_key, rules=first_key, main_data=data)
+            error_message_value = validate_single_data(data=elements,
+                                                       key=element_key, rules=first_value)
             if len(error_message_key) > 0:
-                error_messages_key.append(
-                    {"Index": count, "Error": error_message_key})
+                error_messages_key.append({"Index": count,
+                                           "Error": error_message_key})
             if len(error_message_value) > 0:
-                error_messages_value.append(
-                    {"Index": count, "Error": error_message_value})
-        if not (len(error_messages_key) > 0) and not (len(error_messages_value
-                                                          ) > 0):
+                error_messages_value.append({"Index": count,
+                                             "Error": error_message_value})
+        if not (len(error_messages_key) > 0) and not (len(error_messages_value) > 0):
             return [True, ""]
         else:
             return [False, {
@@ -295,12 +350,39 @@ def collection_format(data, key, rule):
         validation_rules = rule["validation_rules"]
         error_messages = []
         for count, element in enumerate(data[key]):
-            error_message = validate_single_data(
-                {key: element}, key, validation_rules)
+            error_message = validate_single_data(data={key: element},
+                                                 key=key, rules=validation_rules, main_data=data)
             if len(error_message) > 0:
-                error_messages.append(
-                    {"Index": count, "Error": error_message})
+                error_messages.append({"Index": count, "Error": error_message})
         if not (len(error_messages) > 0):
             return [True, ""]
         else:
             return [False, error_messages]
+
+
+def fetch_obj(data, key, rule):
+    model = rule["Model"]
+    field = rule["Field"]
+    obj_field = rule["ObjField"]
+
+    if(type(model) != BaseQuerySet):
+        obj = model.objects(**{field: data[key],
+                               constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
+    else:
+        obj = model.filter(**{field: data[key],
+                              constants.STATUS: constants.OBJECT_STATUS_ACTIVE}).first()
+        model = model._document
+
+    if (obj):
+        data.pop(key)
+        data.update({obj_field: obj})
+        return [True, ""]
+    else:
+        return [False, constants.VALIDATION_MESSAGES["FETCH_OBJ"].format(model.__name__.title(), field.title())]
+
+
+def convert_to_epooch(data, key, rule):
+    time_format = rule["format"]
+    data[key] = common_utils.convert_to_epoch(str_time=data[key],
+                                              format=time_format)
+    return [True, ""]

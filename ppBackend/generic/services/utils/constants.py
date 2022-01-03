@@ -78,9 +78,6 @@ OBJECT_STATUS_SUSPENDED_ID = 3
 STATIC_DATA = static_data
 
 SEARCH_DEPTH_MAX = 4
-# # OPERATION TYPES
-# OPERATION_CREATE = "insert"
-# OPERATION_UPDATE = "update"
 
 # USER TYPES
 ADMIN = "admin"
@@ -114,6 +111,9 @@ CREATED_ON = "created_on"
 UPDATED_ON = "updated_on"
 CREATED_BY = "created_by"
 UPDATED_BY = "updated_by"
+
+
+CURRENT_TIME = "current_time"
 
 ADDRESS__COUNTRY = "country"
 ADDRESS__PROVINCE = "province"
@@ -208,6 +208,17 @@ LEAD__LEVEL = "lead_level"
 LEAD__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
 LEAD__USER = "user"
 LEAD__COMMENT = "lead_comment"
+
+# Follow Up Constants
+FOLLOW_UP = "follow_up"
+FOLLOW_UP__LEAD = "lead"
+FOLLOW_UP__NEXT = "next"
+FOLLOW_UP__COMMENT = "comment"
+FOLLOW_UP__LEVEL = "lead_level"
+FOLLOW_UP__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
+FOLLOW_UP__STATUS = "lead_status"
+FOLLOW_UP__STATUS__LIST = ["Interested", "Not Interested"]
+
 # Required, Optional Fields Lists
 # User
 LOGIN_REQUIRED_FIELDS_LIST = [USER__EMAIL_ADDRESS, USER__PASSWORD]
@@ -259,3 +270,19 @@ REQUIRED_UPDATE_FIELDS_LIST__LEAD = list(
 )
 ALL_FIELDS_LIST__LEAD = OPTIONAL_FIELDS_LIST__LEAD + \
     REQUIRED_FIELDS_LIST__LEAD + [ID, CREATED_BY]
+
+# Follow Up
+REQUIRED_FIELDS_LIST__FOLLOW_UP = [
+    FOLLOW_UP__LEAD,
+    FOLLOW_UP__COMMENT,
+    FOLLOW_UP__STATUS,
+    FOLLOW_UP__LEVEL,
+]
+OPTIONAL_FIELDS_LIST__FOLLOW_UP = [
+    FOLLOW_UP__NEXT,
+]
+REQUIRED_UPDATE_FIELDS_LIST__FOLLOW_UP = list(
+    set(REQUIRED_FIELDS_LIST__FOLLOW_UP + [ID]) - set([LEAD__FIRST_NAME])
+)
+ALL_FIELDS_LIST__FOLLOW_UP = OPTIONAL_FIELDS_LIST__FOLLOW_UP + \
+    REQUIRED_FIELDS_LIST__FOLLOW_UP + [ID, CREATED_BY]
