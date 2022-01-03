@@ -15,7 +15,7 @@ class FollowUp(models.Model):
         return {
             constants.FOLLOW_UP__LEAD: [
                 {"rule": "required"},
-                {"rule": "fetch_obj", "Field": constants.ID, "ObjField": constants.FOLLOW_UP__LEAD}],
+                {"rule": "fetch_obj", "Model": Leads, "Field": constants.ID, "ObjField": constants.FOLLOW_UP__LEAD}],
             constants.FOLLOW_UP__NEXT: [{"rule": "datetime_format"}],
             constants.FOLLOW_UP__COMMENT: [
                 {"rule": "required"},
@@ -46,7 +46,7 @@ class FollowUp(models.Model):
         return {
             constants.ID: str(self[constants.ID]),
             constants.FOLLOW_UP__LEAD: self[constants.FOLLOW_UP__LEAD].fetch().display(),
-            constants.FOLLOW_UP__NEXT: self[constants.FOLLOW_UP__NEXT].fetch().display(),
+            constants.FOLLOW_UP__NEXT: self[constants.FOLLOW_UP__NEXT],
             constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.FOLLOW_UP__STATUS: self[constants.FOLLOW_UP__STATUS],
             constants.FOLLOW_UP__LEVEL: self[constants.FOLLOW_UP__LEVEL],

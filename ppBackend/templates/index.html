@@ -35,17 +35,24 @@
     <script src="{{ url_for('static', filename='js/jquery.slimscroll.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.scrollTo.min.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/switchery/switchery.min.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='plugins/moment/moment.js') }}"></script>
+    <link
+        href="{{ url_for('static', filename='plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}"
+        rel=”stylesheet”>
+    <script
+        src="{{ url_for('static', filename='plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js') }}"> </script>
+
     <script>
         const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
-
     </script>
     <script>
         response_code = parseInt("{{response_code}}")
         {% if response_code == 401 %}
-            document.location = "/"
+        document.location = "/"
         {% endif %}
         {% if response_code == 5001 %}
-            document.location = "/"
+        document.location = "/"
         {% endif %}
     </script>
     {% block scripthead %}
@@ -107,7 +114,8 @@
                         <li class="dropdown user-box">
                             <a href="" class="dropdown-toggle waves-effect user-link" data-toggle="dropdown"
                                 aria-expanded="true">
-                                <img src="{{url_for('static', filename='images/users/avatar-1.jpg')}}" alt="user-img" class="img-circle user-img">
+                                <img src="{{url_for('static', filename='images/users/avatar-1.jpg')}}" alt="user-img"
+                                    class="img-circle user-img">
                             </a>
 
                             <ul
@@ -154,6 +162,15 @@
                         </li>
                         <li class="has_sub">
                             <a href="javascript:void(0);" class="waves-effect"><i
+                                    class="mdi mdi-layers widget-one-icon"></i> <span> Follow ups </span> <span
+                                    class="menu-arrow"></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="/api/follow_ups/read">View Follow Ups</a></li>
+                                <li><a href="/api/follow_ups/create">Add Follow Ups</a></li>
+                            </ul>
+                        </li>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i
                                     class="mdi mdi-layers widget-one-icon"></i> <span> Clients </span> <span
                                     class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
@@ -185,7 +202,7 @@
                 </div>
                 <!-- Sidebar -->
                 <div class="clearfix"></div>
-<!-- 
+                <!-- 
                 <div class="help-box">
                     <h5 class="text-muted m-t-0">For Help ?</h5>
                     <p class=""><span class="text-custom">Email:</span> <br /> shaheer@proppioneers.com</p>
@@ -218,8 +235,8 @@
     <script>
         var resizefunc = [];
     </script>
-        {% block scriptfooter %}
-        {% endblock %}
+    {% block scriptfooter %}
+    {% endblock %}
 
     <script>
         console.log(TokenObj)

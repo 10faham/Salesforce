@@ -15,19 +15,20 @@ class FollowUpController(Controller):
 
     @classmethod
     def create_controller(cls, data):
-        is_valid, error_messages = cls.cls_validate_data(data=data)
+        is_valid, error_messages, data = cls.cls_validate_data(data=data,
+                                                               return_data=True)
         if not is_valid:
             return response_utils.get_response_object(
                 response_code=response_codes.CODE_VALIDATION_FAILED,
                 response_message=response_codes.MESSAGE_VALIDATION_FAILED,
                 response_data=error_messages
             )
-        if common_utils.get_time() > common_utils.convert_to_epoch(data[constants.FOLLOW_UP__NEXT]):
-            return response_utils.get_response_object(
-                response_code=response_codes.CODE_WRONG_PARAMETERS,
-                response_message=response_codes.MESSAGE_HAS_TO_BE_LESS_THAN.format(
-                    constants.FOLLOW_UP__NEXT, constants.CURRENT_TIME
-                ))
+        # if common_utils.get_time() > common_utils.convert_to_epoch(data[constants.FOLLOW_UP__NEXT]):
+        #     return response_utils.get_response_object(
+        #         response_code=response_codes.CODE_WRONG_PARAMETERS,
+        #         response_message=response_codes.MESSAGE_HAS_TO_BE_LESS_THAN.format(
+        #             constants.FOLLOW_UP__NEXT, constants.CURRENT_TIME
+        #         ))
         if data[constants.FOLLOW_UP__LEAD][constants.CREATED_BY] != common_utils.current_user():
             return response_utils.get_response_object(
                 response_code=response_codes.CODE_UNAUTHENTICATED_ACCESS,

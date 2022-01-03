@@ -59,7 +59,8 @@ class LeadsController(Controller):
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=lead_dataset)
+            response_data=lead_dataset
+        )
 
     @classmethod
     def update_controller(cls, data):

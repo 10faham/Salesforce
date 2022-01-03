@@ -31,7 +31,7 @@ class Controller:
         return True, obj
 
     @classmethod
-    def cls_validate_data(cls, data, validation_rules=None,
+    def cls_validate_data(cls, data, validation_rules=None, return_data=False,
                           update_mode=constants.UPDATE_MODE__FULL):
         if not validation_rules:
             validation_rules = cls.Model.validation_rules()
@@ -40,7 +40,7 @@ class Controller:
                 {key: validation_rules[key]
                  for key in validation_rules.keys() & data.keys()}
         return validate_data(
-            data=data,
+            raw_data=data, return_data=return_data,
             validation_rules=validation_rules)
 
     # Database Layer

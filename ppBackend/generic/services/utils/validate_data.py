@@ -8,7 +8,7 @@ from ppBackend.generic.services.utils import common_utils, constants
 # TODO Add Rules : URL
 
 
-def validate_data(raw_data, validation_rules={}, return_data=True):
+def validate_data(raw_data, validation_rules={}, return_data=False):
     """
         Validate data with respect to validation_rules and operation type
         :param data: Dict obj of data to be validated

@@ -1,0 +1,140 @@
+{% extends 'index.html' %}
+{% block scripthead %}
+
+<script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    {% if response_code == 200 %}
+    console.log({{ response_data| tojson}})
+    // document.location = "/home"
+
+    {% endif %}
+    {% if response_code == 4003 %}
+    alert(`Validation Failed \n` + `{{ response_data| tojson}}`)
+    console.log({{ response_data| tojson}})
+    {% elif response_code != 200 %}
+    alert(`Error \n` + `{{ response_message}}`)
+
+    // document.location = "/home"
+
+    {% endif %}
+</script>
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Add Leads</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card-box">
+                        <div class="row">
+                            <form class="form-horizontal" action="" method="POST">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Lead*</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" required name="lead" title="lead">
+                                                <option value="" selected disabled></option>
+                                                {% for lead in leads %}
+                                                <option value="{{lead.id}}">{{lead.first_name}}</option>
+                                                {% endfor %}
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Level*</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" required name="lead_level" title="lead_level">
+                                                <option value=""></option>
+                                                <option value="AtomBomb">Atom-Bomb</option>
+                                                <option value="Hot">Hot</option>
+                                                <option value="Moderate">Moderate</option>
+                                                <option value="Cold">Cold</option>
+                                                <option value="SubZero">Sub-Zero</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Status*</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" required title="lead_status"
+                                                name="lead_status">
+                                                <option value=""></option>
+                                                <option value="Interested">Interested</option>
+                                                <option value="Not Interested">Not Interested</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Next Follow Up</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control datetime-picker" required title="next"
+                                                name="next" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Comment*</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" required title="comment"
+                                                name="comment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                </div>
+                                <input class="btn btn-default" type="submit" value="Save">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+    <footer class="footer text-right">
+        2021 © PropPioneers
+    </footer>
+
+</div>
+
+<script>
+    $(".datetime-picker").datetimepicker({
+        format: 'YYYY-MM-DD hh:mm:ss'
+    })
+</script>
+{% endblock %}

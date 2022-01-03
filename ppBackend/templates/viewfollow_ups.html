@@ -1,0 +1,111 @@
+{% extends 'index.html' %}
+
+
+{% block scripthead %}
+<script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    {% if response_code == 200 %}
+    sessionStorage.setItem("leadsObj", '{{response_data|tojson}}')
+    // document.location = "/home"
+    {% else %}
+    console.log({{ response_data| tojson}})
+    {% endif %}
+
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">View All Follow Ups</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="lead-row" class="card-box">
+                        <div class="row">
+                            <div class="demo-box m-t-20">
+                                <h4 class="m-t-0 header-title"><b> Follow Ups </b></h4>
+                                <div class="table-responsive">
+                                    <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Lead</th>
+                                                <th>Status</th>
+                                                <th>Level</th>
+                                                <th>Next</th>
+                                                <th>Comment</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lead-detail">
+                                            {% for obj in response_data %}
+                                            <tr>
+                                                <th scope="row">{{loop.index}}</th>
+                                                <td>{{obj.lead.first_name}}</td>
+                                                <td>{{obj.lead_status}}</td>
+                                                <td>{{obj.lead_level}}</td>
+                                                <td>{{obj.next}}</td>
+                                                <td>{{obj.comment}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end card-box -->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+    <footer class="footer text-right">
+        2021 © PropPioneers
+    </footer>
+
+</div>
+
+
+<!-- ============================================================== -->
+<!-- End Right content here -->
+<!-- ============================================================== -->
+
+{% endblock %}
+
+{% block scriptfooter %}
+
+<script>
+   //if (TokenObj.user.name == 1)
+     //     response_code = parseInt("{{response_code}}")
+     //     response_message = "{{response_message}}"
+     //     response_data = "{{response_data}}"
+     //     // document.location = "/home"
+     //   console.log({{response_data}})
+
+</script>
+
+{% endblock %}
