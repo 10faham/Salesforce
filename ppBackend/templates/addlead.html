@@ -10,9 +10,10 @@
 
     {% endif %}
     {% if response_code == 4003 %}
-    console.log({{response_data|tojson}})
-    // document.location = "/home"
-
+    alert(`Validation Failed \n` + `{{ response_data| tojson}}`)
+    console.log({{ response_data| tojson}})
+    {% elif response_code != 200 %}
+    alert(`Error \n` + `{{ response_message}}`)
     {% endif %}
 
 </script>
