@@ -16,16 +16,32 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__LEAD: [
                 {"rule": "required"},
                 {"rule": "fetch_obj", "Model": Leads, "Field": constants.ID, "ObjField": constants.FOLLOW_UP__LEAD}],
-            constants.FOLLOW_UP__NEXT: [{"rule": "datetime_format"}],
-            constants.FOLLOW_UP__COMMENT: [
+            constants.FOLLOW_UP__TYPE: [
                 {"rule": "required"},
                 {"rule": "datatype", "datatype": str}],
-            constants.FOLLOW_UP__STATUS: [
+            constants.FOLLOW_UP__SUB_TYPE: [
                 {"rule": "required"},
-                {"rule": "choices", "options": constants.FOLLOW_UP__STATUS__LIST}],
+                {"rule": "datatype", "datatype": str}],
             constants.FOLLOW_UP__LEVEL: [
                 {"rule": "required"},
                 {"rule": "choices", "options": constants.FOLLOW_UP__LEVEL__LIST}],
+            constants.FOLLOW_UP__STATUS: [
+                {"rule": "required"},
+                {"rule": "choices", "options": constants.FOLLOW_UP__STATUS__LIST}],
+            constants.FOLLOW_UP__COMPLETION_DATE: [{"rule": "datetime_format"}],
+            constants.FOLLOW_UP__COMMENT: [
+                {"rule": "required"},
+                {"rule": "datatype", "datatype": str}],
+            constants.FOLLOW_UP__NEXT_TASK: [
+                {"rule": "required"},
+                {"rule": "datatype", "datatype": str}],
+            constants.FOLLOW_UP__NEXT_PROJECT: [
+                {"rule": "required"},
+                {"rule": "datatype", "datatype": str}],
+            constants.FOLLOW_UP__NEXT_DEADLINE: [{"rule": "datetime_format"}],
+            constants.FOLLOW_UP__NEXT_COMMENT: [
+                {"rule": "required"},
+                {"rule": "datatype", "datatype": str}],
         }
 
     @ classmethod
@@ -34,10 +50,16 @@ class FollowUp(models.Model):
     }
 
     lead = db.LazyReferenceField(Leads, required=True)
-    next = db.DateTimeField()
-    comment = db.StringField(required=True)
-    lead_status = db.StringField(required=True)
+    type = db.StringField(required=True)
+    sub_type = db.StringField(required=True)
     lead_level = db.StringField(required=True)
+    lead_status = db.StringField(required=True)
+    completion_date = db.DateTimeField()
+    comment = db.StringField(required=True)
+    next_task = db.StringField(required=True)
+    next_project = db.StringField(required=True)
+    next_deadline = db.DateTimeField()
+    next_comment = db.StringField(required=True)
 
     def __str__(self):
         return str(self.pk)
@@ -46,11 +68,16 @@ class FollowUp(models.Model):
         return {
             constants.ID: str(self[constants.ID]),
             constants.FOLLOW_UP__LEAD: self[constants.FOLLOW_UP__LEAD].fetch().display(),
-            constants.FOLLOW_UP__NEXT: self[constants.FOLLOW_UP__NEXT],
-            constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
-            constants.FOLLOW_UP__STATUS: self[constants.FOLLOW_UP__STATUS],
+            constants.FOLLOW_UP__TYPE: self[constants.FOLLOW_UP__TYPE],
+            constants.FOLLOW_UP__SUB_TYPE: self[constants.FOLLOW_UP__SUB_TYPE],
             constants.FOLLOW_UP__LEVEL: self[constants.FOLLOW_UP__LEVEL],
+            constants.FOLLOW_UP__STATUS: self[constants.FOLLOW_UP__STATUS],
+            constants.FOLLOW_UP__COMPLETION_DATE: self[constants.FOLLOW_UP__COMPLETION_DATE],
+            constants.FOLLOW_UP__NEXT_TASK: self[constants.FOLLOW_UP__NEXT_TASK],
+            constants.FOLLOW_UP__NEXT_PROJECT: self[constants.FOLLOW_UP__NEXT_PROJECT],
+            constants.FOLLOW_UP__NEXT_DEADLINE: self[constants.FOLLOW_UP__NEXT_DEADLINE],
+            constants.FOLLOW_UP__NEXT_COMMENT: self[constants.FOLLOW_UP__NEXT_COMMENT],
+            constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.STATUS: self[constants.STATUS],
-            constants.CREATED_BY: self[constants.CREATED_BY].fetch()[
-                constants.USER__NAME]
+            constants.CREATED_BY: self[constants.CREATED_BY].fetch()[constants.USER__NAME]
         }

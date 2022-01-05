@@ -205,19 +205,26 @@ LEAD__CITY = "city"
 LEAD__CLIENT_CATEGORY = "client_category"
 LEAD__CLIENT_CATEGORY__LIST = ["Investor", "User", "Agent"]
 LEAD__LEVEL = "lead_level"
-LEAD__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
+LEAD__LEVEL__LIST = ["AtomBomb", "Hot", "Moderate", "Cold", "SubZero"]
 LEAD__USER = "user"
 LEAD__COMMENT = "lead_comment"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
 FOLLOW_UP__LEAD = "lead"
-FOLLOW_UP__NEXT = "next"
-FOLLOW_UP__COMMENT = "comment"
+FOLLOW_UP__TYPE = "type"
+FOLLOW_UP__SUB_TYPE = "sub_type"
 FOLLOW_UP__LEVEL = "lead_level"
-FOLLOW_UP__LEVEL__LIST = ["AtomBomb","Hot", "Moderate", "Cold", "SubZero"]
+FOLLOW_UP__LEVEL__LIST = ["AtomBomb", "Hot", "Moderate", "Cold", "SubZero"]
 FOLLOW_UP__STATUS = "lead_status"
 FOLLOW_UP__STATUS__LIST = ["Interested", "Not Interested"]
+FOLLOW_UP__COMPLETION_DATE = "completion_date"
+FOLLOW_UP__COMMENT = "comment"
+
+FOLLOW_UP__NEXT_TASK = "next_task"
+FOLLOW_UP__NEXT_PROJECT = "next_project"
+FOLLOW_UP__NEXT_DEADLINE = "next_deadline"
+FOLLOW_UP__NEXT_COMMENT = "next_comment"
 
 # Required, Optional Fields Lists
 # User
@@ -274,12 +281,18 @@ ALL_FIELDS_LIST__LEAD = OPTIONAL_FIELDS_LIST__LEAD + \
 # Follow Up
 REQUIRED_FIELDS_LIST__FOLLOW_UP = [
     FOLLOW_UP__LEAD,
-    FOLLOW_UP__COMMENT,
-    FOLLOW_UP__STATUS,
+    FOLLOW_UP__TYPE,
+    FOLLOW_UP__SUB_TYPE,
     FOLLOW_UP__LEVEL,
+    FOLLOW_UP__STATUS,
+    FOLLOW_UP__COMMENT,
+    FOLLOW_UP__NEXT_TASK,
+    FOLLOW_UP__NEXT_PROJECT,
+    FOLLOW_UP__NEXT_COMMENT,
 ]
 OPTIONAL_FIELDS_LIST__FOLLOW_UP = [
-    FOLLOW_UP__NEXT,
+    FOLLOW_UP__COMPLETION_DATE,
+    FOLLOW_UP__NEXT_DEADLINE,
 ]
 REQUIRED_UPDATE_FIELDS_LIST__FOLLOW_UP = list(
     set(REQUIRED_FIELDS_LIST__FOLLOW_UP + [ID]) - set([LEAD__FIRST_NAME])

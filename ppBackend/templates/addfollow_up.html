@@ -16,9 +16,6 @@
     alert(`Login Expired. Please login again \n` + `{{ response_data| tojson}}`)
     {% elif response_code == 401 %}
     alert(`Login Expired. Please login again \n` + `{{ response_data| tojson}}`)
-
-    // document.location = "/home"
-
     {% endif %}
 </script>
 {% endblock %}
@@ -52,13 +49,13 @@
                 <div class="col-sm-12">
                     <div class="card-box">
                         <div class="row">
-                            <form class="form-horizontal" action="" method="POST">
+                            <form class="form-horizontal" action="" method="POST" id="follow_up_form">
                                 <h4 class="page-title">Current Task</h4>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Type *</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control" required name="followup_type" title="followup_type">
+                                            <select class="form-control" required name="type" title="type">
                                                 <option value=""></option>
                                                 <option value="Meeting">Meeting</option>
                                                 <option value="Call">Call</option>
@@ -73,7 +70,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Sub Type *</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control" required name="lead_level" title="lead_level">
+                                            <select class="form-control" required name="sub_type" title="sub_type">
                                                 <option value=""></option>
                                                 <option value="SMS">SMS</option>
                                                 <option value="Contacted_client">Contacted Client</option>
@@ -120,7 +117,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Completion Date</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control datetime-picker" required title="next" name="next" />
+                                            <input type="text" class="form-control datetime-picker" required
+                                                title="completion_date" name="completion_date" />
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +137,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Next Task *</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control" required name="followup_next" title="Next Task">
+                                                <select class="form-control" required name="next_task"
+                                                    title="Next Task">
                                                     <option value=""></option>
                                                     <option value="DoNothing">Do Nothing</option>
                                                     <option value="ContactClient">Contact Client</option>
@@ -147,8 +146,10 @@
                                                     <option value="ReceiveTokenPayment">Receive Token Payment</option>
                                                     <option value="MeetClient">Meet Client</option>
                                                     <option value="ArrangeMeeting">Arrange Meeting</option>
-                                                    <option value="ReceivePartialDownPayment">Receive Partial Down Payment</option>
-                                                    <option value="ReceiveCompleteDownPayment">Receive Complete Down Payment</option>
+                                                    <option value="ReceivePartialDownPayment">Receive Partial Down
+                                                        Payment</option>
+                                                    <option value="ReceiveCompleteDownPayment">Receive Complete Down
+                                                        Payment</option>
                                                     <option value="Closed(Won)">Closed (Won)</option>
                                                     <option value="SignSaleAgreement">Sign Sale Agreement</option>
                                                 </select>
@@ -160,7 +161,8 @@
                                             <label class="col-sm-2 control-label">Project *</label>
                                             <div class="col-sm-10">
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control datetime-picker" required title="Project" name="Project" value=""/>
+                                                    <input type="text" class="form-control" required
+                                                        title="Project" name="next_project" value="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -169,7 +171,8 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Deadline</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control datetime-picker" required title="next" name="next" />
+                                                <input type="text" class="form-control datetime-picker" required
+                                                    title="next" name="next_deadline" />
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +181,7 @@
                                             <label class="col-sm-2 control-label">Comment*</label>
                                             <div class="col-sm-10">
                                                 <textarea class="form-control" required title="comment"
-                                                    name="comment"></textarea>
+                                                    name="next_comment"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -206,5 +209,10 @@
     $(".datetime-picker").datetimepicker({
         format: 'YYYY-MM-DD hh:mm:ss'
     })
+    const params = new URLSearchParams(window.location.search);
+    const lead = params.get("lead");
+    console.log(lead);
+    $("#follow_up_form").append(`<input type="hidden" name="lead" value="${lead}" >`)
+    console.log("Element added")
 </script>
 {% endblock %}
