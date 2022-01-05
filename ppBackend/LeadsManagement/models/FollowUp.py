@@ -28,7 +28,9 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__STATUS: [
                 {"rule": "required"},
                 {"rule": "choices", "options": constants.FOLLOW_UP__STATUS__LIST}],
-            constants.FOLLOW_UP__COMPLETION_DATE: [{"rule": "datetime_format"}],
+            constants.FOLLOW_UP__COMPLETION_DATE: [
+                {"rule": "required"}, 
+                {"rule": "datetime_format"}],
             constants.FOLLOW_UP__COMMENT: [
                 {"rule": "required"},
                 {"rule": "datatype", "datatype": str}],
@@ -36,11 +38,9 @@ class FollowUp(models.Model):
                 {"rule": "required"},
                 {"rule": "datatype", "datatype": str}],
             constants.FOLLOW_UP__NEXT_PROJECT: [
-                {"rule": "required"},
                 {"rule": "datatype", "datatype": str}],
-            constants.FOLLOW_UP__NEXT_DEADLINE: [{"rule": "datetime_format"}],
+            constants.FOLLOW_UP__NEXT_DEADLINE: [{"rule": "required"}, {"rule": "datetime_format"}],
             constants.FOLLOW_UP__NEXT_COMMENT: [
-                {"rule": "required"},
                 {"rule": "datatype", "datatype": str}],
         }
 
@@ -54,12 +54,12 @@ class FollowUp(models.Model):
     sub_type = db.StringField(required=True)
     lead_level = db.StringField(required=True)
     lead_status = db.StringField(required=True)
-    completion_date = db.DateTimeField()
+    completion_date = db.DateTimeField(required=True)
     comment = db.StringField(required=True)
     next_task = db.StringField(required=True)
-    next_project = db.StringField(required=True)
-    next_deadline = db.DateTimeField()
-    next_comment = db.StringField(required=True)
+    next_project = db.StringField()
+    next_deadline = db.DateTimeField(required=True)
+    next_comment = db.StringField()
 
     def __str__(self):
         return str(self.pk)

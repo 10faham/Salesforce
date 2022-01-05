@@ -7,9 +7,10 @@
     response_message = "{{response_message}}"
     {% if response_code == 200 %}
     sessionStorage.setItem("leadsObj", '{{response_data|tojson}}')
+    console.log({{ response_data|tojson}})
     // document.location = "/home"
     {% else %}
-    console.log({{ response_data| tojson}})
+    console.log({{ response_data|tojson}})
     {% endif %}
 
 </script>
@@ -48,10 +49,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Lead</th>
-                                                <th>Status</th>
-                                                <th>Level</th>
-                                                <th>Next</th>
+                                                <th>Task</th>
+                                                <th>Deadline</th>
+                                                <th>Client</th>
+                                                <th>Project</th>
                                                 <th>Comment</th>
                                                 <th></th>
                                             </tr>
@@ -59,11 +60,12 @@
                                         <tbody id="lead-detail">
                                             {% for obj in response_data %}
                                             <tr>
-                                                <th scope="row">{{loop.index}}</th>
+                                                <th scope="row"><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                    <i class="glyphicon glyphicon-plus"></i></a>{{loop.index}}</th>
+                                                <td>{{obj.next_task}}</td>
+                                                <td>{{obj.next_deadline}}</td>
                                                 <td>{{obj.lead.first_name}}</td>
-                                                <td>{{obj.lead_status}}</td>
-                                                <td>{{obj.lead_level}}</td>
-                                                <td>{{obj.next}}</td>
+                                                <td>{{obj.project}}</td>
                                                 <td>{{obj.comment}}</td>
                                             </tr>
                                             {% endfor %}
