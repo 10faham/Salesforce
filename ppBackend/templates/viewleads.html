@@ -89,6 +89,7 @@
                                     <th>Status</th>
                                     <th>Source</th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="lead-detail"></tbody>
@@ -98,14 +99,15 @@
             </div>`)
             element1[1].forEach((item, k) => {
                 $("#lead-detail").append(`<tr>
-                    <th scope="row"><a href="/api/follow_ups/create?lead=${item.id}"><i class="glyphicon glyphicon-plus"></i></a>`+(k+1)+`</th>
+                    <th scope="row">`+(k+1)+`<button type="button" style="border: none; padding: 0px 4px" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="" data-original-title="${item.id}"><i class="mdi mdi-key-variant"></i></button></th>
                     <td>` + item.first_name + `</td>
                     <td>`+item.phone_number + `</td>
                     <td>`+item.email_address + `</td>
                     <td>`+item.project + `</td>
-                    <td>`+item.lead_level + `</td>
+                    <td>`+item.lead_level + `<i class="mdi mdi-thermometer"></i></td>
                     <td>`+item.lead_status + `</td>
                     <td>`+item.lead_source + `</td>
+                    <td><a href="/api/follow_ups/create?lead=${item.id}"><i class="glyphicon glyphicon-plus"></i></a></td>
                 </tr>`)            
         })}});
 

@@ -55,18 +55,22 @@
                                                 <th>Project</th>
                                                 <th>Comment</th>
                                                 <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="lead-detail">
                                             {% for obj in response_data %}
                                             <tr>
-                                                <th scope="row"><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                    <i class="glyphicon glyphicon-plus"></i></a>{{loop.index}}</th>
+                                                <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
                                                 <td>{{obj.next_task}}</td>
                                                 <td>{{obj.next_deadline}}</td>
                                                 <td>{{obj.lead.first_name}}</td>
-                                                <td>{{obj.project}}</td>
+                                                <td>{{obj.next_project}}</td>
                                                 <td>{{obj.comment}}</td>
+                                                <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                    <i class="glyphicon glyphicon-plus"></i></a></td>
+                                                <td><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                    </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
