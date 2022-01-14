@@ -46,8 +46,10 @@
     <script>
         const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
     </script>
+        {{ moment.include_moment() }}
     <script>
         response_code = parseInt("{{response_code}}")
+        
         {% if response_code == 401 %}
         document.location = "/"
         {% endif %}
@@ -224,7 +226,9 @@
         <!-- ============================================================== -->
         <!-- End Right content here -->
         <!-- ============================================================== -->
-
+        <footer class="footer text-right">
+            {{moment().format('YYYY')}} © PropPioneers
+        </footer>
 
     </div>
     <!-- END wrapper -->

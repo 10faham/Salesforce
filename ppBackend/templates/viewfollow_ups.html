@@ -45,36 +45,162 @@
                             <div class="demo-box m-t-20">
                                 <h4 class="m-t-0 header-title"><b> Follow Ups </b></h4>
                                 <div class="table-responsive">
-                                    <table class="table m-0 table-colored-bordered table-bordered-primary">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Task</th>
-                                                <th>Deadline</th>
-                                                <th>Client</th>
-                                                <th>Project</th>
-                                                <th>Comment</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="lead-detail">
-                                            {% for obj in response_data %}
-                                            <tr>
-                                                <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
-                                                <td>{{obj.next_task}}</td>
-                                                <td>{{obj.next_deadline}}</td>
-                                                <td>{{obj.lead.first_name}}</td>
-                                                <td>{{obj.next_project}}</td>
-                                                <td>{{obj.comment}}</td>
-                                                <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                    <i class="glyphicon glyphicon-plus"></i></a></td>
-                                                <td><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                    </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                                    <ul class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#overdue" data-toggle="tab" aria-expanded="true">
+                                                <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                                <span class="hidden-xs">Over Due</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#today" data-toggle="tab" aria-expanded="false">
+                                                <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                <span class="hidden-xs">Today</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#next7day" data-toggle="tab" aria-expanded="false">
+                                                <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                <span class="hidden-xs">Next 7 days</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#all" data-toggle="tab" aria-expanded="false">
+                                                <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                <span class="hidden-xs">All</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="overdue">
+                                            <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Task</th>
+                                                        <th>Deadline</th>
+                                                        <th>Client</th>
+                                                        <th>Project</th>
+                                                        <th>Comment</th>
+                                                        <th>Actions</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="lead-detail">
+                                                    {% for obj in response_data %}
+                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') < moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                    <tr>
+                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                        <td>{{obj.next_task}}</td>
+                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
+                                                        <td>{{obj.lead.first_name}}</td>
+                                                        <td>{{obj.next_project}}</td>
+                                                        <td>{{obj.comment}}</td>
+                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button></td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="tab-pane" id="today">
+                                            <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Task</th>
+                                                        <th>Deadline</th>
+                                                        <th>Client</th>
+                                                        <th>Project</th>
+                                                        <th>Comment</th>
+                                                        <th>Actions</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="lead-detail">
+                                                    {% for obj in response_data %}
+                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') == moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                    <tr>
+                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                        <td>{{obj.next_task}}</td>
+                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
+                                                        <td>{{obj.lead.first_name}}</td>
+                                                        <td>{{obj.next_project}}</td>
+                                                        <td>{{obj.comment}}</td>
+                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button></td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane" id="next7day">
+                                            <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Task</th>
+                                                        <th>Deadline</th>
+                                                        <th>Client</th>
+                                                        <th>Project</th>
+                                                        <th>Comment</th>
+                                                        <th>Actions</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="lead-detail">
+                                                    {% for obj in response_data %}
+                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') > moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                    <tr>
+                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                        <td>{{obj.next_task}}</td>
+                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
+                                                        <td>{{obj.lead.first_name}}</td>
+                                                        <td>{{obj.next_project}}</td>
+                                                        <td>{{obj.comment}}</td>
+                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button></td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane" id="all">
+                                            <table class="table m-0 table-colored-bordered table-bordered-primary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Task</th>
+                                                        <th>Deadline</th>
+                                                        <th>Client</th>
+                                                        <th>Project</th>
+                                                        <th>Comment</th>
+                                                        <th>Actions</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="lead-detail">
+                                                    {% for obj in response_data %}
+                                                    <tr>
+                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                        <td>{{obj.next_task}}</td>
+                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
+                                                        <td>{{obj.lead.first_name}}</td>
+                                                        <td>{{obj.next_project}}</td>
+                                                        <td>{{obj.comment}}</td>
+                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
+                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -89,9 +215,6 @@
 
     </div> <!-- content -->
 
-    <footer class="footer text-right">
-        2021 © PropPioneers
-    </footer>
 
 </div>
 
