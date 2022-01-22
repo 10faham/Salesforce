@@ -47,12 +47,23 @@ class FollowUpController(Controller):
     def read_controller(cls, data):
         user_childs = UserController.get_user_childs(user=common_utils.current_user(),
                                                      return_self=True)
-        queryset = cls.db_read_records(read_filter={
-            constants.CREATED_BY+"__in": user_childs, **data})
+        followup_dataset = []
+        temp = []
+        for user in user_childs:
+            if user == common_utils.current_user():
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                followup_dataset.append([user.name, [obj.display() for obj in queryset]])
+            else:
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                temp.append([user.name, [obj.display() for obj in queryset]])
+        for each in temp:
+            followup_dataset.append(each)
+        user = common_utils.current_user()
+        # followup_dataset.append(user.name)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=[obj.display() for obj in queryset]
+            response_data=followup_dataset
         )
 
     @classmethod

@@ -39,3 +39,14 @@ def create_view(data):
 def read_view(data):
     res = FollowUpController.read_controller(data=data)
     return render_template("viewfollow_ups.html", **res)
+
+@follow_ups_bp.route("/follow_read", methods=["GET"])
+@decorators.is_authenticated
+# @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
+@decorators.keys_validator(
+    [],
+    constants.ALL_FIELDS_LIST__FOLLOW_UP,
+)
+def readfp_view(data):
+    res = FollowUpController.read_controller(data=data)
+    return render_template("viewfollow_ups.html", **res)
