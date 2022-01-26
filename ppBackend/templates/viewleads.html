@@ -11,7 +11,7 @@
     {% else %}
     console.log({{response_data|tojson}})
     {% endif %}
-    const leadsObj = JSON.parse(sessionStorage.getItem('leadsObj'))
+    const leadsObj = {{response_data|tojson}}
   
 </script>
 {% endblock %}
