@@ -1,8 +1,5 @@
-try:
 
-    from ppBackend import app
-except ImportError as e:
-    print(e)
+from ppBackend import app
 
 def _run():
     """ Imports the app and runs it. """

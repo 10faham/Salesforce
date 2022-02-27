@@ -12,7 +12,7 @@ File: Menu
   z-index: 999;
 }
 .topbar .topbar-left {
-  background: #36404e;
+  background: #ffffff;
   float: left;
   text-align: center;
   height: 70px;
@@ -88,7 +88,7 @@ File: Menu
   width: 225px;
   padding-top: 10px;
   z-index: 10;
-  background: #36404e;
+  background: #ffffff;
   bottom: 50px;
   margin-top: 0;
   padding-bottom: 70px;
@@ -190,10 +190,10 @@ body.fixed-left .side-menu.left {
   border-top: 0;
 }
 #sidebar-menu ul ul li.active a {
-  color: #7fc1fc;
+  color: #37844e;
 }
 #sidebar-menu ul ul a {
-  color: #98a6ad;
+  color: #6a7275;
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;
@@ -205,7 +205,7 @@ body.fixed-left .side-menu.left {
   font-size: 13px;
 }
 #sidebar-menu ul ul a:hover {
-  color: #ffffff;
+  color: #37844e;
 }
 #sidebar-menu ul ul a i {
   margin-right: 5px;
@@ -218,18 +218,18 @@ body.fixed-left .side-menu.left {
 }
 #sidebar-menu .subdrop {
   color: #ffffff !important;
-  background-color: #313a46;
+  background-color: #37844e;
 }
 #sidebar-menu > ul > li > a {
-  color: #98a6ad;
+  color: #4d5558;
   display: block;
   padding: 12px 20px;
   margin: 2px 0;
 }
 #sidebar-menu > ul > li > a:hover {
-  color: #ffffff;
+  color: #053d16;
   text-decoration: none;
-  background-color: #313a46;
+  background-color: #37844e;
 }
 #sidebar-menu > ul > li > a > span {
   vertical-align: middle;
@@ -252,7 +252,7 @@ body.fixed-left .side-menu.left {
 }
 #sidebar-menu > ul > li > a.active {
   color: #ffffff !important;
-  background-color: #313a46;
+  background-color: #37844e;
 }
 .menu-title {
   padding: 12px 20px !important;

@@ -687,8 +687,8 @@ a:focus {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #7fc1fc;
-  border-color: #7fc1fc;
+  background-color: #37844e;
+  border-color: #37844e;
 }
 .pager li > a,
 .pager li > span {
