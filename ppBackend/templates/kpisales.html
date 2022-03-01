@@ -47,7 +47,10 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Leads Assigned</th>
+                                            <th>TLW</th>
                                             <th>Calls</th>
+                                            <th>AT Calls</th>
+                                            <th>V Calls</th>
                                             <th>Meetings</th>
                                         </tr>
 
@@ -56,8 +59,11 @@
                                         {% for user in kpi.response_data %}
                                         <tr>
                                                 <td>{{user[0]}}</td>
-                                                <td>{{leads_count.response_data[0]}}</td>
+                                                <td>{{leads_count.response_data[loop.index - 1][1]}}</td>
+                                                <td>{{user[3]}}</td>
                                                 <td>{{user[1]}}</td>
+                                                <td>{{user[4]}}</td>
+                                                <td>{{user[5]}}</td>
                                                 <td>{{user[2]}}</td>
                                         </tr>
                                         {% endfor %}
