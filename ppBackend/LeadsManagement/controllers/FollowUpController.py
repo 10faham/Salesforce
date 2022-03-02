@@ -88,3 +88,15 @@ class FollowUpController(Controller):
             response_message=response_codes.MESSAGE_NOT_FOUND_DATA.format(
                 constants.FOLLOW_UP.title(), constants.ID
             ))
+
+    @classmethod
+    def read_lead_follow(cls, data):
+        queryset = cls.db_read_records(read_filter={constants.FOLLOW_UP__LEAD: data['lead']})
+        followup_dataset = []
+        user = common_utils.current_user()
+        followup_dataset.append([obj.display() for obj in queryset])
+        return response_utils.get_response_object(
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_SUCCESS,
+            response_data=followup_dataset
+        )

@@ -114,7 +114,11 @@
                                                                         <td>{{user[0]}}</td>
                                                                         <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <a href="/api/follow_ups/follow_read?lead='{{obj.lead.id}}'"><i class="mdi mdi-file-restore"></i></a></td>
+                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
+                                                                            </form>
+                                                                        </td>
                                                                     </tr>
                                                                     {% endif %}
                                                                     {% endfor %}

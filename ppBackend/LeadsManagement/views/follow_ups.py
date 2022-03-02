@@ -40,13 +40,12 @@ def read_view(data):
     res = FollowUpController.read_controller(data=data)
     return render_template("viewfollow_ups.html", **res)
 
-@follow_ups_bp.route("/follow_read", methods=["GET"])
+@follow_ups_bp.route("/follow_read", methods=["POST"])
 @decorators.is_authenticated
 # @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
-    [],
-    constants.ALL_FIELDS_LIST__FOLLOW_UP,
+    constants.REQUIRED_FIELDS_LIST__FOLLOW_UP_LEAD,
 )
 def readfp_view(data):
-    res = FollowUpController.read_controller(data=data)
-    return render_template("viewfollow_ups.html", **res)
+    res = FollowUpController.read_lead_follow(data=data)
+    return render_template("viewfollow_leads.html", **res)
