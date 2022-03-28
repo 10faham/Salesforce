@@ -13,7 +13,7 @@ static_data_path = os.path.join(current_dir_path, "static\\static_data.json")
 
 
 #  EXPIRY TIME IN HOURS
-TOKEN_EXPIRY_TIME_WEB = 0.5
+TOKEN_EXPIRY_TIME_WEB = 2
 # TOKEN_EXPIRY_TIME_MOBILE = False
 # TOKEN_EXPIRY_TIME_EMAIL = 0.5
 

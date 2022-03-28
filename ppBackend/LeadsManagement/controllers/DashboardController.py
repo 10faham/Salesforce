@@ -9,7 +9,7 @@ from ppBackend.LeadsManagement.models.FollowUp import FollowUp
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
 from ppBackend import config
-from datetime import date
+from datetime import datetime
 
 
 class DashboardController(Controller):
@@ -23,10 +23,10 @@ class DashboardController(Controller):
         temp = []
         for user in user_childs:
             if user == common_utils.current_user():
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user})
                 lead_dataset.append([user.name, len(queryset)])
             else:
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user})
                 temp.append([user.name, len(queryset)])
         for each in temp:
             lead_dataset.append(each)
@@ -58,16 +58,21 @@ class DashboardFollow(Controller):
         user = common_utils.current_user()
         follow_dataset = []
         kpi_dataset = []
-        queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+        filter = {}
+        if data.get(constants.DATE_FROM):
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = data.get(constants.DATE_FROM)
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = data.get(constants.DATE_TO)
+
+        # queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter, **data})
         user_childs = UserController.get_user_childs(
             user=common_utils.current_user(), return_self=True)
         temp = []
         for user in user_childs:
             if user == common_utils.current_user():
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter})
                 follow_dataset.append([user.name, [obj.display() for obj in queryset]])
             else:
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter})
                 temp.append([user.name, [obj.display() for obj in queryset]])
         for each in temp:
             follow_dataset.append(each)

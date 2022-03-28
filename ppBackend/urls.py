@@ -43,14 +43,16 @@ def dashboard_view(data):
 def addlead_view():
     return render_template('addlead.html')
 
-@app.route("/kpisales", methods=["GET"])
+@app.route("/kpisales", methods=["GET", "POST"])
 @decorators.is_authenticated
-@decorators.keys_validator(
-    [],
-    constants.ALL_FIELDS_LIST__LEAD,
-)
+@decorators.keys_validator()
 def kpisales_view(data):
+    if request.method == "POST":
+        print(data.get(constants.DATE_FROM))
+        print(request.form.get(constants.DATE_TO))
+    
     res = DashboardController.read_lead(data=data)
+    data = request.form
     res2 = DashboardFollow.read_kpi(data=data)
     obj = {'leads_count':'0',
         'kpi':'0'}

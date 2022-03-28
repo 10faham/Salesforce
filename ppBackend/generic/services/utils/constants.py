@@ -225,6 +225,8 @@ FOLLOW_UP__NEXT_TASK = "next_task"
 FOLLOW_UP__NEXT_PROJECT = "next_project"
 FOLLOW_UP__NEXT_DEADLINE = "next_deadline"
 FOLLOW_UP__NEXT_COMMENT = "next_comment"
+DATE_FROM = "date_start"
+DATE_TO = "date_end"
 
 # Required, Optional Fields Lists
 # User

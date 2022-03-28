@@ -20,6 +20,12 @@ users_bp = Blueprint("users_bp", __name__)
 def create_view(data):
     return UserController.create_controller(data=data)
 
+@users_bp.route("/create", methods=["GET"])
+@decorators.is_authenticated
+@decorators.roles_allowed([constants.ROLE_ID_ADMIN])
+@decorators.keys_validator()
+def create_viewget(data):
+    return render_template("adduser.html")
 
 @users_bp.route("/read", methods=["GET"])
 @decorators.is_authenticated

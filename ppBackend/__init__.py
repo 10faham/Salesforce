@@ -18,7 +18,7 @@ initialize_db(app)
 moment = Moment(app)
 bcrypt = Bcrypt(app)
 app.config.update(config.MAIL_SETTINGS)
-from ppBackend.scripts import run_scripts
-run_scripts()
+# from ppBackend.scripts import run_scripts
+# run_scripts()
 # Routing
 import ppBackend.urls
