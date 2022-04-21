@@ -6,6 +6,7 @@
 from ppBackend.generic import models
 from ppBackend.generic import db
 from ppBackend.generic.services.utils import constants
+from ppBackend.generic.services.utils.common_utils import epoch_to_datetime
 from ppBackend.UserManagement.models.User import User
 
 
@@ -93,5 +94,7 @@ class Leads(models.Model):
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
             constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
             constants.STATUS: self[constants.STATUS],
-            constants.CREATED_BY: self.created_by.fetch().name
+            constants.CREATED_BY: self.created_by.fetch().name,
+            constants.CREATED_ON: epoch_to_datetime(self[constants.CREATED_ON]),
+            constants.UPDATED_ON: epoch_to_datetime(self[constants.UPDATED_ON])
         }

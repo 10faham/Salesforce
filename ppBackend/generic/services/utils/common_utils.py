@@ -65,6 +65,14 @@ def format_date(str_date, format=config.DATE_FORMAT):
         return None
 
 
+def epoch_to_datetime(epoch_time):
+    try:
+        date = datetime.datetime.fromtimestamp(epoch_time/1000)
+        return date.strftime(config.DISPLAY_DATE_FORMAT)
+    except ValueError:
+        return None
+
+
 def convert_to_epoch(str_time, format=config.DATETIME_FORMAT):
     return int(time.mktime(time.strptime(str_time, format)))
 

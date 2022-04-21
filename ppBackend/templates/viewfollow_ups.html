@@ -105,7 +105,7 @@
                                                                     {% for obj in user[1] %}                        
                                                                     {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') < moment().format('YYYY MM DD, HH:mm:ss') %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{moment(obj.next_deadline).calendar()}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
@@ -151,16 +151,20 @@
                                                                     {% for obj in user[1] %}
                                                                     {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') == moment().format('YYYY MM DD, HH:mm:ss') %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{moment(obj.next_deadline).calendar()}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
                                                                         <td>{{obj.next_project}}</td>
                                                                         <td>{{obj.comment}}</td>
                                                                         <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <a href="/api/follow_ups/follow_read?lead='{{obj.lead.id}}'"><i class="mdi mdi-file-restore"></i></a></td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
+                                                                            </form>
+                                                                        </td>
                                                                     </tr>
                                                                     {% endif %}
                                                                     {% endfor %}
@@ -199,9 +203,13 @@
                                                                         <td>{{obj.next_project}}</td>
                                                                         <td>{{obj.comment}}</td>
                                                                         <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <a href="/api/follow_ups/follow_read?lead='{{obj.lead.id}}'"><i class="mdi mdi-file-restore"></i></a></td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
+                                                                            </form>
+                                                                        </td>
                                                                     </tr>
                                                                     {% endif %}
                                                                     {% endfor %}
@@ -240,9 +248,13 @@
                                                                         <td>{{obj.next_project}}</td>
                                                                         <td>{{obj.comment}}</td>
                                                                         <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <a href="/api/follow_ups/follow_read?lead='{{obj.lead.id}}'"><i class="mdi mdi-file-restore"></i></a></td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
+                                                                            </form>
+                                                                        </td>
                                                                     </tr>
                                                                     {% endif %}
                                                                     {% endfor %}
@@ -280,9 +292,13 @@
                                                                         <td>{{obj.next_project}}</td>
                                                                         <td>{{obj.comment}}</td>
                                                                         <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead='{{obj.lead.id}}'">
-                                                                            <i class="glyphicon glyphicon-plus"></i></a><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="left" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <a href="/api/follow_ups/follow_read?lead='{{obj.lead.id}}'"><i class="mdi mdi-file-restore"></i></a></td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
+                                                                            </form>
+                                                                        </td>
                                                                     </tr>
                                                                     {% endfor %}
                                                                     {% endfor %}

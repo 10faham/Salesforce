@@ -181,9 +181,9 @@ def unique(data, key, rule, main_data=None):
     if (obj is None):
         return [True, ""]
     else:
-        if data.get(constants.UID) and data[constants.UID] == obj[constants.UID]:
+        if data.get(constants.ID) and data[constants.ID] == obj[constants.ID]:
             return [True, ""]
-        elif main_data and main_data.get(constants.UID) and main_data.get(constants.UID) == obj[constants.UID]:
+        elif main_data and main_data.get(constants.ID) and main_data.get(constants.ID) == obj[constants.ID]:
             return [True, ""]
         return [False, constants.VALIDATION_MESSAGES["UNIQUE"].format(field.title())]
 

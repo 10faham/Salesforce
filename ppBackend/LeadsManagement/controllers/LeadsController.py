@@ -56,6 +56,7 @@ class LeadsController(Controller):
                 constants.CREATED_BY: user, **data})
             lead_dataset.append([user.name, [obj.display()
                                 for obj in queryset]])
+        lead_dataset.append(common_utils.current_user().name)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
