@@ -6,6 +6,7 @@
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
+from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
 from ppBackend import config
 
@@ -54,13 +55,22 @@ class LeadsController(Controller):
         for user in user_childs:
             queryset = cls.db_read_records(read_filter={
                 constants.CREATED_BY: user, **data})
-            lead_dataset.append([user.name, [obj.display()
-                                for obj in queryset]])
-        lead_dataset.append(common_utils.current_user().name)
+            lead_data = []
+            for obj in queryset.order_by("-"+constants.CREATED_ON):
+                tmp = obj.display()
+                tmp['followup'] = FollowUpController.read_count(tmp['id'])
+                lead_data.append(tmp)
+            lead_dataset.append(
+                [str(user.pk), user[constants.USER__NAME], lead_data])
+        # lead_dataset.append(common_utils.current_user().name)
+        leads_data = {}
+        leads_data['data'] = lead_dataset
+        leads_data['username'] = common_utils.current_user()[
+            constants.USER__NAME]
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=lead_dataset
+            response_data=leads_data
         )
 
     @classmethod

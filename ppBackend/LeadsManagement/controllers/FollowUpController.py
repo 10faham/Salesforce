@@ -51,10 +51,13 @@ class FollowUpController(Controller):
         temp = []
         for user in user_childs:
             if user == common_utils.current_user():
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
-                followup_dataset.append([user.name, [obj.display() for obj in queryset]])
+                queryset = cls.db_read_records(
+                    read_filter={constants.CREATED_BY: user, **data})
+                followup_dataset.append(
+                    [user.name, [obj.display() for obj in queryset]])
             else:
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+                queryset = cls.db_read_records(
+                    read_filter={constants.CREATED_BY: user, **data})
                 temp.append([user.name, [obj.display() for obj in queryset]])
         for each in temp:
             followup_dataset.append(each)
@@ -65,6 +68,17 @@ class FollowUpController(Controller):
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=followup_dataset
         )
+
+    @classmethod
+    def read_count(cls, lead_id):
+        queryset = cls.db_read_records(
+            read_filter={constants.FOLLOW_UP__LEAD: lead_id})
+        followup = {'count': queryset.count()}
+        followup['data'] = queryset.order_by(
+            "-"+constants.CREATED_ON).first() or {}
+        if followup["data"]:
+            followup["data"] = followup["data"].display()
+        return followup
 
     @classmethod
     def suspend_controller(cls, data):
@@ -91,7 +105,8 @@ class FollowUpController(Controller):
 
     @classmethod
     def read_lead_follow(cls, data):
-        queryset = cls.db_read_records(read_filter={constants.FOLLOW_UP__LEAD: data['lead']})
+        queryset = cls.db_read_records(
+            read_filter={constants.FOLLOW_UP__LEAD: data['lead']})
         followup_dataset = []
         user = common_utils.current_user()
         followup_dataset.append([obj.display() for obj in queryset])

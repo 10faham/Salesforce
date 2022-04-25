@@ -7,10 +7,10 @@
     {% if response_code == 200 %}
     console.log({{response_data|tojson}})
     // document.location = "/home"
-    alert(`Followup Added \n` + `{{ response_data| tojson}}`)
+    alert(`Lead Added \n` + `{{ response_data| tojson}}`)
     {% endif %}
     {% if response_code == 4003 %}
-    alert(`Validation Failed - Please recheck submitted data \n` + `{{ response_data| tojson}}`)
+    alert(`Validation Failed \n` + `{{ response_data| tojson}}`)
     console.log({{ response_data| tojson}})
     {% elif response_code != 200 %}
     // alert(`Error \n` + `{{ response_message}}`)
@@ -49,6 +49,7 @@
                     <div class="card-box">
                         <div class="row">
                             <form class="form-horizontal" action="/api/follow_ups/create" method="POST" id="follow_up_form">
+                                <input type="hidden" name="lead" value="{{response_data.id}}" >
                                 <h4 class="page-title">Current Task</h4>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -114,7 +115,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Task Completion Date</label>
+                                        <label class="col-sm-2 control-label">Completion Date</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control datetime-picker" required
                                                 title="completion_date" name="completion_date" />
@@ -208,7 +209,7 @@
     const params = new URLSearchParams(window.location.search);
     const lead = params.get("lead");
     console.log(lead);
-    $("#follow_up_form").append(`<input type="hidden" name="lead" value="${lead}" >`)
+    // $("#follow_up_form").append(`<input type="hidden" name="lead" value="${lead}" >`)
     console.log("Element added")
 </script>
 {% endblock %}

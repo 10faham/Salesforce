@@ -26,8 +26,8 @@ def create_get_view():
 )
 def create_view(data):
     res = FollowUpController.create_controller(data=data)
-    return render_template("./addfollow_up.html", **res)
-
+    # return render_template("./viewfollow_ups.html", **res)
+    return redirect(url_for('follow_ups_bp.read_view', **res))
 
 @follow_ups_bp.route("/read", methods=["GET"])
 @decorators.is_authenticated
