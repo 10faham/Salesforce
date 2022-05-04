@@ -67,7 +67,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="">
-                                                        <a href="#today" data-toggle="tab" aria-expanded="false">
+                                                        <a href="#tomorrow" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-user"></i></span>
                                                             <span class="hidden-xs">Tomorrow</span>
                                                         </a>
@@ -98,40 +98,33 @@
                                                                         <th>Deadline</th>
                                                                         <th>Client</th>
                                                                         <th>Project</th>
-                                                                        <th>Comment</th>
                                                                         <th>Assigned To</th>
                                                                         <th>Actions</th>
                                                                     </tr>
                                                                 </thead>
 
                                                                 <tbody id="lead-detail">
-                                                                    {% for user in response_data %}
-                                                                    {% for obj in user[1] %}                        
-                                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') < moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                                    {% for obj in response_data['overdue'] %}
                                                                     <tr>
-                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
-                                                                        <td>{{obj.next_task}}</td>
-                                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
-                                                                        <td>{{obj.lead.first_name}}</td>
-                                                                        <td>{{obj.next_project}}</td>
-                                                                        <td>{{obj.comment}}</td>
-                                                                        <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
+                                                                        <td>{{obj.data.next_task}}</td>
+                                                                        <td>{{obj.data.next_deadline}}</td>
+                                                                        <td>{{obj.data.lead.first_name}}</td>
+                                                                        <td>{{obj.data.next_project}}</td>
+                                                                        <td>{{obj.data.lead.created_by}}</td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
                                                                             <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                                <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
                                                                         </td>
                                                                     </tr>
-                                                                    {% endif %}
-                                                                    {% endfor %}
                                                                     {% endfor %}
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
-            
                                                     <div class="tab-pane" id="today">
                                                         <div class="card-box table-responsive">
                         
@@ -143,7 +136,6 @@
                                                                         <th>Deadline</th>
                                                                         <th>Client</th>
                                                                         <th>Project</th>
-                                                                        <th>Comment</th>
                                                                         <th>Assigned To</th>
                                                                         <th>Actions</th>
                                                                     </tr>
@@ -151,27 +143,22 @@
                         
                         
                                                                 <tbody id="lead-detail">
-                                                                    {% for user in response_data %}
-                                                                    {% for obj in user[1] %}
-                                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') == moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                                    {% for obj in response_data['today'] %}
                                                                     <tr>
-                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
-                                                                        <td>{{obj.next_task}}</td>
-                                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
-                                                                        <td>{{obj.lead.first_name}}</td>
-                                                                        <td>{{obj.next_project}}</td>
-                                                                        <td>{{obj.comment}}</td>
-                                                                        <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
+                                                                        <td>{{obj.data.next_task}}</td>
+                                                                        <td>{{obj.data.next_deadline}}</td>
+                                                                        <td>{{obj.data.lead.first_name}}</td>
+                                                                        <td>{{obj.data.next_project}}</td>
+                                                                        <td>{{obj.data.lead.created_by}}</td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
                                                                             <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                                <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
                                                                         </td>
                                                                     </tr>
-                                                                    {% endif %}
-                                                                    {% endfor %}
                                                                     {% endfor %}
                                                                 </tbody>
                                                             </table>
@@ -188,7 +175,6 @@
                                                                         <th>Deadline</th>
                                                                         <th>Client</th>
                                                                         <th>Project</th>
-                                                                        <th>Comment</th>
                                                                         <th>Assigned To</th>
                                                                         <th>Actions</th>
                                                                     </tr>
@@ -196,27 +182,22 @@
                         
                         
                                                                 <tbody id="lead-detail">
-                                                                    {% for user in response_data %}
-                                                                    {% for obj in user[1] %}
-                                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') > moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                                    {% for obj in response_data['tomorrow'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
-                                                                        <td>{{obj.next_task}}</td>
-                                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
-                                                                        <td>{{obj.lead.first_name}}</td>
-                                                                        <td>{{obj.next_project}}</td>
-                                                                        <td>{{obj.comment}}</td>
-                                                                        <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.next_task}}</td>
+                                                                        <td>{{obj.data.next_deadline}}</td>
+                                                                        <td>{{obj.data.lead.first_name}}</td>
+                                                                        <td>{{obj.data.next_project}}</td>
+                                                                        <td>{{obj.data.lead.created_by}}</td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
                                                                             <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                                <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
                                                                         </td>
                                                                     </tr>
-                                                                    {% endif %}
-                                                                    {% endfor %}
                                                                     {% endfor %}
                                                                 </tbody>
                                                             </table>
@@ -233,7 +214,6 @@
                                                                         <th>Deadline</th>
                                                                         <th>Client</th>
                                                                         <th>Project</th>
-                                                                        <th>Comment</th>
                                                                         <th>Assigned To</th>
                                                                         <th>Actions</th>
                                                                     </tr>
@@ -241,27 +221,22 @@
                         
                         
                                                                 <tbody id="lead-detail">
-                                                                    {% for user in response_data %}
-                                                                    {% for obj in user[1] %}
-                                                                    {% if moment(obj.next_deadline).format('YYYY MM DD, HH:mm:ss') > moment().format('YYYY MM DD, HH:mm:ss') %}
+                                                                    {% for obj in response_data['next7'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
-                                                                        <td>{{obj.next_task}}</td>
-                                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
-                                                                        <td>{{obj.lead.first_name}}</td>
-                                                                        <td>{{obj.next_project}}</td>
-                                                                        <td>{{obj.comment}}</td>
-                                                                        <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.next_task}}</td>
+                                                                        <td>{{obj.data.next_deadline}}</td>
+                                                                        <td>{{obj.data.lead.first_name}}</td>
+                                                                        <td>{{obj.data.next_project}}</td>
+                                                                        <td>{{obj.data.lead.created_by}}</td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
                                                                             <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                                <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
                                                                         </td>
                                                                     </tr>
-                                                                    {% endif %}
-                                                                    {% endfor %}
                                                                     {% endfor %}
                                                                 </tbody>
                                                             </table>
@@ -278,7 +253,6 @@
                                                                         <th>Deadline</th>
                                                                         <th>Client</th>
                                                                         <th>Project</th>
-                                                                        <th>Comment</th>
                                                                         <th>Assigned To</th>
                                                                         <th>Actions</th>
                                                                     </tr>
@@ -286,32 +260,32 @@
                         
                         
                                                                 <tbody id="lead-detail">
-                                                                    {% for user in response_data %}
-                                                                    {% for obj in user[1] %}
+                                                                    {% for obj in response_data['all'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
-                                                                        <td>{{obj.next_task}}</td>
-                                                                        <td>{{moment(obj.next_deadline).calendar()}}</td>
-                                                                        <td>{{obj.lead.first_name}}</td>
-                                                                        <td>{{obj.next_project}}</td>
-                                                                        <td>{{obj.comment}}</td>
-                                                                        <td>{{user[0]}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.next_task}}</td>
+                                                                        <td>{{obj.data.next_deadline}}</td>
+                                                                        <td>{{obj.data.lead.first_name}}</td>
+                                                                        <td>{{obj.data.next_project}}</td>
+                                                                        <td>{{obj.data.lead.created_by}}</td>
+                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
                                                                             <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj.lead.id}}" >
+                                                                                <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
-                                                                    {% endfor %}
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
+
                                                 </div>
-            
+                                                
+                                                            
+
                                             </div>
                                         </div>
                                     </div>

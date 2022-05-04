@@ -3,9 +3,12 @@
 # Framework imports
 
 # Local imports
+from datetime import datetime, timedelta
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.FollowUp import FollowUp
+from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
+# from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
 from ppBackend import config
 
@@ -48,25 +51,60 @@ class FollowUpController(Controller):
         user_childs = UserController.get_user_childs(user=common_utils.current_user(),
                                                      return_self=True)
         followup_dataset = []
-        temp = []
+        followup_data = {}
+        overdue = []
+        today = []
+        tomorrow = []
+        next7 = []
+        all = []
         for user in user_childs:
-            if user == common_utils.current_user():
-                queryset = cls.db_read_records(
-                    read_filter={constants.CREATED_BY: user, **data})
-                followup_dataset.append(
-                    [user.name, [obj.display() for obj in queryset]])
-            else:
-                queryset = cls.db_read_records(
-                    read_filter={constants.CREATED_BY: user, **data})
-                temp.append([user.name, [obj.display() for obj in queryset]])
-        for each in temp:
-            followup_dataset.append(each)
+            queryset = cls.db_read_records(
+                read_filter={constants.CREATED_BY: user, **data})
+            tmp = []
+            tmp.append([obj.display() for obj in queryset])
+            leads_id = []
+            for lead in tmp:
+                for follow in lead:
+                    if follow[constants.FOLLOW_UP__LEAD][constants.ID] not in leads_id:
+                        leads_id.append(follow[constants.FOLLOW_UP__LEAD][constants.ID])
+            
+            tmp_follow = []
+            tmp_follow.append([FollowUpController.read_count(obj) for obj in leads_id])
+            for item in tmp_follow[0]:
+                # print(datetime.now().date())
+                # print(item['data']['next_deadline'].date())
+                now = datetime.now().date()
+                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() < now:
+                    overdue.append(item)
+                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() == now:
+                    today.append(item)
+                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() == (now + timedelta(days = 1)):
+                    tomorrow.append(item)
+                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() > now and item[
+                    'data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() <= (now + timedelta(days = 7)):
+                    next7.append(item)
+                all.append(item)
+            followup_dataset.append([user.name, tmp, tmp_follow])
+
+            # for obj in queryset:
+            #     tmp = obj.display()
+            #     # tmp['followup'] = FollowUpController.read_count(tmp['id'])
+            #     lead_data.append(FollowUpController.read_count(['id']))
+            # lead_dataset.append(
+            #     [str(user.pk), user[constants.USER__NAME], lead_data])
         user = common_utils.current_user()
+        followup_data['followup'] = followup_dataset
+        followup_data['overdue'] = overdue
+        followup_data['today'] = today
+        followup_data['tomorrow'] = tomorrow
+        followup_data['next7'] = next7
+        followup_data['all'] = all
+        followup_data['usernamne'] = common_utils.current_user()[constants.USER__NAME]
         # followup_dataset.append(user.name)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=followup_dataset
+            response_data=followup_data
         )
 
     @classmethod

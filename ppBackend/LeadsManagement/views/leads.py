@@ -43,8 +43,9 @@ def leads_create_view(data):
 
     res = LeadsController.create_controller(data=data_lead)
     rest = res
-    data_follow['lead'] = res['response_data']['id']
-    res = FollowUpController.create_controller(data=data_follow)
+    if res['response_code'] == 200:
+        data_follow['lead'] = res['response_data']['id']
+        res = FollowUpController.create_controller(data=data_follow)
     # return redirect(url_for('addlead_view', **res))
     return render_template("./addlead.html", **res)
     # return render_template("./addfollow_up_bylead.html", **res)
