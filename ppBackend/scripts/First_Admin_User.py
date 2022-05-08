@@ -11,7 +11,9 @@ from ppBackend.UserManagement.controllers.UserController import UserController
 #     import RoleController
 
 
-def create_admin_user_if_not_exists():
+def create_admin_user_if_not_exists(run=False):
+    if not run:
+        return
     with app.test_request_context():
         if not bool(UserController.db_read_records({}).count()):
             print("No Users")

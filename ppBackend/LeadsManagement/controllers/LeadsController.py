@@ -16,35 +16,31 @@ class LeadsController(Controller):
 
     @classmethod
     def create_controller(cls, data):
-        print(data)
-        is_valid, error_messages, obj = cls.db_insert_record(
-            data=data, db_commit=False)
-        if is_valid:
-            logged_in_user = common_utils.current_user()
-            already_exists = cls.db_read_records(read_filter={
-                constants.LEAD__PHONE_NUMBER: obj[constants.LEAD__PHONE_NUMBER],
-                constants.CREATED_BY+"__nin": [logged_in_user]
-            })
-            if already_exists:
-                # TODO
-                print('duplicate number**********************************')
-                return response_utils.get_response_object(
-                    response_code=response_codes.CODE_USER_ALREADY_EXIST,
-                    response_message=response_codes.MESSAGE_ALREADY_EXISTS_DATA,
-                    response_data=already_exists
-                )
-            obj.save()
+        is_valid, error_messages = cls.cls_validate_data(data=data)
+        if not is_valid:
             return response_utils.get_response_object(
-                response_code=response_codes.CODE_SUCCESS,
-                response_message=response_codes.MESSAGE_SUCCESS,
-                response_data=obj.display()
+                response_code=response_codes.CODE_VALIDATION_FAILED,
+                response_message=response_codes.MESSAGE_VALIDATION_FAILED,
+                response_data=error_messages
             )
-        print('validation failed ********************************')
-        print(error_messages)
+        current_user = common_utils.current_user()
+        already_exists = cls.db_read_records(read_filter={
+            constants.LEAD__PHONE_NUMBER: obj[constants.LEAD__PHONE_NUMBER],
+            constants.CREATED_BY+"__nin": [current_user]
+        })
+        if already_exists:
+            return response_utils.get_response_object(
+                response_code=response_codes.CODE_USER_ALREADY_EXIST,
+                response_message=response_codes.MESSAGE_ALREADY_EXISTS_DATA,
+                response_data=already_exists
+            )
+        data[constants.LEAD__ASSIGNED_TO] = current_user
+        _, _, obj = cls.db_insert_record(
+            data=data, default_validation=False)
         return response_utils.get_response_object(
-            response_code=response_codes.CODE_VALIDATION_FAILED,
-            response_message=response_codes.MESSAGE_VALIDATION_FAILED,
-            response_data=error_messages
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_SUCCESS,
+            response_data=obj.display()
         )
 
     @classmethod

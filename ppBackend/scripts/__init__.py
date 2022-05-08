@@ -1,4 +1,8 @@
 
 from ppBackend.scripts.First_Admin_User import create_admin_user_if_not_exists
-def run_scripts():
-    create_admin_user_if_not_exists()
+from ppBackend.scripts.phoneNumberFormatCorrection import phone_number_format_correction
+
+
+def run_scripts(execute_create_admin_user_if_not_exists=False, execute_phone_number_format_correction=False):
+    create_admin_user_if_not_exists(execute_create_admin_user_if_not_exists)
+    phone_number_format_correction(execute_phone_number_format_correction)

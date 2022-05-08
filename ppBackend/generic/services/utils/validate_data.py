@@ -230,7 +230,7 @@ def uid(data, key):
 
 
 def phone_number(data, key):
-    phone_number_regex = re.compile(r'^\+|0{1,}(?:[0-9]●?){6,14}[0-9]$')
+    phone_number_regex = re.compile(r'^\+?[1-9]\d{10,13}$')
     if phone_number_regex.match(str(data[key])):
         return [True, ""]
     else:

@@ -208,6 +208,7 @@ LEAD__LEVEL = "lead_level"
 LEAD__LEVEL__LIST = ["AtomBomb", "Hot", "Moderate", "Cold", "SubZero"]
 LEAD__USER = "user"
 LEAD__COMMENT = "lead_comment"
+LEAD__ASSIGNED_TO = "assigned_to"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
