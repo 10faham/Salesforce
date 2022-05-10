@@ -72,6 +72,7 @@ class Leads(models.Model):
     lead_level = db.StringField(required=True)
     lead_comment = db.StringField()
     assigned_to = db.LazyReferenceField(User, required=True)
+    assigned_by = db.LazyReferenceField(User, required=True)
 
     def __str__(self):
         return str(self.pk)
@@ -96,6 +97,7 @@ class Leads(models.Model):
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
             constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
             constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name if self[constants.LEAD__ASSIGNED_TO] else None,
+            constants.LEAD__ASSIGNED_BY: self[constants.LEAD__ASSIGNED_BY].fetch().name if self[constants.LEAD__ASSIGNED_BY] else None,
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self.created_by.fetch().name,
             constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),

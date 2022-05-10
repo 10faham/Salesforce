@@ -60,8 +60,10 @@ class DashboardFollow(Controller):
         kpi_dataset = []
         filter = {}
         if data.get(constants.DATE_FROM):
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = data.get(constants.DATE_FROM)
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = data.get(constants.DATE_TO)
+            datefrom = data.get(constants.DATE_FROM).split('T')
+            dateto = data.get(constants.DATE_TO).split('T')
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = datetime.strptime(datefrom[0], '%Y-%m-%d')
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = datetime.strptime(dateto[0], '%Y-%m-%d')
 
         # queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter, **data})
         user_childs = UserController.get_user_childs(

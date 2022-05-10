@@ -2,6 +2,7 @@
 
 
 {% block scripthead %}
+<link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
 
 <script>
     response_code = parseInt("{{response_code}}")
@@ -40,7 +41,27 @@
                 </div>
             </div>
             <!-- end row -->
-
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>Select Date</label>
+                    <form action="/api/leads/read" method="POST" id="leads_date">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <div id="reportrange" class="pull-right form-control">
+                                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    <span></span>
+                                    <input id="start" type="hidden" name="date_start" value=" ">
+                                    <input id="end" type="hidden" name="date_end" value=" ">
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
 
             <div class="row">
@@ -330,9 +351,12 @@
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.scroller.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.colVis.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
 <!-- init -->
 <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
+<script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
+
 
 <script>
         $("table").each(function(){

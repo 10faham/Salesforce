@@ -19,7 +19,7 @@ def phone_number_format_correction(run=False):
             # constants.LEAD__PHONE_NUMBER+"__contains": " "
         })
         for obj in queryset:
-            obj[constants.LEAD__PHONE_NUMBER] = "+92" + obj[constants.LEAD__PHONE_NUMBER][1:]
-            obj[constants.LEAD__PHONE_NUMBER] = obj[constants.LEAD__PHONE_NUMBER].replace(" ", "")
-            obj.save()
+            # obj[constants.LEAD__PHONE_NUMBER] = "+92" + obj[constants.LEAD__PHONE_NUMBER][1:]
+            # obj[constants.LEAD__PHONE_NUMBER] = obj[constants.LEAD__PHONE_NUMBER].replace(" ", "")
+            # obj.save()
             print("Updated Obj : ", obj)

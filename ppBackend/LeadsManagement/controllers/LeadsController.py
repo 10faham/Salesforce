@@ -25,7 +25,7 @@ class LeadsController(Controller):
             )
         current_user = common_utils.current_user()
         already_exists = cls.db_read_records(read_filter={
-            constants.LEAD__PHONE_NUMBER: obj[constants.LEAD__PHONE_NUMBER],
+            constants.LEAD__PHONE_NUMBER: data[constants.LEAD__PHONE_NUMBER],
             constants.CREATED_BY+"__nin": [current_user]
         })
         if already_exists:
@@ -35,6 +35,7 @@ class LeadsController(Controller):
                 response_data=already_exists
             )
         data[constants.LEAD__ASSIGNED_TO] = current_user
+        data[constants.LEAD__ASSIGNED_BY] = current_user
         _, _, obj = cls.db_insert_record(
             data=data, default_validation=False)
         return response_utils.get_response_object(
@@ -45,12 +46,19 @@ class LeadsController(Controller):
 
     @classmethod
     def read_controller(cls, data):
+        filter = {}
+        if data.get(constants.DATE_FROM):
+            datefrom = data.get(constants.DATE_FROM).split('T')
+            dateto = data.get(constants.DATE_TO).split('T')
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
+            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+            
         user_childs = UserController.get_user_childs(
             user=common_utils.current_user(), return_self=True)
         lead_dataset = []
         for user in user_childs:
             queryset = cls.db_read_records(read_filter={
-                constants.CREATED_BY: user, **data})
+                constants.CREATED_BY: user, **filter})
             lead_data = []
             for obj in queryset.order_by("-"+constants.CREATED_ON):
                 tmp = obj.display()

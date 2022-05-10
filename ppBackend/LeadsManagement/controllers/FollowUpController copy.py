@@ -48,13 +48,6 @@ class FollowUpController(Controller):
 
     @classmethod
     def read_controller(cls, data):
-        filter = {}
-        if data.get(constants.DATE_FROM):
-            datefrom = data.get(constants.DATE_FROM).split('T')
-            dateto = data.get(constants.DATE_TO).split('T')
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
-            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
-        
         user_childs = UserController.get_user_childs(user=common_utils.current_user(),
                                                      return_self=True)
         followup_dataset = []

@@ -76,6 +76,8 @@ def epoch_to_datetime(epoch_time):
 def convert_to_epoch(str_time, format=config.DATETIME_FORMAT):
     return int(time.mktime(time.strptime(str_time, format)))
 
+def convert_to_epoch1000(str_time, format=config.DATETIME_FORMAT):
+    return int(time.mktime(time.strptime(str_time, format)))*1000
 
 def json_to_dict(json_data):
     return json.loads(json_data)

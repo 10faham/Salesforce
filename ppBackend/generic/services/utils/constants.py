@@ -209,6 +209,7 @@ LEAD__LEVEL__LIST = ["AtomBomb", "Hot", "Moderate", "Cold", "SubZero"]
 LEAD__USER = "user"
 LEAD__COMMENT = "lead_comment"
 LEAD__ASSIGNED_TO = "assigned_to"
+LEAD__ASSIGNED_BY = "assigned_by"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
@@ -279,7 +280,7 @@ REQUIRED_UPDATE_FIELDS_LIST__LEAD = list(
     set(REQUIRED_FIELDS_LIST__LEAD + [ID]) - set([LEAD__FIRST_NAME])
 )
 ALL_FIELDS_LIST__LEAD = OPTIONAL_FIELDS_LIST__LEAD + \
-    REQUIRED_FIELDS_LIST__LEAD + [ID, CREATED_BY]
+    REQUIRED_FIELDS_LIST__LEAD + [ID, CREATED_BY, CREATED_ON]
 
 # Follow Up
 REQUIRED_FIELDS_LIST__FOLLOW_UP = [

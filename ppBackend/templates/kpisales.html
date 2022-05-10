@@ -71,7 +71,8 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Leads Assigned</th>
+                                            <th>Total Leads Assigned</th>
+                                            <th>Leads Add Today</th>
                                             <th>TLW</th>
                                             <th>Calls</th>
                                             <th>AT Calls</th>
@@ -84,6 +85,7 @@
                                         {% for user in kpi.response_data %}
                                         <tr>
                                                 <td>{{user[0]}}</td>
+                                                <td>{{leads_count.response_data[loop.index - 1][1]}}</td>
                                                 <td>{{leads_count.response_data[loop.index - 1][1]}}</td>
                                                 <td>{{user[3]}}</td>
                                                 <td>{{user[1]}}</td>
