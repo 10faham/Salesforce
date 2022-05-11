@@ -1,7 +1,7 @@
 # Python imports
 
 # Framework imports
-from flask import Blueprint, redirect, url_for, redirect, render_template
+from flask import Blueprint, redirect, url_for, redirect, render_template, request
 
 # Local imports
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
@@ -29,7 +29,7 @@ def create_view(data):
     # return render_template("./viewfollow_ups.html", **res)
     return redirect(url_for('follow_ups_bp.read_view', **res))
 
-@follow_ups_bp.route("/read", methods=["GET"])
+@follow_ups_bp.route("/read", methods=["GET", "POST"])
 @decorators.is_authenticated
 # @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
@@ -37,6 +37,8 @@ def create_view(data):
     constants.ALL_FIELDS_LIST__FOLLOW_UP,
 )
 def read_view(data):
+    if request.method == "POST":
+        data = request.form    
     res = FollowUpController.read_controller(data=data)
     return render_template("viewfollow_ups.html", **res)
 

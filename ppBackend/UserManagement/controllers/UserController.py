@@ -171,3 +171,7 @@ class UserController(Controller):
         if return_self:
             user__childs.append(user)
         return user__childs
+
+    @classmethod
+    def get_user(cls, data):
+        return cls.db_read_single_record(read_filter={constants.ID: data})

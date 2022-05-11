@@ -62,8 +62,8 @@ class DashboardFollow(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM).split('T')
             dateto = data.get(constants.DATE_TO).split('T')
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = datetime.strptime(datefrom[0], '%Y-%m-%d')
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = datetime.strptime(dateto[0], '%Y-%m-%d')
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = datetime.strptime(datefrom[0], config.DATE_FORMAT)
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = datetime.strptime(dateto[0], config.DATE_FORMAT)
 
         # queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter, **data})
         user_childs = UserController.get_user_childs(

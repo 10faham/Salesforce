@@ -4,6 +4,7 @@
 {% block scripthead %}
 <link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
 
+
 <script>
     response_code = parseInt("{{response_code}}")
     response_message = "{{response_message}}"
@@ -44,7 +45,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <label>Select Date</label>
-                    <form action="/api/leads/read" method="POST" id="leads_date">
+                    <form action="/api/follow_ups/read" method="POST" id="leads_date">
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <div id="reportrange" class="pull-right form-control">
@@ -133,9 +134,14 @@
                                                                         <td>{{obj.data.lead.first_name}}</td>
                                                                         <td>{{obj.data.next_project}}</td>
                                                                         <td>{{obj.data.lead.created_by}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
+                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.data.comment}}'" data-original-title="'{{obj.data.comment}}'"><i
+                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                            <p>TLW: {{obj.count}}</p>
+                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
                                                                                 <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
@@ -172,9 +178,14 @@
                                                                         <td>{{obj.data.lead.first_name}}</td>
                                                                         <td>{{obj.data.next_project}}</td>
                                                                         <td>{{obj.data.lead.created_by}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
+                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.data.comment}}'" data-original-title="'{{obj.data.comment}}'"><i
+                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                            <p>TLW: {{obj.count}}</p>
+                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
                                                                                 <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
@@ -211,9 +222,14 @@
                                                                         <td>{{obj.data.lead.first_name}}</td>
                                                                         <td>{{obj.data.next_project}}</td>
                                                                         <td>{{obj.data.lead.created_by}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
+                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.data.comment}}'" data-original-title="'{{obj.data.comment}}'"><i
+                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                            <p>TLW: {{obj.count}}</p>
+                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
                                                                                 <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
@@ -250,9 +266,14 @@
                                                                         <td>{{obj.data.lead.first_name}}</td>
                                                                         <td>{{obj.data.next_project}}</td>
                                                                         <td>{{obj.data.lead.created_by}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
+                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.data.comment}}'" data-original-title="'{{obj.data.comment}}'"><i
+                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                            <p>TLW: {{obj.count}}</p>
+                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
                                                                                 <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
@@ -289,9 +310,14 @@
                                                                         <td>{{obj.data.lead.first_name}}</td>
                                                                         <td>{{obj.data.next_project}}</td>
                                                                         <td>{{obj.data.lead.created_by}}</td>
-                                                                        <td><a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
+                                                                        <td>
+                                                                            <button id="{{obj.data.id}}" type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
+                                                                                data-toggle="tooltip" data-placement="left" title="{{obj.data.comment}}" data-original-title="{{obj.data.comment}}" ><i
+                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/create?lead={{obj.data.lead.id}}"><i class="glyphicon glyphicon-plus"></i></a>
                                                                             <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.data.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
-                                                                            <form class="" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
+                                                                            <p>TLW: {{obj.count}}</p>
+                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
                                                                                 <input type="hidden" name="lead" value="{{obj.data.lead.id}}" >
                                                                             <input type="submit" class="mdi mdi-file-restore" value="view all">
                                                                             </form>
@@ -353,14 +379,22 @@
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
+<!-- Modal-Effect -->
+<script src="{{ url_for('static', filename='plugins/custombox/js/custombox.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/custombox/js/legacy.min.js') }}"></script>
+
 <!-- init -->
 <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
-
 <script>
         $("table").each(function(){
-            $(this).DataTable();
+            $(this).DataTable({
+                "bFilter": true,
+                "aaSorting": [],
+                "pageLength": 100
+            });
+            
         })
     // TableManageButtons.init();
 

@@ -32,13 +32,13 @@ class FollowUpController(Controller):
         #         response_message=response_codes.MESSAGE_HAS_TO_BE_LESS_THAN.format(
         #             constants.FOLLOW_UP__NEXT, constants.CURRENT_TIME
         #         ))
-        if data[constants.FOLLOW_UP__LEAD][constants.CREATED_BY] != common_utils.current_user():
-            return response_utils.get_response_object(
-                response_code=response_codes.CODE_UNAUTHENTICATED_ACCESS,
-                response_message=response_codes.MESSAGE_UNAUTHENTICATED_ACCESS
-            )
-        data[constants.FOLLOW_UP__LEAD][constants.LEAD__STATUS] = data[constants.FOLLOW_UP__STATUS]
-        data[constants.FOLLOW_UP__LEAD].save()
+        # if data[constants.FOLLOW_UP__LEAD][constants.CREATED_BY] != common_utils.current_user():
+        #     return response_utils.get_response_object(
+        #         response_code=response_codes.CODE_UNAUTHENTICATED_ACCESS,
+        #         response_message=response_codes.MESSAGE_UNAUTHENTICATED_ACCESS
+        #     )
+        # data[constants.FOLLOW_UP__LEAD][constants.LEAD__STATUS] = data[constants.FOLLOW_UP__STATUS]
+        # data[constants.FOLLOW_UP__LEAD].save()
         _, _, obj = cls.db_insert_record(data=data)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
@@ -52,8 +52,8 @@ class FollowUpController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM).split('T')
             dateto = data.get(constants.DATE_TO).split('T')
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
-            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom[0], config.DATE_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto[0], config.DATE_FORMAT)
         
         user_childs = UserController.get_user_childs(user=common_utils.current_user(),
                                                      return_self=True)
@@ -66,7 +66,7 @@ class FollowUpController(Controller):
         all = []
         for user in user_childs:
             queryset = cls.db_read_records(
-                read_filter={constants.CREATED_BY: user, **data})
+                read_filter={constants.CREATED_BY: user, **filter})
             tmp = []
             tmp.append([obj.display() for obj in queryset])
             leads_id = []

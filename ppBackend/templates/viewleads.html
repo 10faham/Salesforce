@@ -37,25 +37,38 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" id="filter">
         <div class="col-xs-12">
-            <label>Select Date</label>
-            <form action="/api/leads/read" method="POST" id="leads_date">
-                <div class="col-xs-6">
-                    <div class="form-group">
+          <form action="/api/leads/read" method="POST" id="leads_date">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Select Date</label>
                         <div id="reportrange" class="pull-right form-control">
                             <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                             <span></span>
-                            <input id="start" type="hidden" name="date_start" value=" ">
-                            <input id="end" type="hidden" name="date_end" value=" ">
+                            <input id="start" type="hidden" name="date_start" value="">
+                            <input id="end" type="hidden" name="date_end" value="">
                         </div>
                         <div class="clearfix"></div>
-                    </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Assigned To</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="assigned_to" title="assigned_to">
+                        <option value="">Team {{response_data['username']}}</option>
+                        {% for user in response_data['data'] %}
+                        <option value="{{user[0]}}">{{user[1]}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="col-xs-6">
-                    <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
-                </div>
-            </form>
+            </div>
+            </div>
+            <div class="col-sm-12">
+                <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
+            </div>
+          </form>
         </div>
       </div>
 
