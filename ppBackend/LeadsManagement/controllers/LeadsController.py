@@ -122,3 +122,19 @@ class LeadsController(Controller):
             response_message=response_codes.MESSAGE_NOT_FOUND_DATA.format(
                 constants.LEAD.title(), constants.ID
             ))
+    
+    @classmethod
+    def read_count(cls, data):
+        filter = {}
+        if data.get(constants.DATE_FROM):
+            datefrom = data.get(constants.DATE_FROM).split('T')
+            dateto = data.get(constants.DATE_TO).split('T')
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
+            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+        if data.get(constants.LEAD__ASSIGNED_TO):
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+        else:
+            user_childs = UserController.get_user_childs(
+                user=common_utils.current_user(), return_self=True)
+
+        

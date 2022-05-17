@@ -174,4 +174,4 @@ class UserController(Controller):
 
     @classmethod
     def get_user(cls, data):
-        return cls.db_read_single_record(read_filter={constants.ID: data})
+        return cls.db_read_single_record(read_filter={constants.ID: data}, deleted_records=True)

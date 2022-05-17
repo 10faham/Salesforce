@@ -11,6 +11,7 @@ from ppBackend.generic.services.utils import constants, decorators
 from ppBackend.UserManagement.views.users import users_bp
 from ppBackend.LeadsManagement.views.leads import leads_bp
 from ppBackend.LeadsManagement.views.follow_ups import follow_ups_bp
+from ppBackend.LeadsManagement.views.reports import reports_bp
 from ppBackend.generic.services.utils import common_utils
 from ppBackend.generic.services.utils.common_utils import current_user
 from ppBackend.LeadsManagement.controllers.DashboardController import DashboardController
@@ -30,7 +31,7 @@ from ppBackend.LeadsManagement.controllers.DashboardController import DashboardF
     constants.ALL_FIELDS_LIST__LEAD,
 )
 def dashboard_view(data):
-    res = DashboardController.read_lead(data=data)
+    res = DashboardController.read_lead_count(data=data)
     res2 = DashboardFollow.read_follow(data=data)
     obj = {'leads_count':'0',
         'follow_ups':'0'}
@@ -43,23 +44,6 @@ def dashboard_view(data):
 def addlead_view():
     return render_template('addlead.html')
 
-@app.route("/kpisales", methods=["GET", "POST"])
-@decorators.is_authenticated
-@decorators.keys_validator()
-def kpisales_view(data):
-    if request.method == "POST":
-        print(data.get(constants.DATE_FROM))
-        print(request.form.get(constants.DATE_TO))
-    
-    res = DashboardController.read_lead(data=data)
-    data = request.form
-    res2 = DashboardFollow.read_kpi(data=data)
-    obj = {'leads_count':'0',
-        'kpi':'0'}
-    obj.update({'leads_count':res})
-    obj.update({'kpi':res2})
-    return render_template('kpisales.html', **obj)
-
 @app.route("/api/static-data", methods=["GET"])
 def static_data_view():
     return jsonify(constants.STATIC_DATA)
@@ -68,3 +52,4 @@ def static_data_view():
 app.register_blueprint(users_bp, url_prefix="/")
 app.register_blueprint(leads_bp, url_prefix="/api/leads")
 app.register_blueprint(follow_ups_bp, url_prefix="/api/follow_ups")
+app.register_blueprint(reports_bp, url_prefix="/api/reports")

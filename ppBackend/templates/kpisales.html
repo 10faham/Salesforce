@@ -10,14 +10,12 @@
     response_message = "{{response_message}}"
     {% if response_code == 200 %}
     sessionStorage.setItem("leadsObj", '{{response_data|tojson}}')
-    console.log({{ leads_count.response_data| tojson}})
-    console.log({{ kpi.response_data| tojson}})
+    console.log({{ response_data| tojson}})
     // document.location = "/home"
     {% else %}
-    console.log({{ leads_count.response_data| tojson}})
-    console.log({{ kpi.response_data| tojson}})
+    console.log({{ response_data| tojson}})
     {% endif %}
-    const leadsObj = {{ leads_count| tojson}}
+    const leadsObj = {{ response_data| tojson}}
 
 </script>
 {% endblock %}
@@ -42,14 +40,14 @@
             <div class="row">
                 <div class="col-xs-12">
                     <label>Select Date</label>
-                    <form action="/kpisales" method="POST" id="kpi_date">
+                    <form action="/api/reports/kpisales" method="POST" id="kpi_date">
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <div id="reportrange" class="pull-right form-control">
                                     <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                                     <span></span>
-                                    <input id="start" type="hidden" name="date_start" value=" ">
-                                    <input id="end" type="hidden" name="date_end" value=" ">
+                                    <input id="start" type="hidden" name="date_start" value="">
+                                    <input id="end" type="hidden" name="date_end" value="">
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -59,7 +57,10 @@
                         </div>
                     </form>
                 </div>
+                <div class="col-xs-12">
+                    <label>Date: {{response_data.datefrom}} - {{response_data.dateto}}</label>
 
+                </div>
             </div>
 
             <div class="row">
@@ -71,7 +72,6 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Total Leads Assigned</th>
                                             <th>Leads Add Today</th>
                                             <th>TLW</th>
                                             <th>Calls</th>
@@ -82,16 +82,15 @@
 
                                     </thead>
                                     <tbody id="lead-detail">
-                                        {% for user in kpi.response_data %}
+                                        {% for user in response_data.kpi %}
                                         <tr>
-                                                <td>{{user[0]}}</td>
-                                                <td>{{leads_count.response_data[loop.index - 1][1]}}</td>
-                                                <td>{{leads_count.response_data[loop.index - 1][1]}}</td>
-                                                <td>{{user[3]}}</td>
-                                                <td>{{user[1]}}</td>
-                                                <td>{{user[4]}}</td>
-                                                <td>{{user[5]}}</td>
-                                                <td>{{user[2]}}</td>
+                                                <td>{{response_data.kpi[user]['name']}}</td>
+                                                <td>{{response_data.kpi[user]['lead_count']}}</td>
+                                                <td>{{response_data.kpi[user]['TLW']}}</td>
+                                                <td>{{response_data.kpi[user]['Call']['_sum']}}</td>
+                                                <td>{{response_data.kpi[user]['Call']['Call_attempt']}}</td>
+                                                <td>n/a</td>
+                                                <td>{{response_data.kpi[user]['Meeting']['_sum']}}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -139,12 +138,6 @@
 <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
-<script>
-        $("table").each(function(){
-            $(this).DataTable();
-        })
-    // TableManageButtons.init();
 
-</script>
 
 {% endblock %}

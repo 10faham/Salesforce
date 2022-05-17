@@ -75,9 +75,8 @@ class FollowUpController(Controller):
                     if follow[constants.FOLLOW_UP__LEAD][constants.ID] not in leads_id:
                         leads_id.append(follow[constants.FOLLOW_UP__LEAD][constants.ID])
             
-            tmp_follow = []
-            tmp_follow.append([FollowUpController.read_count(obj) for obj in leads_id])
-            for item in tmp_follow[0]:
+            tmp_follow = [FollowUpController.read_count(obj) for obj in leads_id]
+            for item in tmp_follow:
                 # print(datetime.now().date())
                 # print(item['data']['next_deadline'].date())
                 now = datetime.now().date()

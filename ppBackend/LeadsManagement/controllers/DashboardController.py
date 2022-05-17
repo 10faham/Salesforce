@@ -7,7 +7,7 @@ from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.LeadsManagement.models.FollowUp import FollowUp
 from ppBackend.UserManagement.controllers.UserController import UserController
-from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
+from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
 from datetime import datetime
 
@@ -16,26 +16,39 @@ class DashboardController(Controller):
     Model = Leads
 
     @classmethod
-    def read_lead(cls, data):
-        user_childs = UserController.get_user_childs(
-            user=common_utils.current_user(), return_self=True)
-        lead_dataset = []
-        temp = []
-        for user in user_childs:
-            if user == common_utils.current_user():
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user})
-                lead_dataset.append([user.name, len(queryset)])
-            else:
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user})
-                temp.append([user.name, len(queryset)])
-        for each in temp:
-            lead_dataset.append(each)
+    def read_lead_count(cls, data, filter={}):
+        lead_data = []
+        user = common_utils.current_user()
+        filter = {}
+        if data.get(constants.DATE_FROM):
+            datefrom = data.get(constants.DATE_FROM).split('T')
+            dateto = data.get(constants.DATE_TO).split('T')
+            filter[constants.CREATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
+            filter[constants.CREATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+        else:
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(str(datetime.now().date()), config.DATE_FORMAT) 
 
+        if data.get(constants.LEAD__ASSIGNED_TO):
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+        else:
+            user_childs = UserController.get_user_childs(
+                user=common_utils.current_user(), return_self=True)
+        user_ids = user_childs.scalar(constants.ID)
+        filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
+
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        for user in queryset:
+            tmp = UserController.get_user(user['_id'])
+            lead_data.append(
+                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count':user['lead_count']})
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=lead_dataset
+            response_data=lead_data
         )
+
 
 class DashboardFollow(Controller):
     Model = FollowUp
@@ -44,9 +57,10 @@ class DashboardFollow(Controller):
     def read_follow(cls, data):
         user = common_utils.current_user()
         follow_dataset = []
-        queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **data})
+        queryset = cls.db_read_records(
+            read_filter={constants.CREATED_BY: user, **data})
 
-        follow_dataset.append([len(queryset)])
+        follow_dataset.append([queryset.count()])
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
@@ -54,48 +68,82 @@ class DashboardFollow(Controller):
         )
 
     @classmethod
-    def read_kpi(cls, data):
+    def read_kpi(cls, data, data2 = None):
         user = common_utils.current_user()
-        follow_dataset = []
-        kpi_dataset = []
         filter = {}
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM).split('T')
             dateto = data.get(constants.DATE_TO).split('T')
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = datetime.strptime(datefrom[0], config.DATE_FORMAT)
-            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__lte"] = datetime.strptime(dateto[0], config.DATE_FORMAT)
-
+            filter[constants.FOLLOW_UP__COMPLETION_DATE +
+                   "__gte"] = datetime.strptime(datefrom[0], config.DATE_FORMAT)
+            filter[constants.FOLLOW_UP__COMPLETION_DATE +
+                   "__lte"] = datetime.strptime(dateto[0], config.DATE_FORMAT)
+        else:
+            filter[constants.FOLLOW_UP__COMPLETION_DATE+"__gte"] = datetime.strptime(str(datetime.now().date()), config.DATE_FORMAT) 
+            datefrom = str(datetime.now().date())
+            dateto = str(datetime.now().date())
+        if data.get(constants.LEAD__ASSIGNED_TO):
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+        else:
+            user_childs = UserController.get_user_childs(
+                user=common_utils.current_user(), return_self=True)
+        user_ids = user_childs.scalar(constants.ID)
+        filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
         # queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter, **data})
-        user_childs = UserController.get_user_childs(
-            user=common_utils.current_user(), return_self=True)
-        temp = []
-        for user in user_childs:
-            if user == common_utils.current_user():
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter})
-                follow_dataset.append([user.name, [obj.display() for obj in queryset]])
-            else:
-                queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter})
-                temp.append([user.name, [obj.display() for obj in queryset]])
-        for each in temp:
-            follow_dataset.append(each)
-        
-        for user in follow_dataset:
-            calls = 0
-            meetings = 0
-            at_calls = 0
-            v_calls = 0
-            for follow in user[1]:
-                if follow['type'] == 'Call':
-                    calls += 1
-                if follow['type'] == 'Meeting':
-                    meetings += 1
-                if follow['sub_type'] == 'Contacted_client' or "Followed_up" or "Whatsapp_call" or "Meeting_Confirmed" or 'Meeting_cancelled' or "Meeting_postponed":
-                    v_calls += 1
-                if follow['sub_type'] == 'Call_attempt':
-                    at_calls += 1
-            kpi_dataset.append([user[0], calls, meetings, len(user[1]), at_calls, v_calls])
+
+        # queryset = cls.db_read_records(read_filter={**filter})
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(
+            pipeline.KPI_REPORT_FOLLOW_UP)
+        kpi_dataset = {str(user[constants.ID]): {
+            "name": user[constants.USER__NAME],
+            "Call": {"_sum": 0},
+            "Meeting": {"_sum": 0},
+            "Sale": {"_sum": 0},
+            "Email": {"_sum": 0},
+            "Acquisition": {"_sum": 0},
+            "TLW":0,
+            "lead_count":0
+        } for user in user_childs}
+        for user in queryset:
+            # if user["_id"]["created_by"] not in user_ids:
+            #     continue
+            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+                                                     ['type']][user["_id"]['sub_type']] = user["count"]
+            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+                                                     ['type']]["_sum"] += user['count']
+            kpi_dataset[str(user["_id"]["created_by"])]['TLW'] += user['count']
+        if data2.get('response_code'):
+            for obj in data2.get('response_data'):
+                kpi_dataset[obj['id']]['lead_count'] = obj['lead_count']
+        # for user in queryset:
+        #     if user['_id']['created_by'] in user_ids:
+        #         temp.append(user['_id'])
+        # temp.append(user['_id'] for user in queryset if user['_id']['created_by'] in user_childs)
+        # temp = list(queryset)
+
+        # for user in follow_dataset:
+        #     calls = 0
+        #     meetings = 0
+        #     at_calls = 0
+        #     v_calls = 0
+        #     for follow in user[1]:
+        #         if follow['type'] == 'Call':
+        #             calls += 1
+        #         elif follow['type'] == 'Meeting':
+        #             meetings += 1
+        #         if follow['sub_type'] == 'Contacted_client' or "Followed_up" or "Whatsapp_call" or "Meeting_Confirmed" or 'Meeting_cancelled' or "Meeting_postponed":
+        #             v_calls += 1
+        #         elif follow['sub_type'] == 'Call_attempt':
+        #             at_calls += 1
+        #     kpi_dataset.append(
+        #         [user[0], calls, meetings, len(user[1]), at_calls, v_calls])
+        out_data = {
+            'kpi': kpi_dataset,
+            'dateto': dateto,
+            'datefrom': datefrom
+        } 
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=kpi_dataset
+            response_data=out_data
         )
