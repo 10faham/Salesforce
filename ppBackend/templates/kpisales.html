@@ -76,7 +76,7 @@
                                             <th>TLW</th>
                                             <th>Calls</th>
                                             <th>AT Calls</th>
-                                            <th>V Calls</th>
+                                            <th>C Calls</th>
                                             <th>Meetings</th>
                                         </tr>
 
@@ -89,7 +89,7 @@
                                                 <td>{{response_data.kpi[user]['TLW']}}</td>
                                                 <td>{{response_data.kpi[user]['Call']['_sum']}}</td>
                                                 <td>{{response_data.kpi[user]['Call']['Call_attempt']}}</td>
-                                                <td>n/a</td>
+                                                <td>{{response_data.kpi[user]['Call']['_connected']}}</td>
                                                 <td>{{response_data.kpi[user]['Meeting']['_sum']}}</td>
                                         </tr>
                                         {% endfor %}

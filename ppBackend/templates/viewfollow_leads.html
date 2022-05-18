@@ -59,7 +59,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="lead-detail">
-                                        {% for obj in response_data[0] %}
+                                        {% for obj in response_data %}
                                         <tr>
                                             <td>{{loop.index}}</td>
                                             <td>{{obj.completion_date}}</td>
@@ -79,7 +79,9 @@
                     </div>
                 </div> <!-- end col -->
             </div>
-
+            <row>
+                
+            </row>
 
 
         </div> <!-- container -->

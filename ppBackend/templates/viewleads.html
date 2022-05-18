@@ -58,7 +58,7 @@
                 <div class="col-sm-10">
                     <select class="form-control" name="assigned_to" title="assigned_to">
                         <option value="">Team {{response_data['username']}}</option>
-                        {% for user in response_data['data'] %}
+                        {% for user in response_data['all_users'] %}
                         <option value="{{user[0]}}">{{user[1]}}</option>
                         {% endfor %}
                     </select>

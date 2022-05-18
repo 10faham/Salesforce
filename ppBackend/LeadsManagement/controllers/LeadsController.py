@@ -70,10 +70,16 @@ class LeadsController(Controller):
             lead_dataset.append(
                 [str(user.pk), user[constants.USER__NAME], lead_data])
         # lead_dataset.append(common_utils.current_user().name)
+        temp = UserController.get_user_childs(
+            user=common_utils.current_user(), return_self=True)
+        all_users = []
+        for id in temp:
+            all_users.append([str(id[constants.ID]) ,id[constants.USER__NAME]])
         leads_data = {}
         leads_data['data'] = lead_dataset
         leads_data['username'] = common_utils.current_user()[
             constants.USER__NAME]
+        leads_data['all_users'] = all_users
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,

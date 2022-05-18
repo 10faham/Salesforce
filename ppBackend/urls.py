@@ -31,6 +31,10 @@ from ppBackend.LeadsManagement.controllers.DashboardController import DashboardF
     constants.ALL_FIELDS_LIST__LEAD,
 )
 def dashboard_view(data):
+    data = {
+        constants.LEAD__ASSIGNED_TO: common_utils.current_user()[
+            constants.ID]
+    }
     res = DashboardController.read_lead_count(data=data)
     res2 = DashboardFollow.read_follow(data=data)
     obj = {'leads_count':'0',

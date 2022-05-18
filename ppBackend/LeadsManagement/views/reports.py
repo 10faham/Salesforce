@@ -17,9 +17,10 @@ reports_bp = Blueprint("reports_bp", __name__)
 @decorators.keys_validator()
 def kpisales_view(data):
     if request.method == "POST":
+        data = request.form
         print(data.get(constants.DATE_FROM))
-        print(request.form.get(constants.DATE_TO))
-    
+        print(data.get(constants.DATE_TO))
+    data = request.form
     res = DashboardController.read_lead_count(data=data)
     data = request.form
     res2 = DashboardFollow.read_kpi(data=data, data2=res)
