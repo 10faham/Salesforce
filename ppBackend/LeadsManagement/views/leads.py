@@ -71,3 +71,14 @@ def read_view(data):
 )
 def update_view(data):
     return LeadsController.update_controller(data=data)
+
+@leads_bp.route("/search", methods=["POST", "GET"])
+@decorators.is_authenticated
+@decorators.keys_validator()
+def search_view(data):
+    if request.method == "POST":
+        data = request.form
+        res = LeadsController.search_controller(data=data)
+        return render_template("find_leads.html", **res)
+    
+    return render_template("find_leads.html")

@@ -45,12 +45,12 @@
 
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <div class="card-box">
                         <div class="row">
                             <form class="form-horizontal" action="/api/follow_ups/create" method="POST" id="follow_up_form">
                                 <h4 class="page-title">Current Task</h4>
-                                <div class="col-md-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Type *</label>
                                         <div class="col-sm-10">
@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Sub Type *</label>
                                         <div class="col-sm-10">
@@ -78,28 +78,14 @@
                                                 <option value="Whatsapp_call">Whatsapp call</option>
                                                 <option value="Whatsapp_message">Whatsapp Message</option>
                                                 <option value="Meeting_Confirmed">Meeting Confirmed</option>
+                                                <option value="Meeting_Done">Meeting Done</option>
                                                 <option value="Meeting_cancelled">Meeting Cancelled</option>
                                                 <option value="Meeting_postponed">Meeting Postponed</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Level*</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" required name="lead_level" title="lead_level">
-                                                <option value=""></option>
-                                                <option value="AtomBomb">Atom-Bomb</option>
-                                                <option value="Hot">Hot</option>
-                                                <option value="Moderate">Moderate</option>
-                                                <option value="Cold">Cold</option>
-                                                <option value="SubZero">Sub-Zero</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Status*</label>
                                         <div class="col-sm-10">
@@ -112,7 +98,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Task Completion Date</label>
                                         <div class="col-sm-10">
@@ -121,7 +107,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Comment*</label>
                                         <div class="col-sm-10">
@@ -132,7 +118,7 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <h4 class="page-title">Next Follow up</h4>
-                                    <div class="col-md-6">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Next Task *</label>
                                             <div class="col-sm-10">
@@ -155,7 +141,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Project</label>
                                             <div class="col-sm-10">
@@ -166,12 +152,27 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Deadline</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control datetime-picker" required
                                                     title="next" name="next_deadline" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Level*</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" required name="lead_level" title="lead_level">
+                                                    <option value=""></option>
+                                                    <option value="AtomBomb">Atom-Bomb</option>
+                                                    <option value="Hot">Hot</option>
+                                                    <option value="Moderate">Moderate</option>
+                                                    <option value="Cold">Cold</option>
+                                                    <option value="SubZero">Sub-Zero</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

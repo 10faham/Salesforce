@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+{% block scripthead %}
+
+<script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    {% if response_code == 200 %}
+    console.log({{response_data|tojson}})
+    // document.location = "/home"
+    // alert(`Lead \n` + `{{ response_data| tojson}}`)
+    {% endif %}
+    {% if response_code == 4003 %}
+    alert(`Validation Failed - Please recheck submitted data\n` + `{{ response_data| tojson}}`)
+    console.log({{ response_data| tojson}})
+    {% elif response_code != 200 %}
+    // alert(`Error \n` + `{{ response_message}}`)
+    {% endif %}
+
+</script>
+{% endblock %}
+{% block content %}
+
+
+
+
+
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="page-title-box">
+                        <h4 class="page-title">Find Leads</h4>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="form-horizontal" action="/api/leads/search" method="POST">
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Phone Number*</label>
+                                        <div class="col-md-10">
+                                            <input type="text" class="form-control" name="phone_number"
+                                                placeholder="+921234567890" required>
+                                        </div>
+                                    </div>
+
+                            </div>
+
+                        <input class="btn btn-default" type="submit" value="Find">
+
+                    </form>
+                </div>
+            </div>
+            <!-- end row -->
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if response_data|length > 0 %}
+                    <div class="row">
+                        <label class="col-md-2 control-label">Assigned to: </label>
+                        {{response_data[0].assigned_to}}
+                    </div>
+                    <div class="row">
+                        <label class="col-md-2 control-label">Lead Created on: </label>
+                        {{response_data[0].created_on}}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+
+
+</div>
+<script>
+    $(".datetime-picker").datetimepicker({
+        format: 'YYYY-MM-DD hh:mm:ss'
+    })
+</script>
+{% endblock %}

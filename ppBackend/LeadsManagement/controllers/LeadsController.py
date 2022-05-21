@@ -143,4 +143,13 @@ class LeadsController(Controller):
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
 
+    @classmethod
+    def search_controller(cls, data):
+        if data.get(constants.LEAD__PHONE_NUMBER):
+            queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: data.get(constants.LEAD__PHONE_NUMBER)})
         
+        return response_utils.get_response_object(
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_SUCCESS,
+            response_data=[obj.display() for obj in queryset]
+        )
