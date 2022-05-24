@@ -9,7 +9,7 @@ from ppBackend.LeadsManagement.models.FollowUp import FollowUp
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
 # from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
-from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
+from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
 
 
@@ -50,10 +50,10 @@ class FollowUpController(Controller):
     def read_controller(cls, data):
         filter = {}
         if data.get(constants.DATE_FROM):
-            datefrom = data.get(constants.DATE_FROM).split('T')
-            dateto = data.get(constants.DATE_TO).split('T')
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom[0], config.DATE_FORMAT)
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto[0], config.DATE_FORMAT)
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto, format=config.FILTER_DATETIME_FORMAT)
         
         user_childs = UserController.get_user_childs(user=common_utils.current_user(),
                                                      return_self=True)
@@ -79,7 +79,7 @@ class FollowUpController(Controller):
             for item in tmp_follow:
                 # print(datetime.now().date())
                 # print(item['data']['next_deadline'].date())
-                now = datetime.now().date()
+                now = datetime.utcnow().date()
                 if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() < now:
                     overdue.append(item)
                 if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() == now:
@@ -122,8 +122,21 @@ class FollowUpController(Controller):
             "-"+constants.CREATED_ON).first() or {}
         if followup["data"]:
             followup["data"] = followup["data"].display()
+            # counter += 1
         return followup
 
+    @classmethod
+    def read_current_followup(cls, lead_id):
+        queryset = cls.db_read_records(
+            read_filter={constants.FOLLOW_UP__LEAD+"__in": lead_id}).aggregate(pipeline.LAST_FOLLOWUP)
+        # followup = {'count': queryset.count()}
+        # followup['data'] = queryset.order_by(
+        #     "-"+constants.CREATED_ON).first() or {}
+        # if followup["data"]:
+        #     followup["data"] = followup["data"].display()
+        temp = [obj for obj in queryset]
+        return temp
+    
     @classmethod
     def suspend_controller(cls, data):
         current_user = common_utils.current_user()

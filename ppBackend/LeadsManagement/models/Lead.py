@@ -73,6 +73,7 @@ class Leads(models.Model):
     lead_comment = db.StringField()
     assigned_to = db.LazyReferenceField(User, required=True)
     assigned_by = db.LazyReferenceField(User, required=True)
+    lead_id = db.SequenceField(value_decorator='LD-{}'.format)
 
     def __str__(self):
         return str(self.pk)
@@ -80,6 +81,7 @@ class Leads(models.Model):
     def display(self):
         return {
             constants.ID: str(self[constants.ID]),
+            constants.LEAD__ID: self[constants.LEAD__ID],
             constants.LEAD__FIRST_NAME: self[constants.LEAD__FIRST_NAME],
             constants.LEAD__LAST_NAME: self[constants.LEAD__LAST_NAME],
             constants.LEAD__NIC: self[constants.LEAD__NIC],
@@ -102,4 +104,16 @@ class Leads(models.Model):
             constants.CREATED_BY: self.created_by.fetch().name,
             constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),
             constants.UPDATED_ON: common_utils.epoch_to_datetime(self[constants.UPDATED_ON])
+        }
+
+    def display_min(self):
+        return {
+            constants.ID: str(self[constants.ID]),
+            constants.LEAD__ID: self[constants.LEAD__ID],
+            constants.LEAD__FIRST_NAME: self[constants.LEAD__FIRST_NAME],
+            constants.LEAD__PHONE_NUMBER: self[constants.LEAD__PHONE_NUMBER],
+            constants.LEAD__PROJECT: self[constants.LEAD__PROJECT],
+            constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
+            constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name,
+            constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),
         }

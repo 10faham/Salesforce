@@ -6,15 +6,5 @@ db.leads.updateMany({},
 
 engr.qaiser.ali@gmail.com
 
-Updated Obj :  619ded96945a75460afc222b Bilal
-Updated Obj :  619f7621945a75460afc223d Tania
-Updated Obj :  619f9bdc945a75460afc2247 Adeel
-Updated Obj :  625d225d21fca4f526e4ad9b Mahnoor
-Updated Obj :  626131df2397059ede51828d Tania
-Updated Obj :  6264f93633177e5f5f7534f1 Noor
-Updated Obj :  6264fc95a66173984b7534fb Noor
-Updated Obj :  626506aa33177e5f5f7534f6 Noor
-Updated Obj :  62651ab7fc21cdde481d6b6a Mahnoor
-Updated Obj :  626925c1dcf323e5a66e7807 Irtiza
-Updated Obj :  62778222818dc166fc98d75f Mahnoor
-Updated Obj :  627785011f47746d1c98d773 Mahnoor
+
+{assigned_to:{$in:[ObjectId('619b5af5a30ed6b97330addf'),ObjectId('619b5d27360643a46baf3818'),ObjectId('619b5e04360643a46baf381b'),ObjectId('619b5e56360643a46baf381c'),ObjectId('619b77b002ce66223367ac36'),ObjectId('619dd021945a75460afc2213'),ObjectId('619dd065945a75460afc2214'),ObjectId('624173f47fec343c6b2cc511'),ObjectId('624174b57fec343c6b2cc512'),ObjectId('6242eec3e92df56342b07716'),ObjectId('6242fab2784f3523a9d820dc'),ObjectId('6253cce240d74a484aff4cd9'),ObjectId('625d0a1721fca4f526e4ad88')]}}

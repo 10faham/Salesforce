@@ -128,7 +128,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['overdue'] %}
                                                                     <tr>
-                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
+                                                                        <td>{{obj.data.follow_id}}</td>
                                                                         <td>{{obj.data.next_task}}</td>
                                                                         <td>{{obj.data.next_deadline}}</td>
                                                                         <td>{{obj.data.lead.first_name}}</td>
@@ -172,7 +172,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['today'] %}
                                                                     <tr>
-                                                                        <td scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></td>
+                                                                        <td>{{obj.data.follow_id}}</td>
                                                                         <td>{{obj.data.next_task}}</td>
                                                                         <td>{{obj.data.next_deadline}}</td>
                                                                         <td>{{obj.data.lead.first_name}}</td>
@@ -216,7 +216,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['tomorrow'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.follow_id}}</td>
                                                                         <td>{{obj.data.next_task}}</td>
                                                                         <td>{{obj.data.next_deadline}}</td>
                                                                         <td>{{obj.data.lead.first_name}}</td>
@@ -260,7 +260,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['next7'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.follow_id}}</td>
                                                                         <td>{{obj.data.next_task}}</td>
                                                                         <td>{{obj.data.next_deadline}}</td>
                                                                         <td>{{obj.data.lead.first_name}}</td>
@@ -304,7 +304,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['all'] %}
                                                                     <tr>
-                                                                        <th scope="row">{{loop.index}}<button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="right" title="" data-original-title="'{{obj.data.lead.id}}'"><i class="mdi mdi-key-variant"></i></button></th>
+                                                                        <td>{{obj.data.follow_id}}</td>
                                                                         <td>{{obj.data.next_task}}</td>
                                                                         <td>{{obj.data.next_deadline}}</td>
                                                                         <td>{{obj.data.lead.first_name}}</td>

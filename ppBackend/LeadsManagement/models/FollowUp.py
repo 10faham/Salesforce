@@ -60,6 +60,7 @@ class FollowUp(models.Model):
     next_project = db.StringField()
     next_deadline = db.DateTimeField(required=True)
     next_comment = db.StringField()
+    follow_id = db.SequenceField(value_decorator='FL-{}'.format)
 
     def __str__(self):
         return str(self.pk)
@@ -67,6 +68,7 @@ class FollowUp(models.Model):
     def display(self):
         return {
             constants.ID: str(self[constants.ID]),
+            constants.FOLLOWUP__ID: self[constants.FOLLOWUP__ID],
             constants.FOLLOW_UP__LEAD: self[constants.FOLLOW_UP__LEAD].fetch().display(),
             constants.FOLLOW_UP__TYPE: self[constants.FOLLOW_UP__TYPE],
             constants.FOLLOW_UP__SUB_TYPE: self[constants.FOLLOW_UP__SUB_TYPE],

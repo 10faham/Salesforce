@@ -11,7 +11,8 @@ from ppBackend.config import config
 def register_scripts():
     from ppBackend.scripts import run_scripts
     run_scripts(execute_create_admin_user_if_not_exists=False,
-                execute_phone_number_format_correction=False)
+                execute_phone_number_format_correction=False,
+                execute_update_id_field=False)
     # Routing
     import ppBackend.urls
 

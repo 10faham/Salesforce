@@ -187,6 +187,7 @@ TOKEN__IS_REVOKED = "is_revoked"
 
 # Lead Constants
 LEAD = "lead"
+LEAD__ID = "lead_id"
 LEAD__FIRST_NAME = "first_name"
 LEAD__LAST_NAME = "last_name"
 LEAD__NIC = "nic"
@@ -213,6 +214,7 @@ LEAD__ASSIGNED_BY = "assigned_by"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
+FOLLOWUP__ID = "follow_id"
 FOLLOW_UP__LEAD = "lead"
 FOLLOW_UP__TYPE = "type"
 FOLLOW_UP__SUB_TYPE = "sub_type"

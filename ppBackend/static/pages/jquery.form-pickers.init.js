@@ -8,8 +8,8 @@
         format: 'DD/MM/YYYY',
         startDate: moment().subtract(29, 'days'),
         endDate: moment(),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2022',
+        minDate: '01/01/2021',
+        maxDate: '12/31/2030',
         dateLimit: {
             days: 365
         },
@@ -43,10 +43,10 @@
             firstDay: 1
         }
     }, function (start, end, label) {
-        console.log(start.toISOString(), end.toISOString(), label);
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        $('#start').val(start.toISOString());
-        $('#end').val(end.toISOString());
+        console.log(start.format('DD MM YYYY').toString(), end.format('DD MM YYYY').toString(), label);
+        $('#reportrange span').html(start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+        $('#start').val(start.format('DD MM YYYY').toString());
+        $('#end').val(end.format('DD MM YYYY').toString());
         // $('#reportrange').append('<input id="start" type="hidden" name="date_start" value="' + start.toISOString() + '" >');
         // $('#reportrange').append('<input id="end" type="hidden" name="date_end" value="' + end.toISOString() + '" >');
     });

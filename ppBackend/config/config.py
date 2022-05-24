@@ -32,6 +32,8 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 DISPLAY_DATETIME_FORMAT = "%d-%m-%Y %H:%M:%S"
 DISPLAY_DATE_FORMAT = "%d-%m-%Y"
 DISPLAY_TIME_FORMAT = "%H:%M:%S"
+FILTER_DATE_FORMAT = "%d %m %Y"
+FILTER_DATETIME_FORMAT = "%d %m %Y %H:%M:%S"
 
 FRONTEND_URL = "https://proppioneers.com"
 MONGO_DB_USER = ""
@@ -39,7 +41,7 @@ MONGO_DB_PASSWORD = ""
 
 MONGO_DB_URI = ""
 if ENVIRONMENT == "LOCAL":
-    MONGO_DB_URI = f"mongodb://localhost:27017/ppbackend-2"
+    MONGO_DB_URI = f"mongodb://localhost:27017/ppbackend"
 if ENVIRONMENT == "STAGING":
     FUNCTION_LOGGING = True
     static_data_path = os.path.join(

@@ -21,29 +21,33 @@ class DashboardController(Controller):
         user = common_utils.current_user()
         filter = {}
         if data.get(constants.DATE_FROM):
-            datefrom = data.get(constants.DATE_FROM).split('T')
-            dateto = data.get(constants.DATE_TO).split('T')
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
             filter[constants.CREATED_ON +
-                   "__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.CREATED_ON +
-                   "__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(str(datetime.now().date()), config.DATE_FORMAT) 
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(
+                str(datetime.now().date()), config.DATE_FORMAT)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
-            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            user_childs = [UserController.get_user(
+                data.get(constants.LEAD__ASSIGNED_TO))]
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
         user_ids = [id[constants.ID] for id in user_childs]
 
-        filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
+        filter[constants.LEAD__ASSIGNED_TO +
+               "__in"] = [str(id) for id in user_ids]
 
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        queryset = cls.db_read_records(
+            read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
         for user in queryset:
             tmp = UserController.get_user(user['_id'])
             lead_data.append(
-                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count':user['lead_count']})
+                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count': user['lead_count']})
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
@@ -69,23 +73,26 @@ class DashboardFollow(Controller):
         )
 
     @classmethod
-    def read_kpi(cls, data, data2 = None):
+    def read_kpi(cls, data, data2=None):
         # user = common_utils.current_user()
         filter = {}
+        print(data)
         if data.get(constants.DATE_FROM):
-            datefrom = data.get(constants.DATE_FROM).split('T')
-            dateto = data.get(constants.DATE_TO).split('T')
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
             filter[constants.CREATED_ON +
-                   "__gte"] = common_utils.convert_to_epoch1000(datefrom[0], config.DATE_FORMAT)
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.CREATED_ON +
-                   "__lte"] = common_utils.convert_to_epoch1000(dateto[0], config.DATE_FORMAT)
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(str(datetime.now().date()), config.DATE_FORMAT) 
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(
+                str(datetime.now().date()), config.DATE_FORMAT)
             datefrom = str(datetime.now().date())
             dateto = str(datetime.now().date())
 
         if data.get(constants.LEAD__ASSIGNED_TO):
-            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            user_childs = [UserController.get_user(
+                data.get(constants.LEAD__ASSIGNED_TO))]
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
@@ -105,19 +112,20 @@ class DashboardFollow(Controller):
             "Sale": {"_sum": 0, "_connected": 0},
             "Email": {"_sum": 0, "_connected": 0},
             "Acquisition": {"_sum": 0, "_connected": 0},
-            "TLW":0,
-            "lead_count":0
+            "TLW": 0,
+            "lead_count": 0
         } for user in user_childs}
         for user in queryset:
             # if user["_id"]["created_by"] not in user_ids:
             #     continue
             kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
-                                                     ['type']][user["_id"]['sub_type']] = user["count"]
+                                                        ['type']][user["_id"]['sub_type']] = user["count"]
             kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
-                                                     ['type']]["_sum"] += user['count']
+                                                        ['type']]["_sum"] += user['count']
             kpi_dataset[str(user["_id"]["created_by"])]['TLW'] += user['count']
             if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up' or user["_id"]['sub_type'] == 'Whatsapp_call':
-                kpi_dataset[str(user["_id"]["created_by"])][user["_id"]['type']]['_connected'] += user["count"]
+                kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+                                                            ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data'):
                 kpi_dataset[obj['id']]['lead_count'] = obj['lead_count']
@@ -147,7 +155,7 @@ class DashboardFollow(Controller):
             'kpi': kpi_dataset,
             'dateto': dateto,
             'datefrom': datefrom
-        } 
+        }
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
