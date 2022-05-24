@@ -176,3 +176,9 @@ class LeadsController(Controller):
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=[obj.display() for obj in queryset]
         )
+    
+    @classmethod
+    def read_lead_min(cls, data):
+        queryset = cls.db_read_records(read_filter={constants.ID+"__in": data})
+        temp = [obj.display_min() for obj in queryset]
+        return temp

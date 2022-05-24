@@ -39,21 +39,31 @@ LAST_FOLLOWUP = [
             'follow_count': {
                 '$sum': 1
             }, 
-            'followup_id': {
+            'id': {
                 '$last': {'$toString': '$_id'}
             }, 
-            'followup_follow_id': {
+            'follow_id': {
                 '$last': '$follow_id'
             }, 
-            'followup_sub_type': {
+            'sub_type': {
                 '$last': '$sub_type'
             }, 
-            'followup_completion_date': {
+            'completion_date': {
                 '$last': '$completion_date'
             }, 
-            'followup_comment': {
+            'comment': {
                 '$last': '$comment'
+            },
+            'next_task': {
+                '$last': '$next_task'
+            },
+            'deadline': {
+                '$last': '$next_deadline'
+            },
+            'created_on': {
+                '$last': '$created_on'
             }
+
         }
     }
 ]

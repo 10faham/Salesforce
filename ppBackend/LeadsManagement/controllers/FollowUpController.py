@@ -54,9 +54,17 @@ class FollowUpController(Controller):
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
             filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto, format=config.FILTER_DATETIME_FORMAT)
+
+        if data.get(constants.LEAD__ASSIGNED_TO):
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+        else:
+            user_childs = UserController.get_user_childs(
+                user=common_utils.current_user(), return_self=True)
         
-        user_childs = UserController.get_user_childs(user=common_utils.current_user(),
-                                                     return_self=True)
+        user_ids = [str(id[constants.ID]) for id in user_childs]
+        filter[constants.CREATED_BY+"__in"] = user_ids
+        
+        
         followup_dataset = []
         followup_data = {}
         overdue = []
@@ -64,33 +72,30 @@ class FollowUpController(Controller):
         tomorrow = []
         next7 = []
         all = []
-        for user in user_childs:
-            queryset = cls.db_read_records(
-                read_filter={constants.CREATED_BY: user, **filter})
-            tmp = []
-            tmp.append([obj.display() for obj in queryset])
-            leads_id = []
-            for lead in tmp:
-                for follow in lead:
-                    if follow[constants.FOLLOW_UP__LEAD][constants.ID] not in leads_id:
-                        leads_id.append(follow[constants.FOLLOW_UP__LEAD][constants.ID])
+
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
+        temp = {obj['_id']:{'data':obj} for obj in queryset}
+        lead_id = [temp[obj]['data']['_id'] for obj in temp]
+        from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
+        lead_data = LeadsController.read_lead_min(lead_id)
+        for obj in lead_data:
+            temp[obj['id']].update({'lead':obj})
             
-            tmp_follow = [FollowUpController.read_count(obj) for obj in leads_id]
-            for item in tmp_follow:
-                # print(datetime.now().date())
-                # print(item['data']['next_deadline'].date())
-                now = datetime.utcnow().date()
-                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() < now:
-                    overdue.append(item)
-                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() == now:
-                    today.append(item)
-                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() == (now + timedelta(days = 1)):
-                    tomorrow.append(item)
-                if item['data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() > now and item[
-                    'data'][constants.FOLLOW_UP__NEXT_DEADLINE].date() <= (now + timedelta(days = 7)):
-                    next7.append(item)
-                all.append(item)
-            followup_dataset.append([user.name, tmp, tmp_follow])
+        for item in temp:
+            # print(datetime.now().date())
+            # print(item['data']['next_deadline'].date())
+            now = datetime.utcnow().date()
+            if temp[item]['data']['deadline'].date() < now:
+                overdue.append(temp[item])
+            if temp[item]['data']['deadline'].date() == now:
+                today.append(temp[item])
+            if temp[item]['data']['deadline'].date() == (now + timedelta(days = 1)):
+                tomorrow.append(temp[item])
+            if temp[item]['data']['deadline'].date() > now and temp[
+                item]['data']['deadline'].date() <= (now + timedelta(days = 7)):
+                next7.append(temp[item])
+            all.append(temp[item])
+        # followup_dataset.append([user.name, tmp, tmp_follow])
 
             # for obj in queryset:
             #     tmp = obj.display()
@@ -99,7 +104,7 @@ class FollowUpController(Controller):
             # lead_dataset.append(
             #     [str(user.pk), user[constants.USER__NAME], lead_data])
         user = common_utils.current_user()
-        followup_data['followup'] = followup_dataset
+        # followup_data['followup'] = followup_dataset
         followup_data['overdue'] = overdue
         followup_data['today'] = today
         followup_data['tomorrow'] = tomorrow
