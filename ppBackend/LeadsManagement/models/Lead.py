@@ -50,6 +50,11 @@ class Leads(models.Model):
     @classmethod
     def update_validation_rules(cls): return {
         constants.LEAD__FIRST_NAME: [{"rule": "nonexistent"}],
+        constants.LEAD__STATUS: [{"rule": "nonexistent"}],
+        constants.LEAD__GENDER: [{"rule": "nonexistent"}],
+        constants.LEAD__COUNTRY: [{"rule": "nonexistent"}],
+        constants.LEAD__CITY: [{"rule": "nonexistent"}],
+        constants.LEAD__LEVEL: [{"rule": "nonexistent"}]
     }
 
     first_name = db.StringField(required=True)
@@ -74,6 +79,7 @@ class Leads(models.Model):
     assigned_to = db.LazyReferenceField(User, required=True)
     assigned_by = db.LazyReferenceField(User, required=True)
     lead_id = db.SequenceField(value_decorator='LD-{}'.format)
+    transfered = db.BooleanField(default=False)
 
     def __str__(self):
         return str(self.pk)
@@ -100,6 +106,7 @@ class Leads(models.Model):
             constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
             constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name if self[constants.LEAD__ASSIGNED_TO] else None,
             constants.LEAD__ASSIGNED_BY: self[constants.LEAD__ASSIGNED_BY].fetch().name if self[constants.LEAD__ASSIGNED_BY] else None,
+            constants.LEAD__TRANSFERED: self[constants.LEAD__TRANSFERED] if self[constants.LEAD__TRANSFERED] else False,
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self.created_by.fetch().name,
             constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),

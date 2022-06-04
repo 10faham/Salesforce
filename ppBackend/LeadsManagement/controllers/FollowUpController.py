@@ -74,27 +74,27 @@ class FollowUpController(Controller):
         all = []
 
         queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
-        temp = {obj['_id']:{'data':obj} for obj in queryset}
-        lead_id = [temp[obj]['data']['_id'] for obj in temp]
-        from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
-        lead_data = LeadsController.read_lead_min(lead_id)
-        for obj in lead_data:
-            temp[obj['id']].update({'lead':obj})
+        followup_dataset = [obj for obj in queryset]
+        # temp = {obj['_id']:{'data':obj} for obj in queryset}
+        # lead_id = [temp[obj]['data']['_id'] for obj in temp]
+        # from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
+        # lead_data = LeadsController.read_lead_min(lead_id)
+        # for obj in lead_data:
+        #     temp[obj['id']].update({'lead':obj})
             
-        for item in temp:
+        for item in followup_dataset:
             # print(datetime.now().date())
             # print(item['data']['next_deadline'].date())
             now = datetime.utcnow().date()
-            if temp[item]['data']['deadline'].date() < now:
-                overdue.append(temp[item])
-            if temp[item]['data']['deadline'].date() == now:
-                today.append(temp[item])
-            if temp[item]['data']['deadline'].date() == (now + timedelta(days = 1)):
-                tomorrow.append(temp[item])
-            if temp[item]['data']['deadline'].date() > now and temp[
-                item]['data']['deadline'].date() <= (now + timedelta(days = 7)):
-                next7.append(temp[item])
-            all.append(temp[item])
+            if item['deadline'].date() < now:
+                overdue.append(item)
+            if item['deadline'].date() == now:
+                today.append(item)
+            if item['deadline'].date() == (now + timedelta(days = 1)):
+                tomorrow.append(item)
+            if item['deadline'].date() > now and item['deadline'].date() <= (now + timedelta(days = 7)):
+                next7.append(item)
+            all.append(item)
         # followup_dataset.append([user.name, tmp, tmp_follow])
 
             # for obj in queryset:

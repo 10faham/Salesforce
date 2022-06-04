@@ -3,6 +3,7 @@
 
 {% block scripthead %}
 <link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/select.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
 
 <script>
   response_code = parseInt("{{response_code}}")
@@ -80,54 +81,52 @@
                 <table id="datatable" class="table table-striped table-bordered">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Assigned to</th>
-                      <th>Last Work</th>
-                      <th>Phone</th>
-                      <th>Project</th>
-                      <th>Level</th>
-                      <th>Actions</th>
+                      <th style="width: 85px;">ID</th>
+                      <th style="width: 85px;">Name</th>
+                      <th style="width: 85px;">Assigned to</th>
+                      <th style="width: 85px;">Last Work</th>
+                      <th style="width: 85px;">Phone</th>
+                      <th style="width: 85px;">Project</th>
+                      <th style="width: 85px;">Level</th>
+                      <th style="width: 85px;">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="lead-detail">
                     {% for obj in response_data['data'] %}
                     <tr>
                       <td scope="row">
-                        <div>{{response_data['data'][obj].data.lead_id}}</div>
+                        <div>{{obj.lead_id}}</div>
                         <div>
-                          <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                            data-toggle="tooltip" data-placement="right" title=""
-                            data-original-title="'{{response_data['data'][obj].data.created_on}}'">
-                            <p>{{response_data['data'][obj].data.created_on}}</p>
-                          </button>
+                            <p>{{obj.created_on}}</p>
                         </div>
                       </td>
-                      <td>{{response_data['data'][obj].data.first_name}}</td>
-                      <td>{{response_data['data'][obj].data.assigned_to}}</td>
-                      {% if 'followup' in response_data['data'][obj] %}
-                      <td><p>{{response_data['data'][obj].followup.followup_sub_type}}</p>
-                        <p>{{response_data['data'][obj].followup.followup_completion_date}}</p></td>
+                      <td>{{obj.first_name}}</td>
+                      <td>{{obj.user.name}}</td>
+                      {% if 'followup' in obj %}
+                      <td><p>{{obj.followup.sub_type}}</p>
+                        <p>{{obj.followup.created_on}}</p></td>
                       {% else %}
                       <td></td>
                       {% endif %}
-                      <td>{{response_data['data'][obj].data.phone_number}}</td>
-                      <td>{{response_data['data'][obj].data.project}}</td>
-                      <td>{{response_data['data'][obj].data.lead_level}}</td>
+                      <td>{{obj.phone_number}}</td>
+                      <td>{{obj.project}}</td>
+                      <td>{{obj.lead_level}}</td>
                       <td>
                         <p><form class="" action="/api/follow_ups/follow_read" target="_blank" method="POST" id="follow_up_lead">
-                          <input type="hidden" name="lead" value="{{response_data['data'][obj].data.id}}">
+                          <input type="hidden" name="lead" value="{{obj._id}}">
                           <input type="submit" class="mdi mdi-file-restore" value="view all">
                         </form></p>
-                        {% if 'followup' in response_data['data'][obj] %}
+                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}"><i
+                          class="mdi mdi-file-restore"></i></a>                        
+                        {% if 'followup' in obj %}
                         <p><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                          data-toggle="tooltip" data-placement="left" title="'{{response_data['data'][obj].followup.followup_comment}}'" data-original-title="'{{response_data['data'][obj].followup.followup_comment}}'"><i
-                            class="mdi mdi-comment-outline"></i></button></p>
-                        <p>TLW: {{response_data['data'][obj].followup.followup_count}}</p>
+                          data-toggle="tooltip" data-placement="left" title="'{{obj.followup.comment}}'" data-original-title="'{{obj.followup.comment}}'"><i
+                            class="mdi mdi-comment-outline"></i><a href="/api/follow_ups/create?lead={{obj._id}}"></a></button>
+                        TLW: {{obj.followup.follow_count}}
                         {% else %}
-                        <p>TLW: 0</p>
+                        TLW: 0
                         {% endif %}
-                        <p><a href="/api/follow_ups/create?lead={{response_data['data'][obj].data.id}}"><i
+                        <a href="/api/follow_ups/create?lead={{obj._id}}"><i
                               class="glyphicon glyphicon-plus"></i></a></p>
                     </tr>
                     {% endfor %}
@@ -170,6 +169,7 @@
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.scroller.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.colVis.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/dataTables.select.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
 <!-- init -->
@@ -181,7 +181,8 @@
     $(this).DataTable({
       "bFilter": true,
       "aaSorting": [],
-      "pageLength": 100
+      "pageLength": 100,
+      select: true,
     });
   })
     // TableManageButtons.init();

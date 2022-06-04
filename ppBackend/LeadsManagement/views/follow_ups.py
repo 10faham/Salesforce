@@ -27,7 +27,7 @@ def create_get_view():
 def create_view(data):
     res = FollowUpController.create_controller(data=data)
     # return render_template("./viewfollow_ups.html", **res)
-    return redirect(url_for('follow_ups_bp.read_view', **res))
+    return redirect(url_for('follow_ups_bp.read_view'))
 
 @follow_ups_bp.route("/read", methods=["GET", "POST"])
 @decorators.is_authenticated
@@ -42,12 +42,13 @@ def read_view(data):
     res = FollowUpController.read_controller(data=data)
     return render_template("viewfollow_ups.html", **res)
 
-@follow_ups_bp.route("/follow_read", methods=["POST"])
+@follow_ups_bp.route("/follow_read", methods=["POST","GET"])
 @decorators.is_authenticated
 # @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
     constants.REQUIRED_FIELDS_LIST__FOLLOW_UP_LEAD,
 )
 def readfp_view(data):
+    # data = request.form
     res = FollowUpController.read_lead_follow(data=data)
     return render_template("viewfollow_leads.html", **res)

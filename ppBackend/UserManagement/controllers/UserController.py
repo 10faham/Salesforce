@@ -175,3 +175,13 @@ class UserController(Controller):
     @classmethod
     def get_user(cls, data):
         return cls.db_read_single_record(read_filter={constants.ID: data}, deleted_records=True)
+
+    @classmethod
+    def get_users_childs_list(cls, data):
+        user_childs = UserController.get_user_childs(
+            user=common_utils.current_user(), return_self=True)
+        child_list = [user.display() for user in user_childs]
+        return response_utils.get_response_object(
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_LOGIN_SUCCESS,
+            response_data=child_list)

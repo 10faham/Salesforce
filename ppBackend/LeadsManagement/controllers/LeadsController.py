@@ -6,9 +6,9 @@
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
-from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
-from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils
+from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
+from datetime import datetime
 
 
 class LeadsController(Controller):
@@ -62,26 +62,26 @@ class LeadsController(Controller):
                 user=common_utils.current_user(), return_self=True)
 
         user_ids = [id[constants.ID] for id in user_childs]
-        filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
-        queryset = cls.db_read_records(read_filter={**filter})
+        filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
 
-        lead_dataset = []
-        lead_data = {}
-        lead_id = []
-        for obj in queryset.order_by('-'+constants.CREATED_ON):
-            lead_id.append(str(obj[constants.ID]))
-            lead_data[str(obj[constants.ID])] = {'data': obj.display_min()}
-            # counter = 0
-        # final_count = 0
-        # for id in lead_id:
-        #     followup = FollowUpController.read_count(id)
-        #     if followup["count"] > 0:
-        #         final_count += 1
-        # print(final_count)
-        # for i in range(0, len(lead_id), 100):
-        followup = FollowUpController.read_current_followup(lead_id)
-        for obj in followup:
-            lead_data[obj['_id']].update({'followup': obj})
+        lead_dataset = [obj for obj in queryset]
+        # lead_data = {}
+        # lead_id = []
+        # for obj in queryset.order_by('-'+constants.CREATED_ON):
+        #     lead_id.append(str(obj[constants.ID]))
+        #     lead_data[str(obj[constants.ID])] = {'data': obj.display_min()}
+        #     # counter = 0
+        # # final_count = 0
+        # # for id in lead_id:
+        # #     followup = FollowUpController.read_count(id)
+        # #     if followup["count"] > 0:
+        # #         final_count += 1
+        # # print(final_count)
+        # # for i in range(0, len(lead_id), 100):
+        # followup = FollowUpController.read_current_followup(lead_id)
+        # for obj in followup:
+        #     lead_data[obj['_id']].update({'followup': obj})
 
         # for obj in queryset.order_by("-"+constants.CREATED_ON):
         #     tmp = obj.display()
@@ -97,7 +97,7 @@ class LeadsController(Controller):
         for id in temp:
             all_users.append([str(id[constants.ID]) ,id[constants.USER__NAME]])
         leads_data = {}
-        leads_data['data'] = lead_data
+        leads_data['data'] = lead_dataset
         leads_data['username'] = common_utils.current_user()[
             constants.USER__NAME]
         leads_data['all_users'] = all_users
@@ -182,3 +182,21 @@ class LeadsController(Controller):
         queryset = cls.db_read_records(read_filter={constants.ID+"__in": data})
         temp = [obj.display_min() for obj in queryset]
         return temp
+
+    @classmethod
+    def bulk_transfer(cls, data):
+        from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
+        queryset = cls.db_read_records(read_filter={constants.LEAD__ASSIGNED_TO: data['assigned_to']}).limit(int(data['count']))
+        
+        followup_data = {constants.FOLLOW_UP__COMMENT: 'LEAD TRANSFER', 
+            constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: datetime.now().strftime(config.DATETIME_FORMAT),
+            constants.FOLLOW_UP__LEVEL: constants.FOLLOW_UP__LEVEL__LIST[2], constants.FOLLOW_UP__TYPE: 'Call', 
+            constants.FOLLOW_UP__SUB_TYPE: 'Call_attempt', constants.FOLLOW_UP__NEXT_TASK: 'ContactClient', constants.FOLLOW_UP__STATUS: 'Interested'}
+        for lead in queryset:
+            update_filter = {constants.ID: lead[constants.ID], constants.LEAD__ASSIGNED_TO: data['transfer_to'], 
+            constants.LEAD__ASSIGNED_BY: common_utils.current_user()}
+            res = LeadsController.update_controller(update_filter)
+            followup_data[constants.FOLLOW_UP__LEAD] = lead[constants.ID]
+            res = FollowUpController.create_controller(data=followup_data)
+            print(res)
+        return data

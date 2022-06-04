@@ -148,7 +148,7 @@
                             <a href="javascript:void(0);" class="waves-effect"><i
                                     class="mdi mdi-layers widget-one-icon"></i> <span> Leads </span> <span
                                     class="menu-arrow"></span></a>
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled" id="leads-menu">
                                 <li><a href="/api/leads/read">View Leads</a></li>
                                 <li><a href="/addlead">Add Leads</a></li>
                                 <li><a href="/api/leads/search">Find Leads</a></li>
@@ -255,6 +255,7 @@
                                             <li><a href=#>Edit User</a></li>
                                         </ul>
                                     </li>`)
+            $('#leads-menu').append('<li><a href=/api/leads/bulktransfer>Bulk transfer</a></li>')
         }
         $("#user-name-h").append('<h5>' + TokenObj.user.name + '</h5>')
     </script>

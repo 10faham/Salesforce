@@ -211,6 +211,7 @@ LEAD__USER = "user"
 LEAD__COMMENT = "lead_comment"
 LEAD__ASSIGNED_TO = "assigned_to"
 LEAD__ASSIGNED_BY = "assigned_by"
+LEAD__TRANSFERED = "transfered"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
@@ -279,7 +280,7 @@ OPTIONAL_FIELDS_LIST__LEAD = [
     LEAD__COMMENT
 ]
 REQUIRED_UPDATE_FIELDS_LIST__LEAD = list(
-    set(REQUIRED_FIELDS_LIST__LEAD + [ID]) - set([LEAD__FIRST_NAME])
+    set([ID])
 )
 ALL_FIELDS_LIST__LEAD = OPTIONAL_FIELDS_LIST__LEAD + \
     REQUIRED_FIELDS_LIST__LEAD + [ID, CREATED_BY, CREATED_ON]

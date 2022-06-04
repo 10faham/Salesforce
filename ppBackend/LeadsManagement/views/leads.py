@@ -6,6 +6,7 @@ from flask import Blueprint, redirect, url_for, redirect, render_template, reque
 # Local imports
 from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
+from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, decorators, common_utils
 
 leads_bp = Blueprint("leads_bp", __name__)
@@ -82,3 +83,15 @@ def search_view(data):
         return render_template("find_leads.html", **res)
     
     return render_template("find_leads.html")
+
+@leads_bp.route("/bulktransfer", methods=["POST", "GET"])
+@decorators.is_authenticated
+@decorators.keys_validator()
+def bulk_trasnfer(data):
+    if request.method == "POST":
+        data = request.form
+        res = LeadsController.bulk_transfer(data=data)
+        return render_template("bulkleads.html", **res)
+    
+    res = UserController.get_users_childs_list(data)
+    return render_template("bulkleads.html", **res)
