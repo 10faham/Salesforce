@@ -7,6 +7,7 @@ from ppBackend.generic import models
 from ppBackend.generic import db
 from ppBackend.generic.services.utils import constants
 from ppBackend.LeadsManagement.models.Lead import Leads
+from ppBackend.UserManagement.models.User import User
 
 
 class FollowUp(models.Model):
@@ -46,7 +47,15 @@ class FollowUp(models.Model):
 
     @ classmethod
     def update_validation_rules(cls): return {
-        constants.LEAD__FIRST_NAME: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__TYPE: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__SUB_TYPE: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__LEVEL: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__STATUS: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__COMPLETION_DATE: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__COMMENT: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__NEXT_TASK: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__NEXT_DEADLINE: [{"rule": "nonexistent"}],
+        constants.FOLLOW_UP__LEAD: [{"rule": "nonexistent"}]
     }
 
     lead = db.LazyReferenceField(Leads, required=True)
@@ -61,6 +70,7 @@ class FollowUp(models.Model):
     next_deadline = db.DateTimeField(required=True)
     next_comment = db.StringField()
     follow_id = db.SequenceField(value_decorator='FL-{}'.format)
+    assigned_to = db.LazyReferenceField(User, required=True)
 
     def __str__(self):
         return str(self.pk)
@@ -81,5 +91,6 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__NEXT_COMMENT: self[constants.FOLLOW_UP__NEXT_COMMENT],
             constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.STATUS: self[constants.STATUS],
-            constants.CREATED_BY: self[constants.CREATED_BY].fetch()[constants.USER__NAME]
+            constants.CREATED_BY: self[constants.CREATED_BY].fetch()[constants.USER__NAME],
+            constants.FOLLOW_UP__ASSIGNED_TO: self[constants.FOLLOW_UP__ASSIGNED_TO].fetch().name if self[constants.FOLLOW_UP__ASSIGNED_TO] else None,
         }

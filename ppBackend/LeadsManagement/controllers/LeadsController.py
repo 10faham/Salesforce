@@ -3,6 +3,7 @@
 # Framework imports
 
 # Local imports
+from ast import Constant
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.UserManagement.controllers.UserController import UserController
@@ -188,15 +189,22 @@ class LeadsController(Controller):
         from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
         queryset = cls.db_read_records(read_filter={constants.LEAD__ASSIGNED_TO: data['assigned_to']}).limit(int(data['count']))
         
-        followup_data = {constants.FOLLOW_UP__COMMENT: 'LEAD TRANSFER', 
+        followup_data_new = {constants.FOLLOW_UP__COMMENT: 'LEAD TRANSFER', 
             constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: datetime.now().strftime(config.DATETIME_FORMAT),
             constants.FOLLOW_UP__LEVEL: constants.FOLLOW_UP__LEVEL__LIST[2], constants.FOLLOW_UP__TYPE: 'Call', 
             constants.FOLLOW_UP__SUB_TYPE: 'Call_attempt', constants.FOLLOW_UP__NEXT_TASK: 'ContactClient', constants.FOLLOW_UP__STATUS: 'Interested'}
         for lead in queryset:
             update_filter = {constants.ID: lead[constants.ID], constants.LEAD__ASSIGNED_TO: data['transfer_to'], 
-            constants.LEAD__ASSIGNED_BY: common_utils.current_user()}
+            constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True}
             res = LeadsController.update_controller(update_filter)
-            followup_data[constants.FOLLOW_UP__LEAD] = lead[constants.ID]
-            res = FollowUpController.create_controller(data=followup_data)
-            print(res)
+
+            followup = FollowUpController.read_lead_follow(data = {'lead':str(lead[constants.ID])})
+            for follow in followup['response_data']:
+                followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
+                  constants.ID: follow[constants.ID]}
+                res = FollowUpController.update_controller(followup_updatedata)
+                
+            followup_data_new[constants.FOLLOW_UP__LEAD] = lead[constants.ID]
+            followup_data_new[constants.FOLLOW_UP__ASSIGNED_TO] = data['transfer_to']
+            res = FollowUpController.create_controller(data=followup_data_new)
         return data

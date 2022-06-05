@@ -62,7 +62,7 @@ class FollowUpController(Controller):
                 user=common_utils.current_user(), return_self=True)
         
         user_ids = [str(id[constants.ID]) for id in user_childs]
-        filter[constants.CREATED_BY+"__in"] = user_ids
+        filter[constants.FOLLOW_UP__ASSIGNED_TO+"__in"] = user_ids
         
         
         followup_dataset = []
@@ -116,6 +116,29 @@ class FollowUpController(Controller):
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=followup_data
+        )
+
+    @classmethod
+    def update_controller(cls, data):
+        is_valid, error_messages, obj = cls.db_update_single_record(
+            read_filter={constants.ID: data[constants.ID]}, update_filter=data
+        )
+        if not is_valid:
+            return response_utils.get_response_object(
+                response_code=response_codes.CODE_VALIDATION_FAILED,
+                response_message=response_codes.MESSAGE_VALIDATION_FAILED,
+                response_data=error_messages
+            )
+        if not obj:
+            return response_utils.get_response_object(
+                response_code=response_codes.CODE_RECORD_NOT_FOUND,
+                response_message=response_codes.MESSAGE_NOT_FOUND_DATA.format(
+                    constants.FOLLOW_UP.title(), constants.ID
+                ))
+        return response_utils.get_response_object(
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_SUCCESS,
+            response_data=obj.display(),
         )
 
     @classmethod

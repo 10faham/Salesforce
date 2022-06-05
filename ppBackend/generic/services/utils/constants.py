@@ -225,6 +225,7 @@ FOLLOW_UP__STATUS = "lead_status"
 FOLLOW_UP__STATUS__LIST = ["Interested", "Not Interested"]
 FOLLOW_UP__COMPLETION_DATE = "completion_date"
 FOLLOW_UP__COMMENT = "comment"
+FOLLOW_UP__ASSIGNED_TO = "assigned_to"
 
 FOLLOW_UP__NEXT_TASK = "next_task"
 FOLLOW_UP__NEXT_PROJECT = "next_project"
