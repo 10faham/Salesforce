@@ -92,5 +92,7 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self[constants.CREATED_BY].fetch()[constants.USER__NAME],
+            constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),
+            constants.UPDATED_ON: common_utils.epoch_to_datetime(self[constants.UPDATED_ON]),
             constants.FOLLOW_UP__ASSIGNED_TO: self[constants.FOLLOW_UP__ASSIGNED_TO].fetch().name if self[constants.FOLLOW_UP__ASSIGNED_TO] else None,
         }
