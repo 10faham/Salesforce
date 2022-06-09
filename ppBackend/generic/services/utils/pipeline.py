@@ -133,6 +133,112 @@ LAST_FOLLOWUP = [
     }
 ]
 
+FIRST_FOLLOWUP = [
+    {
+        '$sort': {
+            'next_deadline': 1, 
+            '_id': 1
+        }
+    }, {
+        '$group': {
+            '_id': '$lead', 
+            'follow_count': {
+                '$sum': 1
+            }, 
+            'id': {
+                '$first': {
+                    '$toString': '$_id'
+                }
+            }, 
+            'follow_id': {
+                '$first': '$follow_id'
+            }, 
+            'sub_type': {
+                '$first': '$sub_type'
+            }, 
+            'completion_date': {
+                '$first': '$completion_date'
+            }, 
+            'comment': {
+                '$first': '$comment'
+            }, 
+            'next_task': {
+                '$first': '$next_task'
+            }, 
+            'deadline': {
+                '$first': '$next_deadline'
+            }, 
+            'created_on': {
+                '$first': '$created_on'
+            }, 
+            'project': {
+                '$first': '$next_project'
+            }
+        }
+    }, {
+        '$lookup': {
+            'from': 'leads', 
+            'localField': '_id', 
+            'foreignField': '_id', 
+            'pipeline': [
+                {
+                    '$addFields': {
+                        '_id': {
+                            '$toString': '$_id'
+                        }, 
+                        'created_by': {
+                            '$toString': '$created_by'
+                        }
+                    }
+                }
+            ], 
+            'as': 'lead'
+        }
+    }, {
+        '$lookup': {
+            'from': 'user', 
+            'localField': 'lead.assigned_to', 
+            'foreignField': '_id', 
+            'as': 'user'
+        }
+    }, {
+        '$project': {
+            'follow_count': 1, 
+            'id': {
+                '$toString': '$id'
+            }, 
+            '_id': {
+                '$toString': '$_id'
+            }, 
+            'follow_id': 1, 
+            'sub_type': 1, 
+            'completion_date': 1, 
+            'comment': 1, 
+            'next_task': 1, 
+            'deadline': 1, 
+            'created_on': 1, 
+            'lead.first_name': 1, 
+            'lead.phone_number': 1, 
+            'lead.lead_id': 1, 
+            'user.name': 1, 
+            'project': 1
+        }
+    }, {
+        '$addFields': {
+            'user': {
+                '$arrayElemAt': [
+                    '$user', 0
+                ]
+            }, 
+            'lead': {
+                '$arrayElemAt': [
+                    '$lead', 0
+                ]
+            }
+        }
+    }
+]
+
 ALL_LEADS = [
     {
         '$sort': {

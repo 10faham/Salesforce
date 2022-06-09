@@ -3,8 +3,8 @@ import os
 # Local imports
 
 
-ENVIRONMENT = "LOCAL"
-# ENVIRONMENT = "STAGING"
+# ENVIRONMENT = "LOCAL"
+ENVIRONMENT = "STAGING"
 
 FUNCTION_LOGGING = False
 
@@ -34,6 +34,7 @@ DISPLAY_DATE_FORMAT = "%d-%m-%Y"
 DISPLAY_TIME_FORMAT = "%H:%M:%S"
 FILTER_DATE_FORMAT = "%d %m %Y"
 FILTER_DATETIME_FORMAT = "%d %m %Y %H:%M:%S"
+TIME_ZONE = "Asia/Karachi"
 
 FRONTEND_URL = "https://proppioneers.com"
 MONGO_DB_USER = ""
@@ -46,7 +47,7 @@ if ENVIRONMENT == "STAGING":
     FUNCTION_LOGGING = True
     static_data_path = os.path.join(
         current_dir_path, "static/static_data.json")
-    MONGO_DB_URI = f"mongodb://192.168.100.9:27017/ppbackend"
+    MONGO_DB_URI = f"mongodb://192.168.100.8:27017/ppbackend"
     # MONGO_DB_URI = f"mongodb+srv://{MONGO_DB_USER}:{MONGO_DB_PASSWORD}@clusterX.aq4vs.mongodb.net/ppbackend?"\
     #     "retryWrites=true&w=majority"
 
