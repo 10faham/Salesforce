@@ -19,9 +19,14 @@ KPI_REPORT_FOLLOW_UP = [
 KPI_REPORT_LEAD_COUNT = [
     {
         '$group': {
-            '_id': '$assigned_to',
-            "lead_count": {
-                "$sum": 1
+            '_id': '$assigned_to', 
+            'lead_count': {
+                '$count': {}
+            }, 
+            'transfered': {
+                '$sum': {
+                    '$toInt': '$transfered'
+                }
             }
         }
     }
@@ -308,7 +313,8 @@ ALL_LEADS = [
             'followup.comment': 1, 
             'followup.created_on': 1, 
             'followup.follow_count': 1, 
-            'user.name': 1
+            'user.name': 1,
+            'user._id':1
         }
     }, {
         '$addFields': {

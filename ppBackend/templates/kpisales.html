@@ -73,10 +73,13 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Leads Add Today</th>
+                                            <th>Leads assigned</th>
                                             <th>TLW</th>
                                             <th>Calls</th>
                                             <th>AT Calls</th>
                                             <th>Meetings</th>
+                                            <th>W-Calls</th>
+                                            <th>W-msg</th>
                                         </tr>
 
                                     </thead>
@@ -85,10 +88,13 @@
                                         <tr>
                                                 <td>{{response_data.kpi[user]['name']}}</td>
                                                 <td>{{response_data.kpi[user]['lead_count']}}</td>
+                                                <td>{{response_data.kpi[user]['transfered']}}</td>
                                                 <td>{{response_data.kpi[user]['TLW']}}</td>
                                                 <td>{{response_data.kpi[user]['Call']['_connected']}}</td>
                                                 <td>{{response_data.kpi[user]['Call']['Call_attempt']}}</td>
                                                 <td>{{response_data.kpi[user]['Meeting']['_sum']}}</td>
+                                                <td>{{response_data.kpi[user]['Call']['Whatsapp_call']}}</td>
+                                                <td>{{response_data.kpi[user]['Call']['Whatsapp_message']}}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -135,6 +141,13 @@
 <!-- init -->
 <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
+
+<script >
+  var table = $('#datatable').DataTable( {
+    "pageLength": 100
+  } );
+  table.column( 3 ).data().sum();
+</script>
 
 
 

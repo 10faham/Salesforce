@@ -225,6 +225,18 @@
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control datetime-picker" required
                                             title="completion_date" name="completion_date" />
+                                            <div class="radio">
+                                                <input type="radio" name="completion_date" id="radio" value="option1" checked>
+                                                <label for="radio">
+                                                    Today: {{ moment().format('DD-MM-YYYY hh:mm:ss') }}
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <input type="radio" name="completion_date" id="radio1" value="option3">
+                                                <label for="radio1">
+                                                    Yesterday: {{ moment().format('DD-MM-YYYY hh:mm:ss')}}
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

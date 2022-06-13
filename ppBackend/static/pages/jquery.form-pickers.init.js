@@ -11,7 +11,7 @@
         minDate: '01/01/2021',
         maxDate: '12/31/2030',
         dateLimit: {
-            days: 365
+            days: 600
         },
         showDropdowns: true,
         showWeekNumbers: false,

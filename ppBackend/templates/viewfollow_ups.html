@@ -135,16 +135,11 @@
                                                                         <td>{{obj.project}}</td>
                                                                         <td>{{obj.user.name}}</td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.comment}}'" data-original-title="'{{obj.comment}}'"><i
-                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" 
+                                                                            data-original-title="{{obj.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                                                                             <a href="/api/follow_ups/create?lead={{obj._id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <a  href="tel:{{obj.lead.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.lead.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                                                                             <p>TLW: {{obj.follow_count}}</p>
-                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj._id}}" >
-                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
-                                                                            </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
@@ -179,16 +174,11 @@
                                                                         <td>{{obj.project}}</td>
                                                                         <td>{{obj.user.name}}</td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.comment}}'" data-original-title="'{{obj.comment}}'"><i
-                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" 
+                                                                            data-original-title="{{obj.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                                                                             <a href="/api/follow_ups/create?lead={{obj._id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <a  href="tel:{{obj.lead.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.lead.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                                                                             <p>TLW: {{obj.follow_count}}</p>
-                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj._id}}" >
-                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
-                                                                            </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
@@ -223,16 +213,11 @@
                                                                         <td>{{obj.project}}</td>
                                                                         <td>{{obj.user.name}}</td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.comment}}'" data-original-title="'{{obj.comment}}'"><i
-                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" 
+                                                                            data-original-title="{{obj.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                                                                             <a href="/api/follow_ups/create?lead={{obj._id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <a  href="tel:{{obj.lead.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.lead.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                                                                             <p>TLW: {{obj.follow_count}}</p>
-                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj._id}}" >
-                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
-                                                                            </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
@@ -267,16 +252,11 @@
                                                                         <td>{{obj.project}}</td>
                                                                         <td>{{obj.user.name}}</td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.comment}}'" data-original-title="'{{obj.comment}}'"><i
-                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" 
+                                                                            data-original-title="{{obj.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                                                                             <a href="/api/follow_ups/create?lead={{obj._id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <a  href="tel:{{obj.lead.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.lead.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                                                                             <p>TLW: {{obj.follow_count}}</p>
-                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj._id}}" >
-                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
-                                                                            </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}
@@ -311,16 +291,11 @@
                                                                         <td>{{obj.project}}</td>
                                                                         <td>{{obj.user.name}}</td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                                                                                data-toggle="tooltip" data-placement="left" title="'{{obj.comment}}'" data-original-title="'{{obj.comment}}'"><i
-                                                                                  class="mdi mdi-comment-outline"></i></button>
+                                                                            <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" 
+                                                                            data-original-title="{{obj.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                                                                             <a href="/api/follow_ups/create?lead={{obj._id}}"><i class="glyphicon glyphicon-plus"></i></a>
-                                                                            <button type="button" class="btn btn-default" style="border: none; padding: 0px 4px" data-toggle="tooltip" data-placement="top" title="" data-original-title="'{{obj.lead.phone_number}}'"><i class="mdi mdi-cellphone-basic"></i></button>
+                                                                            <a  href="tel:{{obj.lead.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.lead.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                                                                             <p>TLW: {{obj.follow_count}}</p>
-                                                                            <form class="" target="_blank" action="/api/follow_ups/follow_read" method="POST" id="follow_up_lead">
-                                                                                <input type="hidden" name="lead" value="{{obj._id}}" >
-                                                                            <input type="submit" class="mdi mdi-file-restore" value="view all">
-                                                                            </form>
                                                                         </td>
                                                                     </tr>
                                                                     {% endfor %}

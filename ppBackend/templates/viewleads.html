@@ -112,16 +112,9 @@
                       <td>{{obj.project}}</td>
                       <td>{{obj.lead_level}}</td>
                       <td>
-                        <p><form class="" action="/api/follow_ups/follow_read" target="_blank" method="POST" id="follow_up_lead">
-                          <input type="hidden" name="lead" value="{{obj._id}}">
-                          <input type="submit" class="mdi mdi-file-restore" value="view all">
-                        </form></p>
-                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}"><i
-                          class="mdi mdi-file-restore"></i></a>                        
                         {% if 'followup' in obj %}
-                        <p><button type="button" class="btn btn-default" style="border: none; padding: 0px 4px"
-                          data-toggle="tooltip" data-placement="left" title="'{{obj.followup.comment}}'" data-original-title="'{{obj.followup.comment}}'"><i
-                            class="mdi mdi-comment-outline"></i><a href="/api/follow_ups/create?lead={{obj._id}}"></a></button>
+                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.followup.comment}}" 
+                              data-original-title="{{obj.followup.comment}}"><i class="mdi mdi-comment-outline"></i></a>
                         TLW: {{obj.followup.follow_count}}
                         {% else %}
                         TLW: 0

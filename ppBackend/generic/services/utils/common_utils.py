@@ -4,6 +4,7 @@ import time
 import re
 import json
 import uuid
+import pytz
 # Local imports
 from ppBackend.generic.services.utils import constants, __global__
 from ppBackend.config import config
@@ -44,10 +45,11 @@ def raise_response_code(code):
 
 def get_time(offset=0, days=0):
     """ return serialized datetime current + offset in hours """
+    timezone = pytz.timezone(config.TIME_ZONE)
     hours = offset
     return int(time.mktime(
-        (datetime.datetime.now() +
-         datetime.timedelta(hours=hours, days=days)).timetuple())
+        timezone.localize((datetime.datetime.now() +
+         datetime.timedelta(hours=hours, days=days))).timetuple())
         * 1000)
 
 

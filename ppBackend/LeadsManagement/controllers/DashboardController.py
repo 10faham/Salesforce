@@ -47,7 +47,7 @@ class DashboardController(Controller):
         for user in queryset:
             tmp = UserController.get_user(user['_id'])
             lead_data.append(
-                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count': user['lead_count']})
+                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count': user['lead_count'], 'transfered': user['transfered']})
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
@@ -113,7 +113,8 @@ class DashboardFollow(Controller):
             "Email": {"_sum": 0, "_connected": 0},
             "Acquisition": {"_sum": 0, "_connected": 0},
             "TLW": 0,
-            "lead_count": 0
+            "lead_count": 0,
+            "transfered":0
         } for user in user_childs}
         for user in queryset:
             # if user["_id"]["created_by"] not in user_ids:
@@ -128,7 +129,8 @@ class DashboardFollow(Controller):
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data'):
-                kpi_dataset[obj['id']]['lead_count'] = obj['lead_count']
+                kpi_dataset[obj['id']]['lead_count'] = int(obj['lead_count'])- int(obj['transfered'])
+                kpi_dataset[obj['id']]['transfered'] = obj['transfered']
         # for user in queryset:
         #     if user['_id']['created_by'] in user_ids:
         #         temp.append(user['_id'])

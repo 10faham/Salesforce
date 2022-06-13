@@ -49,9 +49,10 @@ def read_view(data):
 @decorators.is_authenticated
 # @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
-    constants.REQUIRED_FIELDS_LIST__FOLLOW_UP_LEAD,
+    # constants.REQUIRED_FIELDS_LIST__FOLLOW_UP_LEAD,
 )
 def readfp_view(data):
-    # data = request.form
+    data['lead'] = request.args.get('lead')
+    print(request.args.get('lead'))
     res = FollowUpController.read_lead_follow(data=data)
     return render_template("viewfollow_leads.html", **res)
