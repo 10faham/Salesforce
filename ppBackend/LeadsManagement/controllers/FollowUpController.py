@@ -52,8 +52,8 @@ class FollowUpController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom, config.FILTER_DATETIME_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto, config.FILTER_DATETIME_FORMAT)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]

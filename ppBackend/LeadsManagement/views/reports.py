@@ -8,6 +8,7 @@ from ppBackend.LeadsManagement.controllers.LeadsController import LeadsControlle
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.LeadsManagement.controllers.DashboardController import DashboardController
 from ppBackend.LeadsManagement.controllers.DashboardController import DashboardFollow
+from ppBackend.LeadsManagement.controllers.ReportsController import ReportsController
 from ppBackend.generic.services.utils import constants, decorators, common_utils
 
 reports_bp = Blueprint("reports_bp", __name__)
@@ -25,3 +26,27 @@ def kpisales_view(data):
     data = request.form
     res2 = DashboardFollow.read_kpi(data=data, data2=res)
     return render_template('kpisales.html', **res2)
+
+@reports_bp.route("/detailed", methods=["GET"])
+@decorators.is_authenticated
+@decorators.keys_validator()
+def read_lead_new(data):
+    data[constants.ID] = request.args.get('id')
+    data[constants.DATE_FROM] = request.args.get('datefrom')
+    data[constants.DATE_TO] = request.args.get('dateto')
+    data[constants.LEAD__TRANSFERED] = request.args.get(constants.LEAD__TRANSFERED)
+    res = ReportsController.read_lead_new(data=data)
+    return render_template('kpileads.html', **res)
+
+@reports_bp.route("/detailed-follow", methods=["GET"])
+@decorators.is_authenticated
+@decorators.keys_validator()
+def read_followup_new(data):
+    data[constants.ID] = request.args.get('id')
+    data[constants.DATE_FROM] = request.args.get('datefrom')
+    data[constants.DATE_TO] = request.args.get('dateto')
+    data[constants.LEAD__TRANSFERED] = request.args.get('transfered')
+    data[constants.FOLLOW_UP__TYPE] = request.args.get('filter')
+    data[constants.FOLLOW_UP__SUB_TYPE] = request.args.get('sub-filter')
+    res = ReportsController.read_followup_new(data=data)
+    return render_template('kpileads.html', **res)

@@ -9,7 +9,7 @@ from ppBackend.LeadsManagement.models.FollowUp import FollowUp
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
-from datetime import datetime
+from datetime import datetime, date, time
 
 
 class DashboardController(Controller):
@@ -76,7 +76,7 @@ class DashboardFollow(Controller):
     def read_kpi(cls, data, data2=None):
         # user = common_utils.current_user()
         filter = {}
-        print(data)
+        # print(data)
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
@@ -87,8 +87,8 @@ class DashboardFollow(Controller):
         else:
             filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(
                 str(datetime.now().date()), config.DATE_FORMAT)
-            datefrom = str(datetime.now().date())
-            dateto = str(datetime.now().date())
+            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime("%d %m %Y %H:%M:%S")
+            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime("%d %m %Y %H:%M:%S")
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(

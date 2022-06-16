@@ -185,7 +185,9 @@ class Controller:
             data.update({
                 constants.STATUS: constants.OBJECT_STATUS_ACTIVE,
                 constants.CREATED_BY: common_utils.current_user(),
-                constants.UPDATED_BY: common_utils.current_user()
+                constants.UPDATED_BY: common_utils.current_user(),
+                constants.CREATED_ON: common_utils.get_time(),
+                constants.UPDATED_ON: common_utils.get_time(),
             })
             obj = collection(**data)
             if db_commit:
@@ -222,7 +224,9 @@ class Controller:
                     entry.update({
                         constants.STATUS: constants.OBJECT_STATUS_ACTIVE,
                         constants.CREATED_BY: common_utils.current_user(),
-                        constants.UPDATED_BY: common_utils.current_user()
+                        constants.UPDATED_BY: common_utils.current_user(),
+                        constants.CREATED_ON: common_utils.get_time(),
+                        constants.UPDATED_ON: common_utils.get_time(),
                     })
                     obj_list.append(collection(**entry))
         if is_valid:
@@ -230,5 +234,3 @@ class Controller:
                 return True, "", collection.objects.insert(obj_list)
             return True, "", obj_list
         return False, error_message_list, None
-
-        

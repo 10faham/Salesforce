@@ -250,6 +250,8 @@ ALL_LEADS = [
             '_id': -1
         }
     }, {
+        '$limit': 1500
+    }, {
         '$lookup': {
             'from': 'follow_up', 
             'localField': '_id', 
@@ -313,8 +315,7 @@ ALL_LEADS = [
             'followup.comment': 1, 
             'followup.created_on': 1, 
             'followup.follow_count': 1, 
-            'user.name': 1,
-            'user._id':1
+            'user.name': 1
         }
     }, {
         '$addFields': {
@@ -339,6 +340,98 @@ ALL_LEADS = [
             'followup.created_on': {
                 '$substrBytes': [
                     '$followup.created_on', 0, 10
+                ]
+            }
+        }
+    }
+]
+
+GET_LEADS_KPI = [
+    {
+        '$sort': {
+            'next_deadline': -1, 
+            '_id': -1
+        }
+    }, {
+        '$group': {
+            '_id': '$lead', 
+            'follow_count': {
+                '$sum': 1
+            }, 
+            'id': {
+                '$last': {
+                    '$toString': '$_id'
+                }
+            }, 
+            'follow_id': {
+                '$last': '$follow_id'
+            }, 
+            'sub_type': {
+                '$last': '$sub_type'
+            }, 
+            'comment': {
+                '$last': '$comment'
+            }, 
+            'created_on': {
+                '$last': '$created_on'
+            }
+        }
+    }, {
+        '$lookup': {
+            'from': 'leads', 
+            'localField': '_id', 
+            'foreignField': '_id', 
+            'pipeline': [
+                {
+                    '$addFields': {
+                        '_id': {
+                            '$toString': '$_id'
+                        }, 
+                        'created_by': {
+                            '$toString': '$created_by'
+                        }
+                    }
+                }
+            ], 
+            'as': 'lead'
+        }
+    }, {
+        '$lookup': {
+            'from': 'user', 
+            'localField': 'lead.assigned_to', 
+            'foreignField': '_id', 
+            'as': 'user'
+        }
+    }, {
+        '$project': {
+            'follow_count': 1, 
+            'id': {
+                '$toString': '$id'
+            }, 
+            '_id': {
+                '$toString': '$_id'
+            }, 
+            'follow_id': 1, 
+            'sub_type': 1, 
+            'comment': 1, 
+            'created_on': 1, 
+            'lead.first_name': 1, 
+            'lead.phone_number': 1, 
+            'lead._id': 1, 
+            'lead.lead_id': 1, 
+            'user.name': 1, 
+            'project': 1
+        }
+    }, {
+        '$addFields': {
+            'user': {
+                '$arrayElemAt': [
+                    '$user', 0
+                ]
+            }, 
+            'lead': {
+                '$arrayElemAt': [
+                    '$lead', 0
                 ]
             }
         }

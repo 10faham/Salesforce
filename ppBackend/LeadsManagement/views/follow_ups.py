@@ -25,7 +25,7 @@ def create_get_view():
     constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP,
 )
 def create_view(data):
-    print(data)
+    # print(data)
     lead = LeadsController.db_read_single_record({constants.ID:data[constants.FOLLOW_UP__LEAD]})
     data[constants.FOLLOW_UP__ASSIGNED_TO] = lead[constants.LEAD__ASSIGNED_TO]
     res = FollowUpController.create_controller(data=data)
@@ -53,6 +53,6 @@ def read_view(data):
 )
 def readfp_view(data):
     data['lead'] = request.args.get('lead')
-    print(request.args.get('lead'))
+    # print(request.args.get('lead'))
     res = FollowUpController.read_lead_follow(data=data)
     return render_template("viewfollow_leads.html", **res)
