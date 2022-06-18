@@ -15,7 +15,6 @@
     {% elif response_code != 200 %}
     // alert(`Error \n` + `{{ response_message}}`)
     {% endif %}
-
 </script>
 {% endblock %}
 {% block content %}
@@ -223,18 +222,16 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Task Completion Date</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control datetime-picker" required
-                                            title="completion_date" name="completion_date" />
                                             <div class="radio">
-                                                <input type="radio" name="completion_date" id="radio" value="option1" checked>
-                                                <label for="radio">
-                                                    Today: {{ moment().format('DD-MM-YYYY hh:mm:ss') }}
+                                                <input type="radio" name="completion_date" id="radio" value="" checked>
+                                                <label for="radio" id="today">
+                                                    Today: 
                                                 </label>
                                             </div>
                                             <div class="radio">
-                                                <input type="radio" name="completion_date" id="radio1" value="option3">
-                                                <label for="radio1">
-                                                    Yesterday: {{ moment().format('DD-MM-YYYY hh:mm:ss')}}
+                                                <input type="radio" name="completion_date" id="radio1" value="">
+                                                <label for="radio1" id="yesterday">
+                                                    Yesterday: 
                                                 </label>
                                             </div>
                                     </div>
@@ -317,5 +314,33 @@
     $(".datetime-picker").datetimepicker({
         format: 'YYYY-MM-DD hh:mm:ss'
     })
+
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var day = d.getDate();
+    var hour = d.getHours();
+    var minute = d.getMinutes();
+    var second = d.getSeconds();
+
+    var output = d.getFullYear() + '-' +
+        ((''+month).length<2 ? '0' : '') + month + '-' +
+        ((''+day).length<2 ? '0' : '') + day + ' ' +
+        ((''+hour).length<2 ? '0' :'') + hour + ':' +
+        ((''+minute).length<2 ? '0' :'') + minute + ':' +
+        ((''+second).length<2 ? '0' :'') + second;
+        
+        $("#today").append(output);
+        $("#radio").attr('value', output);
+        var day = d.getDate()-1;
+
+        var output = d.getFullYear() + '-' +
+            ((''+month).length<2 ? '0' : '') + month + '-' +
+            ((''+day).length<2 ? '0' : '') + day + ' ' +
+            ((''+hour).length<2 ? '0' :'') + hour + ':' +
+            ((''+minute).length<2 ? '0' :'') + minute + ':' +
+            ((''+second).length<2 ? '0' :'') + second;
+        
+        $("#yesterday").append(output);
+        $("#radio1").attr('value', output);
 </script>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 
 {% block scripthead %}
-
+<meta http-equiv="refresh" content="60">
 <link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
 
 <script>
@@ -89,8 +89,8 @@
                                                 <td>{{response_data.kpi[user]['name']}}</td>
                                                 <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=false" target="_blank">{{response_data.kpi[user]['lead_count']}}</a></td>
                                                 <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=true" target="_blank">{{response_data.kpi[user]['transfered']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=''" target="_blank">{{response_data.kpi[user]['TLW']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Contacted_client, Followed_up" target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a></td>
+                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Null&sub-filter=Null" target="_blank">{{response_data.kpi[user]['TLW']}}</a></td>
+                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call,Meeting&sub-filter=Contacted_client,Followed_up" target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt" target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed" target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call" target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a></td>

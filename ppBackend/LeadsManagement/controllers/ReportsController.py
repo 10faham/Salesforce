@@ -52,12 +52,12 @@ class ReportsController(Controller):
             filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.CREATED_BY] = data.get(constants.ID)
-        if data.get('filter') != '':
-            filter[constants.FOLLOW_UP__TYPE] = data.get(constants.FOLLOW_UP__TYPE)
-        if data.get('sub-filter') != '':
+        if data.get('type') != 'Null':
+            filter[constants.FOLLOW_UP__TYPE+"__in"] = data.get(constants.FOLLOW_UP__TYPE).split(',')
+        if data.get('sub_type') != 'Null':
             filter[constants.FOLLOW_UP__SUB_TYPE+'__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
-
-        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
+        # queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
+        queryset = FollowUpController.db_read_records(read_filter={**filter})
         
         follow_up = [obj for obj in queryset]
         leads = []

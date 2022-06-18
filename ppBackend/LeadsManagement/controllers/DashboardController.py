@@ -28,8 +28,10 @@ class DashboardController(Controller):
             filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(
-                str(datetime.now().date()), config.DATE_FORMAT)
+            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime(config.DATETIME_FORMAT)
+            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime(config.DATETIME_FORMAT)
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
+            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(
@@ -85,8 +87,10 @@ class DashboardFollow(Controller):
             filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(
-                str(datetime.now().date()), config.DATE_FORMAT)
+            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime(config.DATETIME_FORMAT)
+            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime(config.DATETIME_FORMAT)
+            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
+            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
             datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime("%d %m %Y %H:%M:%S")
             dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime("%d %m %Y %H:%M:%S")
 

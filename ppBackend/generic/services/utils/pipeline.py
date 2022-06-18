@@ -373,7 +373,7 @@ GET_LEADS_KPI = [
                 '$last': '$comment'
             }, 
             'created_on': {
-                '$last': '$created_on'
+                '$last': {'$toDate':'$created_on'}
             }
         }
     }, {
