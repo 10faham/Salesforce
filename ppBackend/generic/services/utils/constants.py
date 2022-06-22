@@ -213,6 +213,35 @@ LEAD__ASSIGNED_TO = "assigned_to"
 LEAD__ASSIGNED_BY = "assigned_by"
 LEAD__TRANSFERED = "transfered"
 
+# Lead Constants
+LEAD_HISTORY = "lead_history"
+HISTORY__ID = "history_id"
+LEAD__ID = "lead_id"
+LEAD_HISTORY__FIRST_NAME = "first_name"
+LEAD_HISTORY__LAST_NAME = "last_name"
+LEAD_HISTORY__NIC = "nic"
+LEAD_HISTORY__PHONE_NUMBER = "phone_number"
+LEAD_HISTORY__LANDLINE_NUMBER = "landline_number"
+LEAD_HISTORY__EMAIL_ADDRESS = "email_address"
+LEAD_HISTORY__ADDRESS = "address"
+LEAD_HISTORY__ADDRESS__KEY_LIST = ["Home", "Office"]
+LEAD_HISTORY__PROJECT = "project"
+LEAD_HISTORY__SOURCE = "lead_source"
+LEAD_HISTORY__STATUS = "lead_status"
+LEAD_HISTORY__STATUS__LIST = ["Interested", "Not Interested"]
+LEAD_HISTORY__GENDER = "gender"
+LEAD_HISTORY__COUNTRY = "country"
+LEAD_HISTORY__CITY = "city"
+LEAD_HISTORY__CLIENT_CATEGORY = "client_category"
+LEAD_HISTORY__CLIENT_CATEGORY__LIST = ["Investor", "User", "Agent"]
+LEAD_HISTORY__LEVEL = "lead_level"
+LEAD_HISTORY__LEVEL__LIST = ["AtomBomb", "Hot", "Moderate", "Cold", "SubZero"]
+LEAD_HISTORY__USER = "user"
+LEAD_HISTORY__COMMENT = "lead_comment"
+LEAD_HISTORY__ASSIGNED_TO = "assigned_to"
+LEAD_HISTORY__ASSIGNED_BY = "assigned_by"
+LEAD_HISTORY__TRANSFERED = "transfered"
+
 # Follow Up Constants
 FOLLOW_UP = "follow_up"
 FOLLOWUP__ID = "follow_id"

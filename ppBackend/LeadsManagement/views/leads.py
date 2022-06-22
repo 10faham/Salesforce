@@ -95,3 +95,11 @@ def bulk_trasnfer(data):
     
     res = UserController.get_users_childs_list(data)
     return render_template("bulkleads.html", **res)
+
+@leads_bp.route("/leadtransfer", methods=["POST"])
+@decorators.is_authenticated
+# @decorators.keys_validator()
+def lead_transfer():
+    data = request.form
+    res = LeadsController.lead_transfer(data=data)
+    return res

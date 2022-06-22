@@ -4,6 +4,7 @@
 {% block scripthead %}
 <link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url_for('static', filename='plugins/datatables/select.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
 
 <script>
   response_code = parseInt("{{response_code}}")
@@ -81,6 +82,7 @@
                 <table id="datatable" class="table table-striped table-bordered">
                   <thead>
                     <tr>
+                      <th style="width: 85px;">UID</th>
                       <th style="width: 85px;">ID</th>
                       <th style="width: 85px;">Name</th>
                       <th style="width: 85px;">Assigned to</th>
@@ -94,16 +96,15 @@
                   <tbody id="lead-detail">
                     {% for obj in response_data['data'] %}
                     <tr>
+                      <td>{{obj._id}}</td>
                       <td scope="row">
-                        <div>{{obj.lead_id}}</div>
-                        <div>
-                            <p>{{obj.created_on}}</p>
-                        </div>
+                        {{obj.lead_id}}
+                        <p>{{obj.created_on}}</p>
                       </td>
                       <td>{{obj.first_name}}</td>
                       <td>{{obj.user.name}}</td>
                       {% if 'followup' in obj %}
-                      <td><p>{{obj.followup.sub_type}}</p>
+                      <td>{{obj.followup.sub_type}}
                         <p>{{obj.followup.created_on}}</p></td>
                       {% else %}
                       <td></td>
@@ -128,6 +129,139 @@
               </div>
             </div>
           </div>
+          {% if response_data.userlevel < 4 %}
+          <div class="row">
+            <button id="transfershow" class="applyBtn btn btn-sm">Assign</button>
+
+            <div id="transfer-sec" class="row" style=" display:none">
+              <div class="col-sm-6">
+                  <div class="card-box">
+                      <div class="row">
+                          <form class="form-horizontal" action="" method="POST" id="follow_up_form">
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Assign To *</label>
+                                    <div class="col-sm-10">
+                                        <select id="transfer_to" class="form-control" required name="transfer_to" title="transfer_to">
+                                          {% for user in response_data['all_users'] %}
+                                          <option value="{{user[0]}}">{{user[1]}}</option>
+                                          {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <h4 class="page-title">Current Task</h4>
+                              <div class="col-sm-12">
+                                  <div class="form-group">
+                                      <label class="col-sm-2 control-label">Type *</label>
+                                      <div class="col-sm-10">
+                                          <select id="type" class="form-control" required name="type" title="type">
+                                              <option value=""></option>
+                                              <option value="Call">Call</option>
+                                              <option value="Meeting">Meeting</option>
+                                              <option value="Email">Email</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                  <div class="form-group">
+                                      <label class="col-sm-2 control-label">Sub Type *</label>
+                                      <div class="col-sm-10">
+                                          <select id="sub_type" class="form-control" required name="sub_type" title="sub_type">
+                                              <option value=""></option>
+                                              <option value="SMS">SMS</option>
+                                              <option value="Call_attempt">Call Attempt</option>
+                                              <option value="Followed_up">Followed Up</option>
+                                              <option value="Whatsapp_call">Whatsapp call</option>
+                                              <option value="Whatsapp_message">Whatsapp Message</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                        <input id="lead_status" type="hidden" name="lead_status" value="Interested">
+                                        <input id="completion_date" type="hidden" name="completion_date" value="">
+                              </div>
+                              <div class="col-sm-12">
+                                  <div class="form-group">
+                                      <label class="col-sm-2 control-label">Comment*</label>
+                                      <div class="col-sm-10">
+                                          <textarea id="comment" class="form-control" required title="comment"
+                                              name="comment"></textarea>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-12">
+                                  <h4 class="page-title">Next Follow up</h4>
+                                  <div class="col-sm-12">
+                                      <div class="form-group">
+                                          <label class="col-sm-2 control-label">Next Task *</label>
+                                          <div class="col-sm-10">
+                                              <select id="next_task" class="form-control" required name="next_task"
+                                                  title="Next Task">
+                                                  <option value=""></option>
+                                                  <option value="DoNothing">Do Nothing</option>
+                                                  <option value="ContactClient">Contact Client</option>
+                                                  <option value="FollowUp">Follow Up</option>
+                                                  <option value="ReceiveTokenPayment">Receive Token Payment</option>
+                                                  <option value="MeetClient">Meet Client</option>
+                                                  <option value="ArrangeMeeting">Arrange Meeting</option>
+                                                  <option value="ReceivePartialDownPayment">Receive Partial Down
+                                                      Payment</option>
+                                                  <option value="ReceiveCompleteDownPayment">Receive Complete Down
+                                                      Payment</option>
+                                                  <option value="SignSaleAgreement">Sign Sale Agreement</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="form-group">
+                                          <label class="col-sm-2 control-label">Project</label>
+                                          <div class="col-sm-10">
+                                              <div class="col-sm-10">
+                                                  <input id="next_project" type="text" class="form-control"
+                                                      title="Project" name="next_project" value="" />
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="form-group">
+                                          <label class="col-sm-2 control-label">Deadline</label>
+                                          <div class="col-sm-10">
+                                              <input id="next_deadline" type="text" class="form-control datetime-picker" required
+                                                  title="next" name="next_deadline" />
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-12">
+                                      <div class="form-group">
+                                          <label class="col-sm-2 control-label">Level*</label>
+                                          <div class="col-sm-10">
+                                              <select id="lead_level" class="form-control" required name="lead_level" title="lead_level">
+                                                  <option value=""></option>
+                                                  <option value="AtomBomb">Atom-Bomb</option>
+                                                  <option value="Hot">Hot</option>
+                                                  <option value="Moderate">Moderate</option>
+                                                  <option value="Cold">Cold</option>
+                                                  <option value="SubZero">Sub-Zero</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <button id="transferbtn" class="applyBtn btn btn-sm btn-success" type="submit">Save</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
         </div> <!-- end col -->
       </div>
       <!-- end row -->
@@ -146,40 +280,120 @@
 
 {% block scriptfooter %}
 
-<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.buttons.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/jszip.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/pdfmake.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/vfs_fonts.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.html5.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.print.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedHeader.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.keyTable.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.responsive.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.scroller.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.colVis.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/datatables.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
 <!-- init -->
-<script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
 <script>
-  $("table").each(function () {
-    $(this).DataTable({
-      "bFilter": true,
-      "aaSorting": [],
-      "pageLength": 100,
-      select: true,
+      $(".datetime-picker").datetimepicker({
+        format: 'YYYY-MM-DD hh:mm:ss'
     });
-  })
-    // TableManageButtons.init();
 
+    var table = $('#datatable').DataTable({
+        "dom": 'PB<"clear">lfrtip',  
+        "bFilter": true,
+        "aaSorting": [],
+        "pageLength": 10,
+        // "stateSave": true,
+        "processing":true,
+        "select": {"style": 'multi+shift'},
+        "searchPanes": {
+            "initCollapsed": true
+        },
+        "columnDefs": [
+            {
+                "searchPanes": {
+                    "show": true
+                },
+                "targets": [3,6,7]
+            },
+            {
+                "searchPanes": {
+                    "show": false
+                },
+                "targets": [0,8]
+            },
+            {
+                "target": 0,
+                "visible": false,
+                "searchable":false,
+            }
+        ],
+        "ordering": false,
+        "buttons":[
+          "selectAll",
+          "selectNone"
+        ],
+    });
+
+    $('#transfershow').click( function () {
+
+      var x = document.getElementById("transfer-sec");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+  }
+    });
+    
+$("#follow_up_form").submit(function (event) {
+  var leads_id = []; 
+  for (var i = 0; i < table.rows('.selected').data().length; i++) {
+        leads_id.push(table.rows('.selected').data()[i][0]) 
+      }
+    var tmp = JSON.stringify(leads_id);
+    var formData = {
+      lead:tmp,
+      transfer_to:$('#transfer_to').val(),
+      type: $("#type").val(),
+      sub_type: $("#sub_type").val(),
+      lead_status: $("#lead_status").val(),
+      completion_date: $("#completion_date").val(),
+      comment: $("#comment").val(),
+      next_task: $("#next_task").val(),
+      next_project: $("#next_project").val(),
+      next_deadline: $("#next_deadline").val(),
+      lead_level: $("#lead_level").val()
+    };
+    // console.log(formData);
+    $.ajax({
+      type: "POST",
+      url: "/api/leads/leadtransfer",
+      data: formData,
+      dataType: "json",
+      encode: true,
+    }).done(function (data) {
+      console.log('submitted')
+      console.log(data.response_code);
+      if (data.response_code == 200){
+        alert('Transfer Successful')
+        setTimeout(function(){// wait for 5 secs(2)
+           location.reload(); // then reload the page.(3)
+      }, 300); 
+      }
+    });
+
+    event.preventDefault();
+  });
+
+
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var day = d.getDate();
+    var hour = d.getHours();
+    var minute = d.getMinutes();
+    var second = d.getSeconds();
+
+    var output = d.getFullYear() + '-' +
+        ((''+month).length<2 ? '0' : '') + month + '-' +
+        ((''+day).length<2 ? '0' : '') + day + ' ' +
+        ((''+hour).length<2 ? '0' :'') + hour + ':' +
+        ((''+minute).length<2 ? '0' :'') + minute + ':' +
+        ((''+second).length<2 ? '0' :'') + second;
+        
+        $("#completion_date").attr('value', output);
 </script>
 
 {% endblock %}

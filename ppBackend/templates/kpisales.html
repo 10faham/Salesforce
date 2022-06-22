@@ -71,15 +71,22 @@
                                 <table id="datatable" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Leads Add Today</th>
-                                            <th>Leads assigned</th>
+                                            <th rowspan="2">Name</th>
+                                            <th colspan="3">Leads</th>
+                                            <th colspan="2">Calls</th>
+                                            <th colspan="2">Meetings</th>
+                                            <th colspan="2">Whatsapp</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Added Today</th>
+                                            <th>Assigned</th>
                                             <th>TLW</th>
+                                            <th>Connected</th>
+                                            <th>Attempt</th>
+                                            <th>Done</th>
+                                            <th>Arranged</th>
                                             <th>Calls</th>
-                                            <th>AT Calls</th>
-                                            <th>Meetings</th>
-                                            <th>W-Calls</th>
-                                            <th>W-msg</th>
+                                            <th>Msg</th>
                                         </tr>
 
                                     </thead>
@@ -93,6 +100,7 @@
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call,Meeting&sub-filter=Contacted_client,Followed_up" target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt" target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed" target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a></td>
+                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed" target="_blank">-</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call" target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a></td>
                                                 <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_message" target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_message']}}</a></td>
                                         </tr>

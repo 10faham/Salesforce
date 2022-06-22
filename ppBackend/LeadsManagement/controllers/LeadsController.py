@@ -6,6 +6,7 @@
 from ast import Constant
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
+from ppBackend.LeadsManagement.controllers.LeadsHistoryController import LeadsHistoryController
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
@@ -101,6 +102,8 @@ class LeadsController(Controller):
         leads_data['data'] = lead_dataset
         leads_data['username'] = common_utils.current_user()[
             constants.USER__NAME]
+        leads_data['userlevel'] = common_utils.current_user()[
+            constants.USER__ROLE][constants.USER__ROLE__ROLE_ID]
         leads_data['all_users'] = all_users
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
@@ -185,6 +188,12 @@ class LeadsController(Controller):
         return temp
 
     @classmethod
+    def read_lead(cls, data):
+        queryset = cls.db_read_records(read_filter={constants.ID+"__in": data})
+        temp = [obj.display_transfer() for obj in queryset]
+        return temp
+
+    @classmethod
     def bulk_transfer(cls, data):
         from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
         queryset = cls.db_read_records(read_filter={constants.LEAD__ASSIGNED_TO: data['assigned_to']}).limit(int(data['count']))
@@ -208,3 +217,35 @@ class LeadsController(Controller):
             followup_data_new[constants.FOLLOW_UP__ASSIGNED_TO] = data['transfer_to']
             res = FollowUpController.create_controller(data=followup_data_new)
         return data
+
+    @classmethod
+    def lead_transfer(cls, data):
+        from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
+        lead_ids = data['lead'].replace('[', '')
+        lead_ids = lead_ids.replace(']', '')
+        lead_ids = lead_ids.replace('"', '')
+        lead_ids = lead_ids.split(',')
+        queryset = LeadsController.read_lead(lead_ids)
+        followup_data_new = {constants.FOLLOW_UP__COMMENT: data['comment'], 
+        constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: data['next_deadline'],
+        constants.FOLLOW_UP__LEVEL: constants.FOLLOW_UP__LEVEL__LIST[2], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
+        constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task'], constants.FOLLOW_UP__STATUS: data['lead_status']}
+        for lead in queryset:
+            lead['lead_id'] = lead['id']
+            del lead["id"]
+            res = LeadsHistoryController.create_controller(lead)
+            update_filter = {constants.ID: lead['lead_id'], constants.LEAD__ASSIGNED_TO: data['transfer_to'], 
+            constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True}    
+            res = LeadsController.update_controller(update_filter)
+            followup = FollowUpController.read_lead_follow(data = {'lead':lead['lead_id']})
+            for follow in followup['response_data']:
+                followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
+                  constants.ID: follow[constants.ID]}
+                res = FollowUpController.update_controller(followup_updatedata)
+            followup_data_new[constants.FOLLOW_UP__LEAD] = lead['lead_id']
+            res = FollowUpController.create_controller(data=followup_data_new)
+        return response_utils.get_json_response_object(
+                response_code=response_codes.CODE_SUCCESS,
+                response_message=response_codes.MESSAGE_SUCCESS,
+                response_data=data
+            )

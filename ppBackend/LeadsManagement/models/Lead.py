@@ -104,13 +104,42 @@ class Leads(models.Model):
             constants.LEAD__CLIENT_CATEGORY: self[constants.LEAD__CLIENT_CATEGORY],
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
             constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
-            constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name if self[constants.LEAD__ASSIGNED_TO] else None,
-            constants.LEAD__ASSIGNED_BY: self[constants.LEAD__ASSIGNED_BY].fetch().name if self[constants.LEAD__ASSIGNED_BY] else None,
+            constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name,
+            constants.LEAD__ASSIGNED_BY: self[constants.LEAD__ASSIGNED_BY].fetch().name,
             constants.LEAD__TRANSFERED: self[constants.LEAD__TRANSFERED] if self[constants.LEAD__TRANSFERED] else False,
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self.created_by.fetch().name,
-            constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),
-            constants.UPDATED_ON: common_utils.epoch_to_datetime(self[constants.UPDATED_ON])
+            constants.CREATED_ON: self[constants.CREATED_ON],
+            constants.UPDATED_ON: self[constants.UPDATED_ON]
+        }
+
+    def display_transfer(self):
+        return {
+            constants.ID: str(self[constants.ID]),
+            constants.LEAD__ID: self[constants.LEAD__ID],
+            constants.LEAD__FIRST_NAME: self[constants.LEAD__FIRST_NAME],
+            constants.LEAD__LAST_NAME: self[constants.LEAD__LAST_NAME],
+            constants.LEAD__NIC: self[constants.LEAD__NIC],
+            constants.LEAD__PHONE_NUMBER: self[constants.LEAD__PHONE_NUMBER],
+            constants.LEAD__LANDLINE_NUMBER: self[constants.LEAD__LANDLINE_NUMBER],
+            constants.LEAD__EMAIL_ADDRESS: self[constants.LEAD__EMAIL_ADDRESS],
+            constants.LEAD__ADDRESS: self[constants.LEAD__ADDRESS],
+            constants.LEAD__PROJECT: self[constants.LEAD__PROJECT],
+            constants.LEAD__SOURCE: self[constants.LEAD__SOURCE],
+            constants.LEAD__STATUS: self[constants.LEAD__STATUS],
+            constants.LEAD__GENDER: self[constants.LEAD__GENDER],
+            constants.LEAD__COUNTRY: self[constants.LEAD__COUNTRY],
+            constants.LEAD__CITY: self[constants.LEAD__CITY],
+            constants.LEAD__CLIENT_CATEGORY: self[constants.LEAD__CLIENT_CATEGORY],
+            constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
+            constants.LEAD__COMMENT: self[constants.LEAD__COMMENT],
+            constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO],
+            constants.LEAD__ASSIGNED_BY: self[constants.LEAD__ASSIGNED_BY],
+            constants.LEAD__TRANSFERED: self[constants.LEAD__TRANSFERED] if self[constants.LEAD__TRANSFERED] else False,
+            constants.STATUS: self[constants.STATUS],
+            constants.CREATED_BY: self.created_by.fetch().name,
+            constants.CREATED_ON: self[constants.CREATED_ON],
+            constants.UPDATED_ON: self[constants.UPDATED_ON]
         }
 
     def display_min(self):

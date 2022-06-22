@@ -56,8 +56,8 @@ class ReportsController(Controller):
             filter[constants.FOLLOW_UP__TYPE+"__in"] = data.get(constants.FOLLOW_UP__TYPE).split(',')
         if data.get('sub_type') != 'Null':
             filter[constants.FOLLOW_UP__SUB_TYPE+'__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
-        # queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
-        queryset = FollowUpController.db_read_records(read_filter={**filter})
+        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
+        # queryset = FollowUpController.db_read_records(read_filter={**filter})
         
         follow_up = [obj for obj in queryset]
         leads = []
