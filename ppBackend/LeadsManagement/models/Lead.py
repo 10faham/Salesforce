@@ -7,9 +7,6 @@ from ppBackend.generic import models
 from ppBackend.generic import db
 from ppBackend.generic.services.utils import constants, common_utils
 from ppBackend.UserManagement.models.User import User
-# from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
-
-
 
 class Leads(models.Model):
     @classmethod
@@ -38,12 +35,12 @@ class Leads(models.Model):
             constants.LEAD__PROJECT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__SOURCE: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__STATUS: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__STATUS__LIST}],
-            constants.LEAD__GENDER: [{"rule": "required"}, {"rule": "choices", "options": constants.GENDER_LIST}],
+            constants.LEAD__GENDER: [{"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__COMMENT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__CLIENT_CATEGORY: [{"rule": "choices", "options": constants.LEAD__CLIENT_CATEGORY__LIST}],
-            constants.LEAD__LEVEL: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__LEVEL__LIST}],
+            constants.LEAD__LEVEL: [{"rule": "choices", "options": constants.LEAD__LEVEL__LIST}],
 
         }
 
@@ -54,7 +51,6 @@ class Leads(models.Model):
         constants.LEAD__GENDER: [{"rule": "nonexistent"}],
         constants.LEAD__COUNTRY: [{"rule": "nonexistent"}],
         constants.LEAD__CITY: [{"rule": "nonexistent"}],
-        constants.LEAD__LEVEL: [{"rule": "nonexistent"}]
     }
 
     first_name = db.StringField(required=True)
@@ -70,7 +66,7 @@ class Leads(models.Model):
     project = db.StringField()
     lead_source = db.StringField()
     lead_status = db.StringField(required=True)
-    gender = db.StringField(required=True)
+    gender = db.StringField()
     country = db.StringField(required=True)
     city = db.StringField(required=True)
     client_category = db.StringField()
@@ -80,6 +76,10 @@ class Leads(models.Model):
     assigned_by = db.LazyReferenceField(User, required=True)
     lead_id = db.SequenceField(value_decorator='LD-{}'.format)
     transfered = db.BooleanField(default=False)
+    followup_id = db.StringField()
+    followup_last_work = db.StringField()
+    followup_last_work_date = db.IntField()
+    followup_count = db.IntField()
 
     def __str__(self):
         return str(self.pk)

@@ -25,11 +25,18 @@ def create_get_view():
     constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP,
 )
 def create_view(data):
-    # print(data)
+    leads = {}
     lead = LeadsController.db_read_single_record({constants.ID:data[constants.FOLLOW_UP__LEAD]})
     data[constants.FOLLOW_UP__ASSIGNED_TO] = lead[constants.LEAD__ASSIGNED_TO]
     res = FollowUpController.create_controller(data=data)
-    # return render_template("./viewfollow_ups.html", **res)
+    leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
+    leads[constants.ID] = data[constants.FOLLOW_UP__LEAD]
+    leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
+    leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
+    leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
+    leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+    leads[constants.LEAD__FOLLOWUP_COUNT] = lead['followup_count']+1
+    res = LeadsController.db_update_single_record(read_filter = {constants.ID:data[constants.FOLLOW_UP__LEAD][constants.ID]}, update_filter = leads)
     return redirect(url_for('follow_ups_bp.read_view'))
 
 @follow_ups_bp.route("/read", methods=["GET", "POST"])

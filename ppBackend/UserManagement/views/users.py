@@ -81,7 +81,7 @@ def login_user_view(data):
     #     return render_template("failed.html", Response=res)
 
 
-@users_bp.route("/logout", methods=["PATCH"])
+@users_bp.route("/logout", methods=["GET"])
 @decorators.logging
 @decorators.is_authenticated
 @decorators.keys_validator()

@@ -2,7 +2,7 @@
 
 
 {% block scripthead %}
-<meta http-equiv="refresh" content="60">
+<!-- <meta http-equiv="refresh" content="600"> -->
 <link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
 
 <script>
@@ -149,14 +149,5 @@
 <!-- init -->
 <!-- <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script> -->
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
-
-<!-- <script >
-  var table = $('#datatable').DataTable( {
-    "pageLength": 100
-  } );
-  table.column( 3 ).data().sum();
-</script> -->
-
-
 
 {% endblock %}

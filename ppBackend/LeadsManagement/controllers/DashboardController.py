@@ -23,15 +23,15 @@ class DashboardController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
             datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime(config.DATETIME_FORMAT)
             dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime(config.DATETIME_FORMAT)
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
-            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
+            filter[constants.UPDATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
+            filter[constants.UPDATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(
@@ -128,7 +128,7 @@ class DashboardFollow(Controller):
             kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                         ['type']]["_sum"] += user['count']
             kpi_dataset[str(user["_id"]["created_by"])]['TLW'] += user['count']
-            if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up' or user["_id"]['sub_type'] == 'Whatsapp_call':
+            if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up':
                 kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):

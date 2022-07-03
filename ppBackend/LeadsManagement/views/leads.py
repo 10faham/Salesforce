@@ -1,5 +1,8 @@
 # Python imports
-
+import os
+import re
+import pandas as pd
+from datetime import datetime
 # Framework imports
 from flask import Blueprint, redirect, url_for, redirect, render_template, request
 
@@ -8,6 +11,7 @@ from ppBackend.LeadsManagement.controllers.LeadsController import LeadsControlle
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, decorators, common_utils
+from ppBackend.config import config
 
 leads_bp = Blueprint("leads_bp", __name__)
 
@@ -35,20 +39,23 @@ def leads_create_view(data):
         key: data[key] for key in [*constants.REQUIRED_FIELDS_LIST__FOLLOW_UP,
                                    *constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP] if data.get(key)
     }
-    # for key in constants.REQUIRED_FIELDS_LIST__FOLLOW_UP:
-    #     if key in data:
-    #         data_follow[key] = data[key]
-    # for key in constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP:
-    #     if key in data:
-    #         data_follow[key] = data[key]
-
-    res = LeadsController.create_controller(data=data_lead)
-    if res['response_code'] == 200:
-        data_follow['lead'] = res['response_data']['id']
+    data_lead[constants.LEAD__FOLLOWUP_COUNT] = 1
+    rest = LeadsController.create_controller(data=data_lead)
+    if rest['response_code'] == 200:
+        data_follow['lead'] = rest['response_data']['id']
         data_follow[constants.FOLLOW_UP__ASSIGNED_TO] = common_utils.current_user()
         res = FollowUpController.create_controller(data=data_follow)
+        leads = {}
+        leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
+        leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
+        leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
+        leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
+        leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
+        leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+        res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
+
     # return redirect(url_for('addlead_view', **res))
-    return render_template("./addlead.html", **res)
+    return render_template("./addlead.html", **rest)
     # return render_template("./addfollow_up_bylead.html", **res)
 
 
@@ -103,3 +110,56 @@ def lead_transfer():
     data = request.form
     res = LeadsController.lead_transfer(data=data)
     return res
+
+@leads_bp.route("/bulkadd", methods=["GET", "POST"])
+@decorators.is_authenticated
+# @decorators.keys_validator()
+def lead_bulk_add():
+    if request.method == "POST":
+        uploaded_file = request.files['file']
+        datafile = pd.read_csv(uploaded_file)
+        jout = datafile.to_dict(orient="split")
+        unique = []
+        duplicates = []
+        lead = {}
+        for item in jout['data']:
+            if item[1] != item[1]:
+                item[1] = ''
+            if item[2] == item[2]:
+                item[2] = item[2].replace(".", "")
+                item[2] = item[2].replace(" ", "")
+                item[2] = re.sub('^00', '+', item[2])
+                item[2] = re.sub('^03', '+923', item[2])
+                item[2] = re.sub('^3', '+923', item[2])
+                queryset = LeadsController.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: item[2]})
+                if queryset:
+                    duplicates.append(item)
+                else:
+                    unique.append(item)
+                    for index, header in enumerate(jout["columns"]):
+                        lead[header] = item[index]
+                    data_lead = {
+                        key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__LEAD,
+                                                *constants.OPTIONAL_FIELDS_LIST__LEAD] if lead.get(key)
+                    }
+                    data_follow = {
+                        key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__FOLLOW_UP,
+                                                *constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP] if lead.get(key)
+                    }
+                    data_lead[constants.LEAD__FOLLOWUP_COUNT] = 1
+                    rest = LeadsController.create_controller(data=data_lead)
+                    if rest['response_code'] == 200:
+                        data_follow['lead'] = rest['response_data']['id']
+                        data_follow[constants.FOLLOW_UP__ASSIGNED_TO] = common_utils.current_user()
+                        data_follow[constants.FOLLOW_UP__COMPLETION_DATE] = datetime.now().strftime(config.DATETIME_FORMAT)
+                        data_follow[constants.FOLLOW_UP__NEXT_DEADLINE] = datetime.now().strftime(config.DATETIME_FORMAT)
+                        res = FollowUpController.create_controller(data=data_follow)
+                        leads = {}
+                        leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
+                        leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
+                        leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
+                        leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
+                        leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
+                        leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+                        res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
+    return render_template("leadbulkadd.html")

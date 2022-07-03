@@ -118,7 +118,6 @@ class Controller:
             update_filter.update(
                 {constants.UPDATED_BY: common_utils.current_user(),
                  constants.UPDATED_ON: common_utils.get_time()})
-
             return True, "", collection.objects(**read_filter).modify(new=True, **update_filter)
         return False, error_messages, None
 

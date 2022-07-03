@@ -3,6 +3,7 @@
 
 # Local imports
 from ppBackend import app
+from ppBackend.LeadsManagement.controllers.LeadsHistoryController import LeadsHistoryController
 from ppBackend.config import config
 from ppBackend.generic.services.utils import common_utils, constants
 from ppBackend.UserManagement.controllers.UserController import UserController
@@ -17,14 +18,15 @@ def update_id_field(run=False):
     if not run:
         return
     with app.test_request_context():
-        count = 0
-        queryset = LeadsController.db_read_records(read_filter={}, deleted_records=True)
-        for index, obj in enumerate(queryset):
-            obj['lead_id'] = f'LD-{index + 1}'
-            obj.save()
-            count += 1
-            print("Updated Obj :", obj)
-            print(count)
+        # count = 0
+        # queryset = LeadsController.db_read_records(read_filter={}, deleted_records=True)
+        # for index, obj in enumerate(queryset):
+        #     obj['lead_id'] = f'LD-{index + 1}'
+        #     obj.save()
+        #     count += 1
+        #     print("Updated Obj :", obj)
+        #     print(count)
+
         queryset = FollowUpController.db_read_records(read_filter={}, deleted_records=True)
         count = 0
         for index, obj in enumerate(queryset):
@@ -33,3 +35,12 @@ def update_id_field(run=False):
             count += 1
             print("Updated Obj :", obj)
             print(count)
+
+        # queryset = LeadsHistoryController.db_read_records(read_filter={}, deleted_records=True)
+        # count = 0
+        # for index, obj in enumerate(queryset):
+        #     obj['history_id'] = f'LH-{index + 1}'
+        #     obj.save()
+        #     count += 1
+        #     print("Updated Obj :", obj)
+        #     print(count)

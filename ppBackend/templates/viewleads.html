@@ -87,9 +87,9 @@
                       <th style="width: 85px;">Name</th>
                       <th style="width: 85px;">Assigned to</th>
                       <th style="width: 85px;">Last Work</th>
-                      <th style="width: 85px;">Phone</th>
                       <th style="width: 85px;">Project</th>
                       <th style="width: 85px;">Level</th>
+                      <th style="width: 85px;">Phone</th>
                       <th style="width: 85px;">Actions</th>
                     </tr>
                   </thead>
@@ -103,25 +103,18 @@
                       </td>
                       <td>{{obj.first_name}}</td>
                       <td>{{obj.user.name}}</td>
-                      {% if 'followup' in obj %}
-                      <td>{{obj.followup.sub_type}}
-                        <p>{{obj.followup.created_on}}</p></td>
-                      {% else %}
-                      <td></td>
-                      {% endif %}
-                      <td>{{obj.phone_number}}</td>
+                      <td><p>{{obj.followup_last_work}}</p>
+                        <p>{{obj.followup_last_work_date}}</p></td>
                       <td>{{obj.project}}</td>
                       <td>{{obj.lead_level}}</td>
+                      <td>{{obj.phone_number}}</td>
                       <td>
-                        {% if 'followup' in obj %}
-                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.followup.comment}}" 
-                              data-original-title="{{obj.followup.comment}}"><i class="mdi mdi-comment-outline"></i></a>
-                        TLW: {{obj.followup.follow_count}}
-                        {% else %}
-                        TLW: 0
-                        {% endif %}
+                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
+                              data-original-title="{{obj.lead_comment}}"><i class="mdi mdi-comment-outline"></i></a>
+                        TLW: {{obj.followup_count}}
                         <a href="/api/follow_ups/create?lead={{obj._id}}"><i
-                              class="glyphicon glyphicon-plus"></i></a></p>
+                              class="glyphicon glyphicon-plus"></i></a>
+                        <a  href="tel:{{obj.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -295,25 +288,26 @@
         "dom": 'PB<"clear">lfrtip',  
         "bFilter": true,
         "aaSorting": [],
-        "pageLength": 10,
+        "pageLength": 50,
         // "stateSave": true,
         "processing":true,
         "select": {"style": 'multi+shift'},
         "searchPanes": {
-            "initCollapsed": true
+            "initCollapsed": true,
+            "viewTotal": true
         },
         "columnDefs": [
             {
                 "searchPanes": {
                     "show": true
                 },
-                "targets": [3,6,7]
+                "targets": [3,5,6]
             },
             {
                 "searchPanes": {
                     "show": false
                 },
-                "targets": [0,8]
+                "targets": [0,1,2,4,7,8]
             },
             {
                 "target": 0,

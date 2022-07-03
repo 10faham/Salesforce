@@ -1,5 +1,7 @@
 # Python imports
-
+import pandas as pd
+import re
+from math import nan, isnan
 # Framework imports
 
 # Local imports
@@ -249,3 +251,30 @@ class LeadsController(Controller):
                 response_message=response_codes.MESSAGE_SUCCESS,
                 response_data=data
             )
+    
+    @classmethod
+    def lead_bulk_add(cls, data):
+        datafile = pd.read_csv(data)
+        jout = datafile.to_dict(orient="split")
+        unique = []
+        duplicates = []
+        lead = {}
+        for item in jout['data']:
+            if item[2] == item[2]:
+                item[2] = item[2].replace(".", "")
+                item[2] = item[2].replace(" ", "")
+                item[2] = re.sub('^00', '+', item[2])
+                item[2] = re.sub('^03', '+923', item[2])
+                item[2] = re.sub('^3', '+923', item[2])
+                queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: item[2]})
+                if queryset:
+                    duplicates.append(item)
+                else:
+                    unique.append(item)
+                    for index, header in enumerate(jout["columns"]):
+                        lead[header] = item[index]
+                       
+        if unique:
+            pass
+
+        print(jout)

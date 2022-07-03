@@ -250,7 +250,60 @@ ALL_LEADS = [
             '_id': -1
         }
     }, {
-        '$limit': 1500
+        '$lookup': {
+            'from': 'user', 
+            'localField': 'assigned_to', 
+            'foreignField': '_id', 
+            'as': 'user'
+        }
+    }, {
+        '$project': {
+            '_id': {
+                '$toString': '$_id'
+            }, 
+            'created_on': {
+                '$toDate': '$created_on'
+            }, 
+            'first_name': 1, 
+            'phone_number': 1, 
+            'project': 1, 
+            'lead_level': 1, 
+            'lead_id': 1, 
+            'lead_comment': 1, 
+            'followup_id': 1, 
+            'followup_last_work': 1, 
+            'followup_count':1,
+            'followup_last_work_date': {
+                '$toDate': '$followup_last_work_date'
+            }, 
+            'user.name': 1
+        }
+    }, {
+        '$addFields': {
+            'user': {
+                '$arrayElemAt': [
+                    '$user', 0
+                ]
+            }, 
+            'created_on': {
+                '$substrBytes': [
+                    '$created_on', 0, 10
+                ]
+            }, 
+            'followup_last_work_date': {
+                '$substrBytes': [
+                    '$followup_last_work_date', 0, 10
+                ]
+            }
+        }
+    }
+]
+
+ALL_LEADS_DATA = [
+    {
+        '$sort': {
+            '_id': -1
+        }
     }, {
         '$lookup': {
             'from': 'follow_up', 
@@ -258,6 +311,10 @@ ALL_LEADS = [
             'foreignField': 'lead', 
             'pipeline': [
                 {
+                    '$sort': {
+                        '_id': 1
+                    }
+                }, {
                     '$group': {
                         '_id': {
                             '$toString': '$lead'
@@ -279,10 +336,11 @@ ALL_LEADS = [
                         'comment': {
                             '$last': '$comment'
                         }, 
+                        'level': {
+                            '$last': '$lead_level'
+                        }, 
                         'created_on': {
-                            '$last': {
-                                '$toDate': '$created_on'
-                            }
+                            '$last': '$created_on'
                         }
                     }
                 }
@@ -315,6 +373,7 @@ ALL_LEADS = [
             'followup.comment': 1, 
             'followup.created_on': 1, 
             'followup.follow_count': 1, 
+            'followup.level': 1, 
             'user.name': 1
         }
     }, {
@@ -332,14 +391,6 @@ ALL_LEADS = [
             'created_on': {
                 '$substrBytes': [
                     '$created_on', 0, 10
-                ]
-            }
-        }
-    }, {
-        '$addFields': {
-            'followup.created_on': {
-                '$substrBytes': [
-                    '$followup.created_on', 0, 10
                 ]
             }
         }
