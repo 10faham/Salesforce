@@ -3,7 +3,8 @@
 
 {% block scripthead %}
 <!-- <meta http-equiv="refresh" content="600"> -->
-<link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet"
+    type="text/css" />
 
 <script>
     response_code = parseInt("{{response_code}}")
@@ -36,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-xs-12">
                     <label>Select Date</label>
@@ -93,16 +94,30 @@
                                     <tbody id="lead-detail">
                                         {% for user in response_data.kpi %}
                                         <tr>
-                                                <td>{{response_data.kpi[user]['name']}}</td>
-                                                <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=false" target="_blank">{{response_data.kpi[user]['lead_count']}}</a></td>
-                                                <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=true" target="_blank">{{response_data.kpi[user]['transfered']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Null&sub-filter=Null" target="_blank">{{response_data.kpi[user]['TLW']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call,Meeting&sub-filter=Contacted_client,Followed_up" target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt" target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed" target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed" target="_blank">-</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call" target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a></td>
-                                                <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_message" target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_message']}}</a></td>
+                                            <td>{{response_data.kpi[user]['name']}}</td>
+                                            <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=false"
+                                                    target="_blank">{{response_data.kpi[user]['lead_count']}}</a></td>
+                                            <td><a href="/api/reports/detailed?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&transfered=true"
+                                                    target="_blank">{{response_data.kpi[user]['transfered']}}</a></td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Null&sub-filter=Null"
+                                                    target="_blank">{{response_data.kpi[user]['TLW']}}</a></td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call,Meeting&sub-filter=Contacted_client,Followed_up"
+                                                    target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a>
+                                            </td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt"
+                                                    target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a>
+                                            </td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
+                                                    target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a>
+                                            </td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
+                                                    target="_blank">-</a></td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call"
+                                                    target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a>
+                                            </td>
+                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_message"
+                                                    target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_message']}}</a>
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -150,4 +165,30 @@
 <!-- <script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script> -->
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
+<script>
+    $.fn.dataTable.Api.register('sumValue()', function () {
+        var totalSum = 0;
+    
+        for (var i = 0, ien = this.length; i < ien; i++) {
+            totalSum += parseInt(this[i].split(/>|</)[2]);
+        }
+    
+        return totalSum;
+    });
+    var table = $('#datatable').DataTable({
+        "pageLength": 50,
+    })
+    console.log(table.column(1).data().sumValue());
+    console.log(table.column(2).data().sumValue());
+    console.log(table.column(3).data().sumValue());
+    console.log(table.column(4).data().sumValue());
+    console.log(table.column(5).data().sumValue());
+    console.log(table.column(6).data().sumValue());
+    console.log(table.column(7).data().sumValue());
+    console.log(table.column(8).data().sumValue());
+    console.log(table.column(9).data().sumValue());
+    $("#lead-detail").append('<tr><td>Total</td><td>'+table.column(1).data().sumValue()+'</td><td>'+table.column(2).data().sumValue()+'</td><td>'+table.column(3).data().sumValue()+'</td><td>'+table.column(4).data().sumValue()+'</td><td>'+table.column(5).data().sumValue()+'</td><td>'+table.column(6).data().sumValue()+'</td><td>'+table.column(7).data().sumValue()+'</td><td>'+table.column(8).data().sumValue()+'</td><td>'+table.column(9).data().sumValue()+'</td></tr>');
+
+
+</script>
 {% endblock %}

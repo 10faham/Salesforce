@@ -115,12 +115,13 @@ def lead_transfer():
 @decorators.is_authenticated
 # @decorators.keys_validator()
 def lead_bulk_add():
+    duplicates = []
     if request.method == "POST":
         uploaded_file = request.files['file']
+        data = request.form
         datafile = pd.read_csv(uploaded_file)
         jout = datafile.to_dict(orient="split")
         unique = []
-        duplicates = []
         lead = {}
         for item in jout['data']:
             if item[1] != item[1]:
@@ -155,6 +156,7 @@ def lead_bulk_add():
                         data_follow[constants.FOLLOW_UP__NEXT_DEADLINE] = datetime.now().strftime(config.DATETIME_FORMAT)
                         res = FollowUpController.create_controller(data=data_follow)
                         leads = {}
+                        leads[constants.LEAD__ASSIGNED_TO] = data[constants.LEAD__ASSIGNED_TO]
                         leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
                         leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
                         leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
@@ -162,4 +164,10 @@ def lead_bulk_add():
                         leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
                         leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
                         res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
-    return render_template("leadbulkadd.html")
+    temp = UserController.get_user_childs(
+        user=common_utils.current_user(), return_self=True)
+    all_users = []
+    for id in temp:
+        all_users.append([str(id[constants.ID]), id[constants.USER__NAME]])
+    response_data = {'all_users': all_users, 'duplicate':len(duplicates)}
+    return render_template("leadbulkadd.html", **response_data)

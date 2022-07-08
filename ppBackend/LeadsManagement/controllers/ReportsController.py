@@ -22,17 +22,17 @@ class ReportsController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM)
             dateto = data.get(constants.DATE_TO)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.LEAD__ASSIGNED_TO] = data.get(constants.ID)
             if data.get(constants.LEAD__TRANSFERED) == 'true':
                 filter[constants.LEAD__TRANSFERED] = True
             else:
                 filter[constants.LEAD__TRANSFERED] = False
-
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
+        queryset = cls.db_read_records(read_filter=filter)
+        queryset = queryset.aggregate(pipeline.ALL_LEADS)
         lead_data = [obj for obj in queryset]
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
@@ -53,16 +53,19 @@ class ReportsController(Controller):
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.CREATED_BY] = data.get(constants.ID)
         if data.get('type') != 'Null':
-            filter[constants.FOLLOW_UP__TYPE+"__in"] = data.get(constants.FOLLOW_UP__TYPE).split(',')
+            filter[constants.FOLLOW_UP__TYPE +
+                   "__in"] = data.get(constants.FOLLOW_UP__TYPE).split(',')
         if data.get('sub_type') != 'Null':
-            filter[constants.FOLLOW_UP__SUB_TYPE+'__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
-        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
+            filter[constants.FOLLOW_UP__SUB_TYPE +
+                   '__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
+        queryset = FollowUpController.db_read_records(
+            read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
         # queryset = FollowUpController.db_read_records(read_filter={**filter})
-        
+
         follow_up = [obj for obj in queryset]
         leads = []
         for obj in follow_up:
-            leads.append({**obj['lead'], 'followup': obj, 'user':obj['user']})
+            leads.append({**obj['lead'], 'followup': obj, 'user': obj['user']})
 
         # leads.append([obj['lead'] for obj in follow_up])
         return response_utils.get_response_object(

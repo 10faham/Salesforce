@@ -23,15 +23,19 @@ class DashboardController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime(config.DATETIME_FORMAT)
-            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime(config.DATETIME_FORMAT)
-            filter[constants.UPDATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
-            filter[constants.UPDATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
+            datefrom = datetime.combine(datetime.now().date(), time(
+                0, 0)).strftime(config.DATETIME_FORMAT)
+            dateto = datetime.combine(datetime.now().date(), time(
+                23, 59, 59)).strftime(config.DATETIME_FORMAT)
+            filter[constants.CREATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom)
+            filter[constants.CREATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(
@@ -46,6 +50,12 @@ class DashboardController(Controller):
 
         queryset = cls.db_read_records(
             read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        filter[constants.UPDATED_ON + "__gte"] = filter[constants.CREATED_ON + "__gte"]
+        filter[constants.UPDATED_ON + "__lte"] = filter[constants.CREATED_ON + "__lte"]
+        del filter[constants.CREATED_ON + "__gte"]
+        del filter[constants.CREATED_ON + "__lte"]
+        queryset2 = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        
         for user in queryset:
             tmp = UserController.get_user(user['_id'])
             lead_data.append(
@@ -87,12 +97,18 @@ class DashboardFollow(Controller):
             filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         else:
-            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime(config.DATETIME_FORMAT)
-            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime(config.DATETIME_FORMAT)
-            filter[constants.CREATED_ON+"__gte"] = common_utils.convert_to_epoch1000(datefrom)
-            filter[constants.CREATED_ON+"__lte"] = common_utils.convert_to_epoch1000(dateto)
-            datefrom = datetime.combine(datetime.now().date(), time(0,0)).strftime("%d %m %Y %H:%M:%S")
-            dateto = datetime.combine(datetime.now().date(), time(23,59,59)).strftime("%d %m %Y %H:%M:%S")
+            datefrom = datetime.combine(datetime.now().date(), time(
+                0, 0)).strftime(config.DATETIME_FORMAT)
+            dateto = datetime.combine(datetime.now().date(), time(
+                23, 59, 59)).strftime(config.DATETIME_FORMAT)
+            filter[constants.CREATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom)
+            filter[constants.CREATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto)
+            datefrom = datetime.combine(datetime.now().date(), time(
+                0, 0)).strftime("%d %m %Y %H:%M:%S")
+            dateto = datetime.combine(datetime.now().date(), time(
+                23, 59, 59)).strftime("%d %m %Y %H:%M:%S")
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(
@@ -118,7 +134,7 @@ class DashboardFollow(Controller):
             "Acquisition": {"_sum": 0, "_connected": 0},
             "TLW": 0,
             "lead_count": 0,
-            "transfered":0
+            "transfered": 0
         } for user in user_childs}
         for user in queryset:
             # if user["_id"]["created_by"] not in user_ids:
@@ -133,7 +149,8 @@ class DashboardFollow(Controller):
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data'):
-                kpi_dataset[obj['id']]['lead_count'] = int(obj['lead_count'])- int(obj['transfered'])
+                kpi_dataset[obj['id']]['lead_count'] = int(
+                    obj['lead_count']) - int(obj['transfered'])
                 kpi_dataset[obj['id']]['transfered'] = obj['transfered']
         # for user in queryset:
         #     if user['_id']['created_by'] in user_ids:

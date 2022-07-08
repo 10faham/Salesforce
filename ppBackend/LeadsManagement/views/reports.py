@@ -29,12 +29,10 @@ def kpisales_view(data):
 
 @reports_bp.route("/detailed", methods=["GET"])
 @decorators.is_authenticated
-@decorators.keys_validator()
+@decorators.keys_validator([constants.ID, 'datefrom', 'dateto', constants.LEAD__TRANSFERED], request_form_data=False)
 def read_lead_new(data):
-    data[constants.ID] = request.args.get('id')
-    data[constants.DATE_FROM] = request.args.get('datefrom')
-    data[constants.DATE_TO] = request.args.get('dateto')
-    data[constants.LEAD__TRANSFERED] = request.args.get(constants.LEAD__TRANSFERED)
+    data[constants.DATE_TO] = data["dateto"]
+    data[constants.DATE_FROM] = data["datefrom"]
     res = ReportsController.read_lead_new(data=data)
     return render_template('kpileads.html', **res)
 
@@ -48,5 +46,5 @@ def read_followup_new(data):
     data[constants.LEAD__TRANSFERED] = request.args.get('transfered')
     data[constants.FOLLOW_UP__TYPE] = request.args.get('filter')
     data[constants.FOLLOW_UP__SUB_TYPE] = request.args.get('sub-filter')
-    res = ReportsController.read_followup_new(data=data)
+    res = ReportsController.read_folloup_new(data=data)
     return render_template('kpileads.html', **res)

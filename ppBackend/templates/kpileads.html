@@ -52,6 +52,7 @@
                       <th style="width: 85px;">Last Work</th>
                       <th style="width: 85px;">Project</th>
                       <th style="width: 85px;">Level</th>
+                      <th style="width: 85px;">Phone</th>
                       <th style="width: 85px;">Actions</th>
                     </tr>
                   </thead>
@@ -59,31 +60,23 @@
                     {% for obj in response_data %}
                     <tr>
                       <td scope="row">
-                        <div>{{obj.lead_id}}</div>
-                        <div>
-                            <p>{{obj.created_on}}</p>
-                        </div>
+                        {{obj.lead_id}}
+                        <p>{{obj.created_on}}</p>
                       </td>
                       <td>{{obj.first_name}}</td>
                       <td>{{obj.user.name}}</td>
-                      {% if 'followup' in obj %}
-                      <td><p>{{obj.followup.sub_type}}</p>
-                        <p>{{obj.followup.created_on}}</p></td>
-                      {% else %}
-                      <td></td>
-                      {% endif %}
+                      <td><p>{{obj.followup_last_work}}</p>
+                        <p>{{obj.followup_last_work_date}}</p></td>
                       <td>{{obj.project}}</td>
                       <td>{{obj.lead_level}}</td>
+                      <td>{{obj.phone_number}}</td>
                       <td>
-                        {% if 'followup' in obj %}
-                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.followup.comment}}" 
-                              data-original-title="{{obj.followup.comment}}"><i class="mdi mdi-comment-outline"></i></a>
-                        TLW: {{obj.followup.follow_count}}
-                        {% else %}
-                        TLW: 0
-                        {% endif %}
+                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
+                              data-original-title="{{obj.lead_comment}}"><i class="mdi mdi-comment-outline"></i></a>
+                        TLW: {{obj.followup_count}}
                         <a href="/api/follow_ups/create?lead={{obj._id}}"><i
-                              class="glyphicon glyphicon-plus"></i></a></p>
+                              class="glyphicon glyphicon-plus"></i></a>
+                        <a  href="tel:{{obj.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
                     </tr>
                     {% endfor %}
                   </tbody>
