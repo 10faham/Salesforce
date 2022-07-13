@@ -81,6 +81,7 @@ class LeadHistory(models.Model):
     history_id = db.SequenceField(value_decorator='LH-{}'.format)
     lead_id = db.StringField()
     transfered = db.BooleanField(default=False)
+    transfered_on = db.IntField()
 
     def __str__(self):
         return str(self.pk)

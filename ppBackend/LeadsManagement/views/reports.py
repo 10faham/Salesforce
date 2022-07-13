@@ -46,5 +46,5 @@ def read_followup_new(data):
     data[constants.LEAD__TRANSFERED] = request.args.get('transfered')
     data[constants.FOLLOW_UP__TYPE] = request.args.get('filter')
     data[constants.FOLLOW_UP__SUB_TYPE] = request.args.get('sub-filter')
-    res = ReportsController.read_folloup_new(data=data)
+    res = ReportsController.read_followup_new(data=data)
     return render_template('kpileads.html', **res)

@@ -30,8 +30,13 @@ def update_leads(run=False):
                 leads[constants.LEAD__COMMENT] = lead['followup']['comment']
                 leads[constants.LEAD__LEVEL] = lead['followup']['level']
                 leads[constants.LEAD__LAST_WORK] = lead['followup']['sub_type']
+                leads[constants.LEAD__FOLLOWUP_TYPE] = lead['followup']['type']
                 leads[constants.LEAD__LAST_WORK_DATE] = lead['followup']['created_on']
                 leads[constants.LEAD__FOLLOWUP_COUNT] = lead['followup']['follow_count']
-                res = LeadsController.db_update_single_record(read_filter = {constants.ID:lead['_id']}, update_filter = leads)
+                leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = lead['followup']['next_deadline']
+                leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = lead['followup']['next_task']
+                leads[constants.LEAD__FOLLOWUP_REF_ID] = lead['followup']['follow_id']
+                res = LeadsController.db_update_single_record(read_filter = {constants.ID:lead['_id']}, update_filter = leads, deleted_records = True)
+                print(res)
             except Exception as e:
                 print(e)

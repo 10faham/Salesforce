@@ -59,7 +59,7 @@ class ReportsController(Controller):
             filter[constants.FOLLOW_UP__SUB_TYPE +
                    '__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
         queryset = FollowUpController.db_read_records(
-            read_filter={**filter}).aggregate(pipeline.GET_LEADS_KPI)
+            read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
         # queryset = FollowUpController.db_read_records(read_filter={**filter})
 
         follow_up = [obj for obj in queryset]

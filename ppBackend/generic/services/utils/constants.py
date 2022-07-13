@@ -216,6 +216,11 @@ LEAD__FOLLOWUP = "followup_id"
 LEAD__LAST_WORK = "followup_last_work"
 LEAD__LAST_WORK_DATE = "followup_last_work_date"
 LEAD__FOLLOWUP_COUNT = "followup_count"
+LEAD__FOLLOWUP_NEXT_DEADLINE = "next_deadline"
+LEAD__FOLLOWUP_NEXT_TASK = "followup_next_task"
+LEAD__FOLLOWUP_REF_ID = "followup_ref_id"
+LEAD__FOLLOWUP_TYPE = "followup_type"
+LEAD__TRANSFERED_ON = "transfered_on"
 
 # Lead Constants
 LEAD_HISTORY = "lead_history"
@@ -246,6 +251,7 @@ LEAD_HISTORY__ASSIGNED_TO = "assigned_to"
 LEAD_HISTORY__ASSIGNED_BY = "assigned_by"
 LEAD_HISTORY__TRANSFERED = "transfered"
 LEAD_HISTORY__FOLLOWUP = "followup_id"
+LEAD_HISTORY__TRANSFERED_ON = "transfered_on"
 
 # Follow Up Constants
 FOLLOW_UP = "follow_up"

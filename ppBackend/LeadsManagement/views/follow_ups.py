@@ -35,7 +35,13 @@ def create_view(data):
     leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
     leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
     leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
-    leads[constants.LEAD__FOLLOWUP_COUNT] = lead['followup_count']+1
+    leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
+    leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
+    leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
+    leads[constants.LEAD__FOLLOWUP_REF_ID] = res['response_data']['follow_id']
+    leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
+    leads[constants.LEAD__FOLLOWUP_COUNT] = lead['followup_count'] + 1
+
     res = LeadsController.db_update_single_record(read_filter = {constants.ID:data[constants.FOLLOW_UP__LEAD][constants.ID]}, update_filter = leads)
     return redirect(url_for('follow_ups_bp.read_view'))
 

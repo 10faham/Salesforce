@@ -125,7 +125,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['overdue'] %}
                                                                     <tr>
-                                                                        <td>{{obj.follow_id}}</td>
+                                                                        <td>{{obj.lead.lead_id}}</td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{obj.deadline}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
@@ -164,7 +164,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['today'] %}
                                                                     <tr>
-                                                                        <td>{{obj.follow_id}}</td>
+                                                                        <td>{{obj.lead.lead_id}}</td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{obj.deadline}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
@@ -203,7 +203,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['tomorrow'] %}
                                                                     <tr>
-                                                                        <td>{{obj.follow_id}}</td>
+                                                                        <td>{{obj.lead.lead_id}}</td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{obj.deadline}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
@@ -242,7 +242,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['next7'] %}
                                                                     <tr>
-                                                                        <td>{{obj.follow_id}}</td>
+                                                                        <td>{{obj.lead.lead_id}}</td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{obj.deadline}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>
@@ -281,7 +281,7 @@
                                                                 <tbody id="lead-detail">
                                                                     {% for obj in response_data['all'] %}
                                                                     <tr>
-                                                                        <td>{{obj.follow_id}}</td>
+                                                                        <td>{{obj.lead.lead_id}}</td>
                                                                         <td>{{obj.next_task}}</td>
                                                                         <td>{{obj.deadline}}</td>
                                                                         <td>{{obj.lead.first_name}}</td>

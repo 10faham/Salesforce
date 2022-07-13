@@ -77,9 +77,14 @@ class Leads(models.Model):
     lead_id = db.SequenceField(value_decorator='LD-{}'.format)
     transfered = db.BooleanField(default=False)
     followup_id = db.StringField()
+    followup_type = db.StringField()
     followup_last_work = db.StringField()
+    followup_next_task = db.StringField()
+    followup_ref_id = db.StringField()
     followup_last_work_date = db.IntField()
     followup_count = db.IntField()
+    next_deadline = db.DateTimeField()
+    transfered_on = db.IntField()
 
     def __str__(self):
         return str(self.pk)
@@ -110,7 +115,8 @@ class Leads(models.Model):
             constants.STATUS: self[constants.STATUS],
             constants.CREATED_BY: self.created_by.fetch().name,
             constants.CREATED_ON: self[constants.CREATED_ON],
-            constants.UPDATED_ON: self[constants.UPDATED_ON]
+            constants.UPDATED_ON: self[constants.UPDATED_ON],
+            constants.LEAD__TRANSFERED_ON: self[constants.LEAD__TRANSFERED_ON] if self[constants.LEAD__TRANSFERED_ON] else False
         }
 
     def display_transfer(self):

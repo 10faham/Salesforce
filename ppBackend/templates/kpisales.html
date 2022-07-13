@@ -75,7 +75,7 @@
                                             <th rowspan="2">Name</th>
                                             <th colspan="3">Leads</th>
                                             <th colspan="2">Calls</th>
-                                            <th colspan="2">Meetings</th>
+                                            <th colspan="1">Meetings</th>
                                             <th colspan="2">Whatsapp</th>
                                         </tr>
                                         <tr>
@@ -85,7 +85,6 @@
                                             <th>Connected</th>
                                             <th>Attempt</th>
                                             <th>Done</th>
-                                            <th>Arranged</th>
                                             <th>Calls</th>
                                             <th>Msg</th>
                                         </tr>
@@ -110,8 +109,6 @@
                                             <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
                                                     target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a>
                                             </td>
-                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
-                                                    target="_blank">-</a></td>
                                             <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a>
                                             </td>
@@ -186,8 +183,7 @@
     console.log(table.column(6).data().sumValue());
     console.log(table.column(7).data().sumValue());
     console.log(table.column(8).data().sumValue());
-    console.log(table.column(9).data().sumValue());
-    $("#lead-detail").append('<tr><td>Total</td><td>'+table.column(1).data().sumValue()+'</td><td>'+table.column(2).data().sumValue()+'</td><td>'+table.column(3).data().sumValue()+'</td><td>'+table.column(4).data().sumValue()+'</td><td>'+table.column(5).data().sumValue()+'</td><td>'+table.column(6).data().sumValue()+'</td><td>'+table.column(7).data().sumValue()+'</td><td>'+table.column(8).data().sumValue()+'</td><td>'+table.column(9).data().sumValue()+'</td></tr>');
+    $("#lead-detail").append('<tr><td>Total</td><td>'+table.column(1).data().sumValue()+'</td><td>'+table.column(2).data().sumValue()+'</td><td>'+table.column(3).data().sumValue()+'</td><td>'+table.column(4).data().sumValue()+'</td><td>'+table.column(5).data().sumValue()+'</td><td>'+table.column(6).data().sumValue()+'</td><td>'+table.column(7).data().sumValue()+'</td><td>'+table.column(8).data().sumValue()+'</td></tr>');
 
 
 </script>

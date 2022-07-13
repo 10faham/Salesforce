@@ -49,21 +49,27 @@ class DashboardController(Controller):
                "__in"] = [str(id) for id in user_ids]
 
         queryset = cls.db_read_records(
-            read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
-        filter[constants.UPDATED_ON + "__gte"] = filter[constants.CREATED_ON + "__gte"]
-        filter[constants.UPDATED_ON + "__lte"] = filter[constants.CREATED_ON + "__lte"]
-        del filter[constants.CREATED_ON + "__gte"]
-        del filter[constants.CREATED_ON + "__lte"]
-        queryset2 = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
-        
+            read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)        
         for user in queryset:
             tmp = UserController.get_user(user['_id'])
             lead_data.append(
-                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count': user['lead_count'], 'transfered': user['transfered']})
+                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'lead_count': user['lead_count']})
+
+        lead_transfer = []
+        filter[constants.LEAD__TRANSFERED_ON + "__gte"] = filter[constants.CREATED_ON + "__gte"]
+        filter[constants.LEAD__TRANSFERED_ON + "__lte"] = filter[constants.CREATED_ON + "__lte"]
+        del filter[constants.CREATED_ON + "__gte"]
+        del filter[constants.CREATED_ON + "__lte"]
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        for user in queryset:
+            tmp = UserController.get_user(user['_id'])
+            lead_transfer.append(
+                {'id': str(tmp.pk), 'username': tmp[constants.USER__NAME], 'transfered': user['transfered']})
+
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=lead_data
+            response_data=[lead_data, lead_transfer]
         )
 
 
@@ -148,32 +154,11 @@ class DashboardFollow(Controller):
                 kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
-            for obj in data2.get('response_data'):
-                kpi_dataset[obj['id']]['lead_count'] = int(
-                    obj['lead_count']) - int(obj['transfered'])
+            for obj in data2.get('response_data')[0]:
+                kpi_dataset[obj['id']]['lead_count'] = obj['lead_count']
+            for obj in data2.get('response_data')[1]:
                 kpi_dataset[obj['id']]['transfered'] = obj['transfered']
-        # for user in queryset:
-        #     if user['_id']['created_by'] in user_ids:
-        #         temp.append(user['_id'])
-        # temp.append(user['_id'] for user in queryset if user['_id']['created_by'] in user_childs)
-        # temp = list(queryset)
 
-        # for user in follow_dataset:
-        #     calls = 0
-        #     meetings = 0
-        #     at_calls = 0
-        #     v_calls = 0
-        #     for follow in user[1]:
-        #         if follow['type'] == 'Call':
-        #             calls += 1
-        #         elif follow['type'] == 'Meeting':
-        #             meetings += 1
-        #         if follow['sub_type'] == 'Contacted_client' or "Followed_up" or "Whatsapp_call" or "Meeting_Confirmed" or 'Meeting_cancelled' or "Meeting_postponed":
-        #             v_calls += 1
-        #         elif follow['sub_type'] == 'Call_attempt':
-        #             at_calls += 1
-        #     kpi_dataset.append(
-        #         [user[0], calls, meetings, len(user[1]), at_calls, v_calls])
         out_data = {
             'kpi': kpi_dataset,
             'dateto': dateto,
@@ -184,4 +169,3 @@ class DashboardFollow(Controller):
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=out_data
         )
-# '619dd065945a75460afc2214'

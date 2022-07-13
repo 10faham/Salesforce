@@ -35,8 +35,7 @@ KPI_REPORT_LEAD_COUNT = [
 LAST_FOLLOWUP = [
     {
         '$sort': {
-            'next_deadline': 1, 
-            '_id': 1
+            'created_on': 1
         }
     }, {
         '$group': {
@@ -87,7 +86,8 @@ LAST_FOLLOWUP = [
                         }, 
                         'created_by': {
                             '$toString': '$created_by'
-                        }
+                        },
+                        'ref_id': '$lead_id'
                     }
                 }
             ], 
@@ -119,6 +119,7 @@ LAST_FOLLOWUP = [
             'lead.first_name': 1, 
             'lead.phone_number': 1, 
             'lead.lead_id': 1, 
+            'lead.ref_id': 1, 
             'user.name': 1, 
             'project': 1
         }
@@ -341,6 +342,18 @@ ALL_LEADS_DATA = [
                         }, 
                         'created_on': {
                             '$last': '$created_on'
+                        }, 
+                        'next_task': {
+                            '$last': '$next_task'
+                        }, 
+                        'next_deadline': {
+                            '$last': '$next_deadline'
+                        }, 
+                        'next_project': {
+                            '$last': '$next_project'
+                        }, 
+                        'type': {
+                            '$last': '$type'
                         }
                     }
                 }
@@ -370,6 +383,10 @@ ALL_LEADS_DATA = [
             'followup.id': 1, 
             'followup.follow_id': 1, 
             'followup.sub_type': 1, 
+            'followup.type': 1, 
+            'followup.next_task': 1, 
+            'followup.next_deadline': 1, 
+            'followup.next_project': 1, 
             'followup.comment': 1, 
             'followup.created_on': 1, 
             'followup.follow_count': 1, 

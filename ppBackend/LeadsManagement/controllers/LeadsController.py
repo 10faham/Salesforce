@@ -237,7 +237,7 @@ class LeadsController(Controller):
             del lead["id"]
             res = LeadsHistoryController.create_controller(lead)
             update_filter = {constants.ID: lead['lead_id'], constants.LEAD__ASSIGNED_TO: data['transfer_to'], 
-            constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True}    
+            constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True, constants.LEAD__TRANSFERED_ON: common_utils.get_time()}  
             res = LeadsController.update_controller(update_filter)
             followup = FollowUpController.read_lead_follow(data = {'lead':lead['lead_id']})
             for follow in followup['response_data']:
