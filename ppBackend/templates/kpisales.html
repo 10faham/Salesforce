@@ -167,7 +167,11 @@
         var totalSum = 0;
     
         for (var i = 0, ien = this.length; i < ien; i++) {
-            totalSum += parseInt(this[i].split(/>|</)[2]);
+            val = parseInt(this[i].split(/>|</)[2]);
+            if (isNaN(val)){
+                val = 0
+            };
+            totalSum += val;
         }
     
         return totalSum;
