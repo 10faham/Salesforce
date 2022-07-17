@@ -295,9 +295,13 @@ ALL_LEADS = [
             'lead_comment': 1, 
             'followup_id': 1, 
             'followup_last_work': 1, 
-            'followup_count':1,
+            'followup_count': 1, 
             'followup_last_work_date': {
-                '$toDate': '$followup_last_work_date'
+                '$toDate': {
+                    '$add': [
+                        '$followup_last_work_date', 18000000
+                    ]
+                }
             }, 
             'user.name': 1
         }
@@ -311,11 +315,6 @@ ALL_LEADS = [
             'created_on': {
                 '$substrBytes': [
                     '$created_on', 0, 10
-                ]
-            }, 
-            'followup_last_work_date': {
-                '$substrBytes': [
-                    '$followup_last_work_date', 0, 10
                 ]
             }
         }

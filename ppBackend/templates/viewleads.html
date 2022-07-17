@@ -109,7 +109,7 @@
                       <td>{{obj.lead_level}}</td>
                       <td>{{obj.phone_number}}</td>
                       <td>
-                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
+                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}&name={{obj.first_name}}&ref={{obj.lead_id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
                               data-original-title="{{obj.lead_comment}}"><i class="mdi mdi-comment-outline"></i></a>
                         TLW: {{obj.followup_count}}
                         <a href="/api/follow_ups/create?lead={{obj._id}}"><i

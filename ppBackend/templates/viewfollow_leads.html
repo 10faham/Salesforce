@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">View All Follow Ups</h4>
+                        <h4 class="page-title">View All Follow Ups - {{response_data[1]}} - {{response_data[2]}}</h4>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="lead-detail">
-                                        {% for obj in response_data %}
+                                        {% for obj in response_data[0] %}
                                         <tr>
                                             <td>{{loop.index}}</td>
                                             <td>{{obj.completion_date}}</td>

@@ -192,10 +192,9 @@ class FollowUpController(Controller):
     def read_lead_follow(cls, data):
         queryset = cls.db_read_records(
             read_filter={constants.FOLLOW_UP__LEAD: data['lead']})
-        user = common_utils.current_user()
         followup_dataset = [obj.display() for obj in queryset]
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=followup_dataset
+            response_data=[followup_dataset, data['name'], data['ref']]
         )
