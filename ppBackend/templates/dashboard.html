@@ -6,14 +6,12 @@
     response_message = "{{response_message}}"
     {% if response_code == 200 %}
     sessionStorage.setItem("leadsObj", '{{response_data|tojson}}')
-    console.log({{ leads_count.response_data| tojson}})
-    console.log({{ follow_ups.response_data| tojson}})
+    console.log({{ response_data | tojson}})
     // document.location = "/home"
     {% else %}
-    console.log({{ leads_count.response_data| tojson}})
-    console.log({{ follow_ups.response_data| tojson}})
+    console.log({{ response_data| tojson}})
     {% endif %}
-    const leadsObj = {{ leads_count| tojson}}
+    const leadsObj = {{ response_data| tojson}}
 
 </script>
 {% endblock %}
@@ -45,7 +43,7 @@
                             <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
                             <div class="wigdet-one-content">
                                 <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Leads">Total Leads</p>
-                                <h2>{{leads_count.response_data[0]}}<small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                <h2>{{response_data.total_leads}}</h2>
                             </div>
                         </div>
                     </div><!-- end col -->
@@ -55,7 +53,7 @@
                             <i class="mdi mdi-account-convert widget-one-icon"></i>
                             <div class="wigdet-one-content">
                                 <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">Pending Tasks</p>
-                                <h2>{{follow_ups.response_data[0]}}<small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                <h2>{{response_data.today}}</h2>
                             </div>
                         </div>
                     </div><!-- end col -->
@@ -65,31 +63,10 @@
                             <i class="mdi mdi-layers widget-one-icon"></i>
                             <div class="wigdet-one-content">
                                 <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Overdue Tasks">Overdue Tasks</p>
-                                <h2>{{follow_ups.response_data[0]}} <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                <h2>{{response_data.overdue}}</h2>
                             </div>
                         </div>
                     </div><!-- end col -->
-
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-av-timer widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Meetings">Meetings</p>
-                                <h2>{{follow_ups.response_data[0]}} <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-av-timer widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Meetings">Total Tasks</p>
-                                <h2>{{follow_ups.response_data[0]}}<small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
-
-
                 </div>
 
             <!-- end row -->

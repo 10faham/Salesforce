@@ -19,6 +19,22 @@ KPI_REPORT_FOLLOW_UP = [
 KPI_REPORT_LEAD_COUNT = [
     {
         '$group': {
+            '_id': '$created_by', 
+            'lead_count': {
+                '$count': {}
+            }, 
+            'transfered': {
+                '$sum': {
+                    '$toInt': '$transfered'
+                }
+            }
+        }
+    }
+]
+
+KPI_REPORT_LEADTRANSFER_COUNT = [
+    {
+        '$group': {
             '_id': '$assigned_to', 
             'lead_count': {
                 '$count': {}
@@ -29,6 +45,12 @@ KPI_REPORT_LEAD_COUNT = [
                 }
             }
         }
+    }
+]
+
+DASHBOARD_LEAD_COUNT = [
+    {
+        '$count': 'total'
     }
 ]
 

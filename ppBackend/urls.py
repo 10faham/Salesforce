@@ -32,17 +32,13 @@ from ppBackend.LeadsManagement.controllers.DashboardController import DashboardF
     constants.ALL_FIELDS_LIST__LEAD,
 )
 def dashboard_view(data):
-    data = {
-        constants.LEAD__ASSIGNED_TO: common_utils.current_user()[
-            constants.ID]
-    }
-    res = DashboardController.read_lead_count(data=data)
-    res2 = DashboardFollow.read_follow(data=data)
-    obj = {'leads_count':'0',
-        'follow_ups':'0'}
-    obj.update({'leads_count':res})
-    obj.update({'follow_ups':res2})
-    return render_template('dashboard.html', **obj)
+    res = DashboardController.get_dashboard_stats()
+    # res2 = DashboardFollow.read_follow(data=data)
+    # obj = {'leads_count':'0',
+    #     'follow_ups':'0'}
+    # obj.update({'leads_count':res})
+    # obj.update({'follow_ups':res2})
+    return render_template('dashboard.html', **res)
 
 
 @app.route("/addlead", methods=["GET"])

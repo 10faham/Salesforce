@@ -22,15 +22,21 @@ class ReportsController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM)
             dateto = data.get(constants.DATE_TO)
-            filter[constants.UPDATED_ON +
-                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
-                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.LEAD__ASSIGNED_TO] = data.get(constants.ID)
             if data.get(constants.LEAD__TRANSFERED) == 'true':
+                filter[constants.LEAD__TRANSFERED_ON +
+                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.LEAD__TRANSFERED_ON +
+                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.LEAD__ASSIGNED_TO] = data.get(constants.ID)
                 filter[constants.LEAD__TRANSFERED] = True
             else:
-                filter[constants.LEAD__TRANSFERED] = False
+                filter[constants.CREATED_ON +
+                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.CREATED_ON +
+                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.CREATED_BY] = data.get(constants.ID)
+                # filter[constants.LEAD__TRANSFERED] = False
+
         queryset = cls.db_read_records(read_filter=filter)
         queryset = queryset.aggregate(pipeline.ALL_LEADS)
         lead_data = [obj for obj in queryset]
@@ -47,29 +53,27 @@ class ReportsController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM)
             dateto = data.get(constants.DATE_TO)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_BY] = data.get(constants.ID)
+            filter[constants.LEAD__ASSIGNED_TO] = data.get(constants.ID)
         if data.get('type') != 'Null':
-            filter[constants.FOLLOW_UP__TYPE +
-                   "__in"] = data.get(constants.FOLLOW_UP__TYPE).split(',')
+            filter['followup_type__in'] = data.get(constants.FOLLOW_UP__TYPE).split(',')
         if data.get('sub_type') != 'Null':
-            filter[constants.FOLLOW_UP__SUB_TYPE +
-                   '__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
-        queryset = FollowUpController.db_read_records(
+            filter['followup_last_work__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
+        queryset = cls.db_read_records(
             read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
         # queryset = FollowUpController.db_read_records(read_filter={**filter})
 
-        follow_up = [obj for obj in queryset]
-        leads = []
-        for obj in follow_up:
-            leads.append({**obj['lead'], 'followup': obj, 'user': obj['user']})
-
+        # follow_up = [obj for obj in queryset]
+        # leads = []
+        # for obj in follow_up:
+        #     leads.append({**obj['lead'], 'followup': obj, 'user': obj['user']})
+        lead_data = [obj for obj in queryset]
         # leads.append([obj['lead'] for obj in follow_up])
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=leads
+            response_data=lead_data
         )

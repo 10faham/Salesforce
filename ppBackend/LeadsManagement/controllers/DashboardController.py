@@ -6,10 +6,11 @@
 from ppBackend.generic.controllers import Controller
 from ppBackend.LeadsManagement.models.Lead import Leads
 from ppBackend.LeadsManagement.models.FollowUp import FollowUp
+from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 
 
 class DashboardController(Controller):
@@ -45,7 +46,7 @@ class DashboardController(Controller):
                 user=common_utils.current_user(), return_self=True)
         user_ids = [id[constants.ID] for id in user_childs]
 
-        filter[constants.LEAD__ASSIGNED_TO +
+        filter[constants.CREATED_BY +
                "__in"] = [str(id) for id in user_ids]
 
         queryset = cls.db_read_records(
@@ -58,9 +59,11 @@ class DashboardController(Controller):
         lead_transfer = []
         filter[constants.LEAD__TRANSFERED_ON + "__gte"] = filter[constants.CREATED_ON + "__gte"]
         filter[constants.LEAD__TRANSFERED_ON + "__lte"] = filter[constants.CREATED_ON + "__lte"]
+        filter[constants.LEAD__ASSIGNED_TO + "__in"] = filter[constants.CREATED_BY + "__in"]
+        del filter[constants.CREATED_BY + "__in"]
         del filter[constants.CREATED_ON + "__gte"]
         del filter[constants.CREATED_ON + "__lte"]
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEAD_COUNT)
+        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.KPI_REPORT_LEADTRANSFER_COUNT)
         for user in queryset:
             tmp = UserController.get_user(user['_id'])
             lead_transfer.append(
@@ -71,7 +74,49 @@ class DashboardController(Controller):
             response_message=response_codes.MESSAGE_SUCCESS,
             response_data=[lead_data, lead_transfer]
         )
+    
+    @classmethod
+    def get_dashboard_stats(cls):
+        user = common_utils.current_user()
+        data = {
+            "user":user[constants.USER__NAME],
+        }
+        filter = {}
+        filter[constants.LEAD__ASSIGNED_TO] = user[constants.ID]
 
+        queryset = list(cls.db_read_records(
+            read_filter={**filter}).aggregate(pipeline.DASHBOARD_LEAD_COUNT))
+        data['total_leads'] = queryset[0]["total"]
+
+        # datefrom = datetime.combine((datetime.now() + timedelta(days = -7)).date(), time(
+        #     0, 0)).strftime(config.DATETIME_FORMAT)
+        # dateto = datetime.combine(datetime.now().date(), time(
+        #     23, 59, 59)).strftime(config.DATETIME_FORMAT)
+        # filter[constants.CREATED_ON +
+        #         "__gte"] = common_utils.convert_to_epoch1000(datefrom)
+        # filter[constants.CREATED_ON +
+        #         "__lte"] = common_utils.convert_to_epoch1000(dateto)
+
+        followup_dataset = []
+        overdue = 0
+        today = 0
+
+        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
+        followup_dataset = [obj for obj in queryset]
+        for item in followup_dataset:
+            now = datetime.utcnow().date()
+            if item['deadline'].date() < now:
+                overdue += 1
+            if item['deadline'].date() == now:
+                today += 1
+        data["overdue"] = overdue
+        data["today"] = today
+
+        return response_utils.get_response_object(
+            response_code=response_codes.CODE_SUCCESS,
+            response_message=response_codes.MESSAGE_SUCCESS,
+            response_data=data
+        )
 
 class DashboardFollow(Controller):
     Model = FollowUp
