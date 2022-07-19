@@ -86,7 +86,8 @@ class DashboardController(Controller):
 
         queryset = list(cls.db_read_records(
             read_filter={**filter}).aggregate(pipeline.DASHBOARD_LEAD_COUNT))
-        data['total_leads'] = queryset[0]["total"]
+        data['total_leads'] = queryset[0]["total"] + queryset[1]["total"]
+        data['new_leads'] = queryset[0]["new"]
 
         # datefrom = datetime.combine((datetime.now() + timedelta(days = -7)).date(), time(
         #     0, 0)).strftime(config.DATETIME_FORMAT)

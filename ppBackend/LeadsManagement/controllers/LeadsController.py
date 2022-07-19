@@ -236,16 +236,30 @@ class LeadsController(Controller):
             lead['lead_id'] = lead['id']
             del lead["id"]
             res = LeadsHistoryController.create_controller(lead)
-            update_filter = {constants.ID: lead['lead_id'], constants.LEAD__ASSIGNED_TO: data['transfer_to'], 
-            constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True, constants.LEAD__TRANSFERED_ON: common_utils.get_time()}  
-            res = LeadsController.update_controller(update_filter)
-            followup = FollowUpController.read_lead_follow(data = {'lead':lead['lead_id']})
-            for follow in followup['response_data']:
+            followup = FollowUpController.read_lead_follow(data = {'lead':lead['lead_id'], 'name':'', 'ref':''})
+            for follow in followup['response_data'][0]:
                 followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
                   constants.ID: follow[constants.ID]}
                 res = FollowUpController.update_controller(followup_updatedata)
             followup_data_new[constants.FOLLOW_UP__LEAD] = lead['lead_id']
             res = FollowUpController.create_controller(data=followup_data_new)
+
+            leads = {}
+            leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
+            leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
+            leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
+            leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
+            leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
+            leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+            leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
+            leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
+            leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
+            leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
+            leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
+            leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
+            leads[constants.LEAD__TRANSFERED] = True
+            leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()  
+            res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
         return response_utils.get_json_response_object(
                 response_code=response_codes.CODE_SUCCESS,
                 response_message=response_codes.MESSAGE_SUCCESS,

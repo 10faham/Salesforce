@@ -50,7 +50,23 @@ KPI_REPORT_LEADTRANSFER_COUNT = [
 
 DASHBOARD_LEAD_COUNT = [
     {
-        '$count': 'total'
+        '$group': {
+            '_id': '$transfered', 
+            'new': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$eq': [
+                                '$updated_on', '$transfered_on'
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }, 
+            'total': {
+                '$sum': 1
+            }
+        }
     }
 ]
 
@@ -303,7 +319,16 @@ ALL_LEADS = [
                     ]
                 }
             }, 
-            'user.name': 1
+            'user.name': 1, 
+            'new': {
+                '$cond': [
+                    {
+                        '$eq': [
+                            '$updated_on', '$transfered_on'
+                        ]
+                    }, 'NEW', ''
+                ]
+            }
         }
     }, {
         '$addFields': {
@@ -315,6 +340,11 @@ ALL_LEADS = [
             'created_on': {
                 '$substrBytes': [
                     '$created_on', 0, 10
+                ]
+            }, 
+            'followup_last_work_date': {
+                '$substrBytes': [
+                    '$followup_last_work_date', 0, 10
                 ]
             }
         }

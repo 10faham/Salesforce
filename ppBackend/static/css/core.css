@@ -949,3 +949,12 @@ a:focus {
   width: 48px;
   margin: 2rem;
 }
+
+thead {
+  color: #ffffff;
+  background-color: #37844e;
+}
+
+td {
+  border: none !important;
+}

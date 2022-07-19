@@ -106,7 +106,9 @@
                       <td><p>{{obj.followup_last_work}}</p>
                         <p>{{obj.followup_last_work_date}}</p></td>
                       <td>{{obj.project}}</td>
-                      <td>{{obj.lead_level}}</td>
+                      <td class="{{obj.lead_level}}">{{obj.lead_level}}
+                        <p style="color: #ff0000">{{obj.new}}</p>
+                      </td>
                       <td>{{obj.phone_number}}</td>
                       <td>
                         <a href="/api/follow_ups/follow_read?lead={{obj._id}}&name={{obj.first_name}}&ref={{obj.lead_id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
@@ -333,6 +335,7 @@
     });
     
 $("#follow_up_form").submit(function (event) {
+  $('#transferbtn').attr("disabled", true);
   var leads_id = []; 
   for (var i = 0; i < table.rows('.selected').data().length; i++) {
         leads_id.push(table.rows('.selected').data()[i][0]) 
