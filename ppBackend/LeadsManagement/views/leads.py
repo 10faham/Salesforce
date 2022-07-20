@@ -141,6 +141,7 @@ def lead_bulk_add():
                     duplicates.append(item)
                 else:
                     unique.append(item)
+                    print(item)
                     for index, header in enumerate(jout["columns"]):
                         lead[header] = item[index]
                     data_lead = {
@@ -167,6 +168,13 @@ def lead_bulk_add():
                         leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
                         leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
                         leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+                        leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
+                        leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
+                        leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
+                        leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
+                        leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
+                        leads[constants.LEAD__TRANSFERED] = True
+                        leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()
                         res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
     temp = UserController.get_user_childs(
         user=common_utils.current_user(), return_self=True)

@@ -62,20 +62,20 @@
                                             <input type="text" class="form-control" name="nic" placeholder="NIC">
                                         </div>
                                     </div>
+                                    <div id="phone-section">
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label">Mobile Number</label>
+                                        <label class="col-md-2 control-label">Phone Number</label>
                                         <div class="col-md-10">
                                             <input type="text" class="form-control" name="phone_number"
-                                                placeholder="Mobile Number">
+                                                placeholder="Phone Number">
                                         </div>
                                     </div>
+                                </div>
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label">Landline Number</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" name="landline_number"
-                                                placeholder="Landline Number">
-                                        </div>
+                                        <a href="#" id="addbtn">
+                                        <i class="mdi mdi-plus-circle-outline"></i></a>
                                     </div>
+
                                     <div class="form-group">
                                         <label class="col-md-2 control-label">Email</label>
                                         <div class="col-md-10">
@@ -328,5 +328,17 @@
         
         $("#yesterday").append(output);
         $("#radio1").attr('value', output);
+
+        $('#addbtn').click( function () {
+            $('#phone-section').append(`                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Phone Number</label>
+                                        <div class="col-md-10">
+                                            <input type="text" class="form-control" name="phone_number"
+                                                placeholder="Phone Number">
+                                        </div>
+                                    </div>`)
+
+        });
+        
 </script>
 {% endblock %}

@@ -230,7 +230,7 @@ class LeadsController(Controller):
         queryset = LeadsController.read_lead(lead_ids)
         followup_data_new = {constants.FOLLOW_UP__COMMENT: data['comment'], 
         constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: data['next_deadline'],
-        constants.FOLLOW_UP__LEVEL: constants.FOLLOW_UP__LEVEL__LIST[2], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
+        constants.FOLLOW_UP__LEVEL: data['lead_level'], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
         constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task'], constants.FOLLOW_UP__STATUS: data['lead_status']}
         for lead in queryset:
             lead['lead_id'] = lead['id']
@@ -258,7 +258,7 @@ class LeadsController(Controller):
             leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
             leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
             leads[constants.LEAD__TRANSFERED] = True
-            leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()  
+            leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()
             res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
         return response_utils.get_json_response_object(
                 response_code=response_codes.CODE_SUCCESS,
