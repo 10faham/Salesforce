@@ -230,7 +230,7 @@ class LeadsController(Controller):
         queryset = LeadsController.read_lead(lead_ids)
         followup_data_new = {constants.FOLLOW_UP__COMMENT: data['comment'], 
         constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: data['next_deadline'],
-        constants.FOLLOW_UP__LEVEL: constants.FOLLOW_UP__LEVEL__LIST[2], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
+        constants.FOLLOW_UP__LEVEL: data['lead_level'], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
         constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task'], constants.FOLLOW_UP__STATUS: data['lead_status']}
         for lead in queryset:
             lead['lead_id'] = lead['id']
