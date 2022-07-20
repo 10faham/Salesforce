@@ -254,7 +254,6 @@ class LeadsController(Controller):
             leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
             leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
             leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
-            leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
             leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
             leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
             leads[constants.LEAD__TRANSFERED] = True

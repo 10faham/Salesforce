@@ -215,17 +215,6 @@
                                   </div>
                                   <div class="col-sm-12">
                                       <div class="form-group">
-                                          <label class="col-sm-2 control-label">Project</label>
-                                          <div class="col-sm-10">
-                                              <div class="col-sm-10">
-                                                  <input id="next_project" type="text" class="form-control"
-                                                      title="Project" name="next_project" value="" />
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-12">
-                                      <div class="form-group">
                                           <label class="col-sm-2 control-label">Deadline</label>
                                           <div class="col-sm-10">
                                               <input id="next_deadline" type="text" class="form-control datetime-picker" required
@@ -350,7 +339,6 @@ $("#follow_up_form").submit(function (event) {
       completion_date: $("#completion_date").val(),
       comment: $("#comment").val(),
       next_task: $("#next_task").val(),
-      next_project: $("#next_project").val(),
       next_deadline: $("#next_deadline").val(),
       lead_level: $("#lead_level").val()
     };
