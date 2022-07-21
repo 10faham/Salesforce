@@ -69,7 +69,7 @@ def format_date(str_date, format=config.DATE_FORMAT):
 def epoch_to_datetime(epoch_time):
     try:
         date = datetime.datetime.fromtimestamp(epoch_time/1000)
-        return date.strftime(config.DISPLAY_DATE_FORMAT)
+        return date.strftime(config.DISPLAY_DATETIME_FORMAT)
     except ValueError:
         return None
 
