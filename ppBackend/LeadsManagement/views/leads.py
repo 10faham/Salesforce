@@ -120,6 +120,7 @@ def lead_transfer():
 # @decorators.keys_validator()
 def lead_bulk_add():
     duplicates = []
+    failed = []
     if request.method == "POST":
         uploaded_file = request.files['file']
         data = request.form
@@ -127,18 +128,18 @@ def lead_bulk_add():
         jout = datafile.to_dict(orient="split")
         unique = []
         lead = {}
-        for item in jout['data']:
+        for index, item in enumerate(jout['data']):
             if item[1] != item[1]:
                 item[1] = ''
             if item[2] == item[2]:
-                item[2] = item[2].replace(".", "")
-                item[2] = item[2].replace(" ", "")
-                item[2] = re.sub('^00', '+', item[2])
-                item[2] = re.sub('^03', '+923', item[2])
-                item[2] = re.sub('^3', '+923', item[2])
+                # item[2] = item[2].replace(".", "")
+                # item[2] = item[2].replace(" ", "")
+                # item[2] = re.sub('^00', '+', item[2])
+                # item[2] = re.sub('^03', '+923', item[2])
+                # item[2] = re.sub('^3', '+923', item[2])
                 queryset = LeadsController.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: item[2]})
                 if queryset:
-                    duplicates.append(item)
+                    duplicates.append(index)
                 else:
                     unique.append(item)
                     print(item)
@@ -154,6 +155,8 @@ def lead_bulk_add():
                     }
                     data_lead[constants.LEAD__FOLLOWUP_COUNT] = 1
                     rest = LeadsController.create_controller(data=data_lead)
+                    if rest['response_code'] != 200:
+                        failed.append(index)
                     if rest['response_code'] == 200:
                         data_follow['lead'] = rest['response_data']['id']
                         data_follow[constants.FOLLOW_UP__ASSIGNED_TO] = common_utils.current_user()
@@ -179,6 +182,8 @@ def lead_bulk_add():
     temp = UserController.get_user_childs(
         user=common_utils.current_user(), return_self=True)
     all_users = []
+    print(duplicates)
+    print(failed)
     for id in temp:
         all_users.append([str(id[constants.ID]), id[constants.USER__NAME]])
     response_data = {'all_users': all_users, 'duplicate':len(duplicates)}

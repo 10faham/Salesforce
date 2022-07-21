@@ -275,19 +275,18 @@ class LeadsController(Controller):
         lead = {}
         for item in jout['data']:
             if item[2] == item[2]:
-                item[2] = item[2].replace(".", "")
-                item[2] = item[2].replace(" ", "")
-                item[2] = re.sub('^00', '+', item[2])
-                item[2] = re.sub('^03', '+923', item[2])
-                item[2] = re.sub('^3', '+923', item[2])
+                # item[2] = item[2].replace(".", "")
+                # item[2] = item[2].replace(" ", "")
+                # item[2] = re.sub('^00', '+', item[2])
+                # item[2] = re.sub('^03', '+923', item[2])
+                # item[2] = re.sub('^3', '+923', item[2])
                 queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: item[2]})
                 if queryset:
                     duplicates.append(item)
                 else:
                     unique.append(item)
                     for index, header in enumerate(jout["columns"]):
-                        lead[header] = item[index]
-                       
+                        lead[header] = item[index]       
         if unique:
             pass
 
