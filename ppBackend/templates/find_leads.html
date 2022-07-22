@@ -150,7 +150,7 @@
     $(".datetime-picker").datetimepicker({
         format: 'YYYY-MM-DD hh:mm:ss'
     });
-    if (TokenObj.user.role.user_role_id <= 2) {
+    if (TokenObj.user.role.user_role_id <= 3) {
         var x = document.getElementById("transfer-sec");
         if (x.style.display === "none") {
             x.style.display = "block";
@@ -177,6 +177,12 @@ $("#transfer_form").submit(function (event) {
       console.log(data.response_code);
       if (data.response_code == 200){
         alert('Transfer Successful')
+        setTimeout(function(){// wait for 5 secs(2)
+           location.reload(); // then reload the page.(3)
+      }, 300); 
+      }
+      if (data.response_code == 10000){
+        alert(data.response_message)
         setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
       }, 300); 
