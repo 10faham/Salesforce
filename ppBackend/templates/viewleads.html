@@ -2,9 +2,14 @@
 
 
 {% block scripthead %}
-<link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='plugins/datatables/select.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet"
+  type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/select.dataTables.min.css') }}" rel="stylesheet"
+  type="text/css" />
+<link href="{{ url_for('static', filename='plugins/datatables/datatables.min.css') }}" rel="stylesheet"
+  type="text/css" />
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" /> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
 
 <script>
   response_code = parseInt("{{response_code}}")
@@ -45,30 +50,30 @@
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="col-sm-2 control-label">Select Date</label>
-                        <div id="reportrange" class="pull-right form-control">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                            <span></span>
-                            <input id="start" type="hidden" name="date_start" value="">
-                            <input id="end" type="hidden" name="date_end" value="">
-                        </div>
-                        <div class="clearfix"></div>
+                <div id="reportrange" class="pull-right form-control">
+                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                  <span></span>
+                  <input id="start" type="hidden" name="date_start" value="">
+                  <input id="end" type="hidden" name="date_end" value="">
+                </div>
+                <div class="clearfix"></div>
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="col-sm-2 control-label">Assigned To</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="assigned_to" title="assigned_to">
-                        <option value="">Team {{response_data['username']}}</option>
-                        {% for user in response_data['all_users'] %}
-                        <option value="{{user[0]}}">{{user[1]}}</option>
-                        {% endfor %}
-                    </select>
+                  <select class="form-control" name="assigned_to" title="assigned_to">
+                    <option value="">Team {{response_data['username']}}</option>
+                    {% for user in response_data['all_users'] %}
+                    <option value="{{user[0]}}">{{user[1]}}</option>
+                    {% endfor %}
+                  </select>
                 </div>
-            </div>
+              </div>
             </div>
             <div class="col-sm-12">
-                <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
+              <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
             </div>
           </form>
         </div>
@@ -103,20 +108,22 @@
                       </td>
                       <td>{{obj.first_name}}</td>
                       <td>{{obj.user.name}}</td>
-                      <td><p>{{obj.followup_last_work}}</p>
-                        <p>{{obj.followup_last_work_date}}</p></td>
+                      <td>
+                        <p>{{obj.followup_last_work}}</p>
+                        <p>{{obj.followup_last_work_date}}</p>
+                      </td>
                       <td>{{obj.project}}</td>
                       <td class="{{obj.lead_level}}">{{obj.lead_level}}
                         <p style="color: #ff0000">{{obj.new}}</p>
                       </td>
                       <td>{{obj.phone_number}}</td>
                       <td>
-                        <a href="/api/follow_ups/follow_read?lead={{obj._id}}&name={{obj.first_name}}&ref={{obj.lead_id}}" target="_blank" type="button" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" 
-                              data-original-title="{{obj.lead_comment}}"><i class="mdi mdi-comment-outline"></i></a>
+                        <a href="#{{obj.lead_id}}" rel="modal:open"><i class="mdi mdi-comment-outline"></i></a>
                         TLW: {{obj.followup_count}}
-                        <a href="/api/follow_ups/create?lead={{obj._id}}"><i
-                              class="glyphicon glyphicon-plus"></i></a>
-                        <a  href="tel:{{obj.phone_number}}" type="button"  data-toggle="tooltip" data-placement="left" title="" data-original-title="{{obj.phone_number}}"><i class="mdi mdi-cellphone-basic"></i></a>
+                        <a href="javascript:addLead('{{obj._id}}');"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a href="tel:{{obj.phone_number}}" type="button" data-toggle="tooltip" data-placement="left"
+                          title="" data-original-title="{{obj.phone_number}}"><i
+                            class="mdi mdi-cellphone-basic"></i></a>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -124,149 +131,482 @@
               </div>
             </div>
           </div>
-          {% if response_data.userlevel < 4 %}
-          <div class="row">
+          {% if response_data.userlevel < 4 %} <div class="row">
             <button id="transfershow" class="applyBtn btn btn-sm">Assign</button>
 
             <div id="transfer-sec" class="row" style=" display:none">
               <div class="col-sm-6">
-                  <div class="card-box">
-                      <div class="row">
-                          <form class="form-horizontal" action="" method="POST" id="follow_up_form">
+                <div class="card-box">
+                  <div class="row">
+                    <form class="form-horizontal" action="" method="POST" id="follow_up_form">
 
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Assign To *</label>
-                                    <div class="col-sm-10">
-                                        <select id="transfer_to" class="form-control" required name="transfer_to" title="transfer_to">
-                                          {% for user in response_data['all_users'] %}
-                                          <option value="{{user[0]}}">{{user[1]}}</option>
-                                          {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                              <h4 class="page-title">Current Task</h4>
-                              <div class="col-sm-12">
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Type *</label>
-                                      <div class="col-sm-10">
-                                          <select id="type" class="form-control" required name="type" title="type">
-                                              <option value=""></option>
-                                              <option value="Call">Call</option>
-                                              <option value="Meeting">Meeting</option>
-                                              <option value="Email">Email</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="col-sm-12">
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Sub Type *</label>
-                                      <div class="col-sm-10">
-                                          <select id="sub_type" class="form-control" required name="sub_type" title="sub_type">
-                                              <option value=""></option>
-                                              <option value="SMS">SMS</option>
-                                              <option value="Call_attempt">Call Attempt</option>
-                                              <option value="Followed_up">Followed Up</option>
-                                              <option value="Whatsapp_call">Whatsapp call</option>
-                                              <option value="Whatsapp_message">Whatsapp Message</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="col-sm-12">
-                                        <input id="lead_status" type="hidden" name="lead_status" value="Interested">
-                                        <input id="completion_date" type="hidden" name="completion_date" value="">
-                              </div>
-                              <div class="col-sm-12">
-                                  <div class="form-group">
-                                      <label class="col-sm-2 control-label">Comment*</label>
-                                      <div class="col-sm-10">
-                                          <textarea id="comment" class="form-control" required title="comment"
-                                              name="comment"></textarea>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="col-sm-12">
-                                  <h4 class="page-title">Next Follow up</h4>
-                                  <div class="col-sm-12">
-                                      <div class="form-group">
-                                          <label class="col-sm-2 control-label">Next Task *</label>
-                                          <div class="col-sm-10">
-                                              <select id="next_task" class="form-control" required name="next_task"
-                                                  title="Next Task">
-                                                  <option value=""></option>
-                                                  <option value="DoNothing">Do Nothing</option>
-                                                  <option value="ContactClient">Contact Client</option>
-                                                  <option value="FollowUp">Follow Up</option>
-                                                  <option value="ReceiveTokenPayment">Receive Token Payment</option>
-                                                  <option value="MeetClient">Meet Client</option>
-                                                  <option value="ArrangeMeeting">Arrange Meeting</option>
-                                                  <option value="ReceivePartialDownPayment">Receive Partial Down
-                                                      Payment</option>
-                                                  <option value="ReceiveCompleteDownPayment">Receive Complete Down
-                                                      Payment</option>
-                                                  <option value="SignSaleAgreement">Sign Sale Agreement</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-12">
-                                      <div class="form-group">
-                                          <label class="col-sm-2 control-label">Project</label>
-                                          <div class="col-sm-10">
-                                              <div class="col-sm-10">
-                                                  <input id="next_project" type="text" class="form-control"
-                                                      title="Project" name="next_project" value="" />
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-12">
-                                      <div class="form-group">
-                                          <label class="col-sm-2 control-label">Deadline</label>
-                                          <div class="col-sm-10">
-                                              <input id="next_deadline" type="text" class="form-control datetime-picker" required
-                                                  title="next" name="next_deadline" />
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-12">
-                                      <div class="form-group">
-                                          <label class="col-sm-2 control-label">Level*</label>
-                                          <div class="col-sm-10">
-                                              <select id="lead_level" class="form-control" required name="lead_level" title="lead_level">
-                                                  <option value=""></option>
-                                                  <option value="AtomBomb">Atom-Bomb</option>
-                                                  <option value="Hot">Hot</option>
-                                                  <option value="Moderate">Moderate</option>
-                                                  <option value="Cold">Cold</option>
-                                                  <option value="SubZero">Sub-Zero</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <button id="transferbtn" class="applyBtn btn btn-sm btn-success" type="submit">Save</button>
-                              </div>
-                          </form>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Assign To *</label>
+                          <div class="col-sm-10">
+                            <select id="transfer_to" class="form-control" required name="transfer_to"
+                              title="transfer_to">
+                              {% for user in response_data['all_users'] %}
+                              <option value="{{user[0]}}">{{user[1]}}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
                       </div>
+
+                      <h4 class="page-title">Current Task</h4>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Type *</label>
+                          <div class="col-sm-10">
+                            <select id="type" class="form-control" required name="type" title="type">
+                              <option value=""></option>
+                              <option value="Call">Call</option>
+                              <option value="Meeting">Meeting</option>
+                              <option value="Email">Email</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Sub Type *</label>
+                          <div class="col-sm-10">
+                            <select id="sub_type" class="form-control" required name="sub_type" title="sub_type">
+                              <option value=""></option>
+                              <option value="SMS">SMS</option>
+                              <option value="Call_attempt">Call Attempt</option>
+                              <option value="Followed_up">Followed Up</option>
+                              <option value="Whatsapp_call">Whatsapp call</option>
+                              <option value="Whatsapp_message">Whatsapp Message</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <input id="lead_status" type="hidden" name="lead_status" value="Interested">
+                        <input id="completion_date" type="hidden" name="completion_date" value="">
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="col-sm-2 control-label">Comment*</label>
+                          <div class="col-sm-10">
+                            <textarea id="comment" class="form-control" required title="comment"
+                              name="comment"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <h4 class="page-title">Next Follow up</h4>
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label">Next Task *</label>
+                            <div class="col-sm-10">
+                              <select id="next_task" class="form-control" required name="next_task" title="Next Task">
+                                <option value=""></option>
+                                <option value="DoNothing">Do Nothing</option>
+                                <option value="ContactClient">Contact Client</option>
+                                <option value="FollowUp">Follow Up</option>
+                                <option value="ReceiveTokenPayment">Receive Token Payment</option>
+                                <option value="MeetClient">Meet Client</option>
+                                <option value="ArrangeMeeting">Arrange Meeting</option>
+                                <option value="ReceivePartialDownPayment">Receive Partial Down
+                                  Payment</option>
+                                <option value="ReceiveCompleteDownPayment">Receive Complete Down
+                                  Payment</option>
+                                <option value="SignSaleAgreement">Sign Sale Agreement</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label">Project</label>
+                            <div class="col-sm-10">
+                              <div class="col-sm-10">
+                                <input id="next_project" type="text" class="form-control" title="Project"
+                                  name="next_project" value="" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label">Deadline</label>
+                            <div class="col-sm-10">
+                              <input id="next_deadline" type="text" class="form-control datetime-picker" required
+                                title="next" name="next_deadline" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-12">
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label">Level*</label>
+                            <div class="col-sm-10">
+                              <select id="lead_level" class="form-control" required name="lead_level"
+                                title="lead_level">
+                                <option value=""></option>
+                                <option value="AtomBomb">Atom-Bomb</option>
+                                <option value="Hot">Hot</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Cold">Cold</option>
+                                <option value="SubZero">Sub-Zero</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <button id="transferbtn" class="applyBtn btn btn-sm btn-success" type="submit">Save</button>
+                      </div>
+                    </form>
                   </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Sub Type *</label>
+                      <div class="col-sm-10">
+                        <select id="sub_type" class="form-control" name="sub_type" title="sub_type">
+                          <option value=""></option>
+                          <option value="SMS">SMS</option>
+                          <option value="Call_attempt">Call Attempt</option>
+                          <option value="Followed_up">Followed Up</option>
+                          <option value="Whatsapp_call">Whatsapp call</option>
+                          <option value="Whatsapp_message">Whatsapp Message</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <input id="lead_status" type="hidden" name="lead_status" value="Interested">
+                    <input id="completion_date" type="hidden" name="completion_date" value="">
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Comment*</label>
+                      <div class="col-sm-10">
+                        <textarea id="comment" class="form-control" title="comment" name="comment"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <h4 class="page-title">Next Follow up</h4>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Next Task *</label>
+                        <div class="col-sm-10">
+                          <select id="next_task" class="form-control" name="next_task" title="Next Task">
+                            <option value=""></option>
+                            <option value="DoNothing">Do Nothing</option>
+                            <option value="ContactClient">Contact Client</option>
+                            <option value="FollowUp">Follow Up</option>
+                            <option value="ReceiveTokenPayment">Receive Token Payment</option>
+                            <option value="MeetClient">Meet Client</option>
+                            <option value="ArrangeMeeting">Arrange Meeting</option>
+                            <option value="ReceivePartialDownPayment">Receive Partial Down
+                              Payment</option>
+                            <option value="ReceiveCompleteDownPayment">Receive Complete Down
+                              Payment</option>
+                            <option value="SignSaleAgreement">Sign Sale Agreement</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Deadline</label>
+                        <div class="col-sm-10">
+                          <input id="next_deadline" type="text" class="form-control datetime-picker" title="next"
+                            name="next_deadline" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Level*</label>
+                        <div class="col-sm-10">
+                          <select id="lead_level" class="form-control" name="lead_level" title="lead_level">
+                            <option value=""></option>
+                            <option value="AtomBomb">Atom-Bomb</option>
+                            <option value="Hot">Hot</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Cold">Cold</option>
+                            <option value="SubZero">Sub-Zero</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <button id="transferbtn" class="applyBtn btn btn-sm btn-success" type="submit">Save</button>
+                  </div>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-          {% endif %}
-        </div> <!-- end col -->
+        </div>
       </div>
-      <!-- end row -->
-    </div> <!-- container -->
+      {% endif %}
+    </div> <!-- end col -->
+  </div>
+  {% for obj in response_data['data'] %}
+  <div id="{{obj.lead_id}}" class="modal">
+    <p> {{obj.lead_comment}} </p>
+  </div>
+  {% endfor %}
+  <!-- end row -->
+</div> <!-- container -->
 
-  </div> <!-- content -->
+</div> <!-- content -->
 
 </div>
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="addLeadModal" tabindex="-1" role="dialog" aria-labelledby="addLeadModalTitleID"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addLeadModalTitleID">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <form class="form-horizontal" action="/api/leads/create" method="POST">
+              <div class="card-box">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Name*</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="first_name" placeholder="First Name" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">CNIC Number</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="nic" placeholder="NIC">
+                      </div>
+                    </div>
+                    <div id="phone-section">
+                      <div class="form-group">
+                        <label class="col-md-2 control-label">Phone Number</label>
+                        <div class="col-md-10">
+                          <input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <a href="#" id="addbtn">
+                        <i class="mdi mdi-plus-circle-outline"></i></a>
+                    </div>
 
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Email</label>
+                      <div class="col-md-10">
+                        <input type="email" class="form-control" name="email_address" placeholder="Email">
+                      </div>
+                    </div>
+                  </div>
 
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Address</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="address" placeholder="Address">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">City*</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="city" placeholder="City" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Country*</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="country" placeholder="Country" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Lead Source</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="lead_source" placeholder="Lead Source">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" name="client_categorys">Category*</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" name="client_category" title="client_category" required>
+                          <option value=""></option>
+                          <option value="Investor">Investor</option>
+                          <option value="User">User</option>
+                          <option value="Agent">Agent</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Gender*</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" required name="gender" title="gender" required>
+                          <option value=""></option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-box">
+                <div class="row">
+                  <h4 class="page-title">Current Task</h4>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Type *</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" required name="type" title="type">
+                          <option value=""></option>
+                          <option value="Meeting">Meeting</option>
+                          <option value="Call">Call</option>
+                          <option value="Email">Email</option>
+                          <option value="Sale">Sale</option>
+                          <option value="Acquisition">Acquisition</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Sub Type *</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" required name="sub_type" title="sub_type">
+                          <option value=""></option>
+                          <option value="SMS">SMS</option>
+                          <option value="Contacted_client">Contacted Client</option>
+                          <option value="Call_attempt">Call Attempt</option>
+                          <option value="Followed_up">Followed Up</option>
+                          <option value="Whatsapp_call">Whatsapp call</option>
+                          <option value="Whatsapp_message">Whatsapp Message</option>
+                          <option value="Meeting_Confirmed">Meeting Confirmed</option>
+                          <option value="Meeting_Confirmed">Meeting Done</option>
+                          <option value="Meeting_cancelled">Meeting Cancelled</option>
+                          <option value="Meeting_postponed">Meeting Postponed</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Level*</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" required name="lead_level" title="lead_level">
+                          <option value=""></option>
+                          <option value="AtomBomb">Very Hot</option>
+                          <option value="Hot">Hot</option>
+                          <option value="Moderate">Moderate</option>
+                          <option value="Cold">Cold</option>
+                          <option value="SubZero">Very Cold</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Status*</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" required title="lead_status" name="lead_status">
+                          <option value=""></option>
+                          <option value="Interested">Interested</option>
+                          <option value="Not Interested">Not Interested</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Task Completion Date</label>
+                      <div class="col-sm-10">
+                        <div class="radio">
+                          <input type="radio" name="completion_date" id="radio" value="" checked>
+                          <label for="radio" id="today">
+                            Today:
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <input type="radio" name="completion_date" id="radio1" value="">
+                          <label for="radio1" id="yesterday">
+                            Yesterday:
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label">Comment*</label>
+                      <div class="col-sm-10">
+                        <textarea class="form-control" required title="comment" name="comment"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <h4 class="page-title">Next Follow up</h4>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Next Task *</label>
+                        <div class="col-sm-10">
+                          <select class="form-control" required name="next_task" title="Next Task">
+                            <option value=""></option>
+                            <option value="DoNothing">Do Nothing</option>
+                            <option value="ContactClient">Contact Client</option>
+                            <option value="FollowUp">Follow Up</option>
+                            <option value="ReceiveTokenPayment">Receive Token Payment</option>
+                            <option value="MeetClient">Meet Client</option>
+                            <option value="ArrangeMeeting">Arrange Meeting</option>
+                            <option value="ReceivePartialDownPayment">Receive Partial Down
+                              Payment</option>
+                            <option value="ReceiveCompleteDownPayment">Receive Complete Down
+                              Payment</option>
+                            <option value="Closed(Won)">Closed (Won)</option>
+                            <option value="SignSaleAgreement">Sign Sale Agreement</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Project</label>
+                        <div class="col-sm-10">
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" title="Project" name="next_project" value="" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Deadline</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control datetime-picker" required title="next"
+                            name="next_deadline" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input class="btn btn-default" type="button" value="Save">
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- ============================================================== -->
 <!-- End Right content here -->
 <!-- ============================================================== -->
@@ -282,68 +622,68 @@
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
 <script>
-      $(".datetime-picker").datetimepicker({
-        format: 'YYYY-MM-DD hh:mm:ss'
-    });
-    
-    var table = $('#datatable').DataTable({
-        "dom": 'PB<"clear">lfrtip',  
-        "bFilter": true,
-        "aaSorting": [],
-        "pageLength": 50,
-        // "stateSave": true,
-        "processing":true,
-        "select": {"style": 'multi+shift'},
+  $(".datetime-picker").datetimepicker({
+    format: 'YYYY-MM-DD hh:mm:ss'
+  });
+
+  var table = $('#datatable').DataTable({
+    "dom": 'PB<"clear">lfrtip',
+    "bFilter": true,
+    "aaSorting": [],
+    "pageLength": 50,
+    // "stateSave": true,
+    "processing": true,
+    "select": { "style": 'multi+shift' },
+    "searchPanes": {
+      "initCollapsed": true,
+      "viewTotal": true
+    },
+    "columnDefs": [
+      {
         "searchPanes": {
-            "initCollapsed": true,
-            "viewTotal": true
+          "show": true
         },
-        "columnDefs": [
-            {
-                "searchPanes": {
-                    "show": true
-                },
-                "targets": [3,5,6]
-            },
-            {
-                "searchPanes": {
-                    "show": false
-                },
-                "targets": [0,1,2,4,7,8]
-            },
-            {
-                "target": 0,
-                "visible": false,
-                "searchable":false,
-            }
-        ],
-        "ordering": false,
-        "buttons":[
-          "selectAll",
-          "selectNone"
-        ],
-    });
-
-    $('#transfershow').click( function () {
-
-      var x = document.getElementById("transfer-sec");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-  }
-    });
-    
-$("#follow_up_form").submit(function (event) {
-  $('#transferbtn').attr("disabled", true);
-  var leads_id = []; 
-  for (var i = 0; i < table.rows('.selected').data().length; i++) {
-        leads_id.push(table.rows('.selected').data()[i][0]) 
+        "targets": [3, 5, 6]
+      },
+      {
+        "searchPanes": {
+          "show": false
+        },
+        "targets": [0, 1, 2, 4, 7, 8]
+      },
+      {
+        "target": 0,
+        "visible": false,
+        "searchable": false,
       }
+    ],
+    "ordering": false,
+    "buttons": [
+      "selectAll",
+      "selectNone"
+    ],
+  });
+
+  $('#transfershow').click(function () {
+
+    var x = document.getElementById("transfer-sec");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  });
+
+  $("#follow_up_form").submit(function (event) {
+    $('#transferbtn').attr("disabled", true);
+    var leads_id = [];
+    for (var i = 0; i < table.rows('.selected').data().length; i++) {
+      leads_id.push(table.rows('.selected').data()[i][0])
+    }
     var tmp = JSON.stringify(leads_id);
     var formData = {
-      lead:tmp,
-      transfer_to:$('#transfer_to').val(),
+      lead: tmp,
+      transfer_to: $('#transfer_to').val(),
       type: $("#type").val(),
       sub_type: $("#sub_type").val(),
       lead_status: $("#lead_status").val(),
@@ -364,11 +704,11 @@ $("#follow_up_form").submit(function (event) {
     }).done(function (data) {
       console.log('submitted')
       console.log(data.response_code);
-      if (data.response_code == 200){
+      if (data.response_code == 200) {
         alert('Transfer Successful')
-        setTimeout(function(){// wait for 5 secs(2)
-           location.reload(); // then reload the page.(3)
-      }, 300); 
+        setTimeout(function () {// wait for 5 secs(2)
+          location.reload(); // then reload the page.(3)
+        }, 300);
       }
     });
 
@@ -376,21 +716,35 @@ $("#follow_up_form").submit(function (event) {
   });
 
 
-    var d = new Date();
-    var month = d.getMonth()+1;
-    var day = d.getDate();
-    var hour = d.getHours();
-    var minute = d.getMinutes();
-    var second = d.getSeconds();
+  var d = new Date();
+  var month = d.getMonth() + 1;
+  var day = d.getDate();
+  var hour = d.getHours();
+  var minute = d.getMinutes();
+  var second = d.getSeconds();
 
-    var output = d.getFullYear() + '-' +
-        ((''+month).length<2 ? '0' : '') + month + '-' +
-        ((''+day).length<2 ? '0' : '') + day + ' ' +
-        ((''+hour).length<2 ? '0' :'') + hour + ':' +
-        ((''+minute).length<2 ? '0' :'') + minute + ':' +
-        ((''+second).length<2 ? '0' :'') + second;
-        
-        $("#completion_date").attr('value', output);
+  var output = d.getFullYear() + '-' +
+    (('' + month).length < 2 ? '0' : '') + month + '-' +
+    (('' + day).length < 2 ? '0' : '') + day + ' ' +
+    (('' + hour).length < 2 ? '0' : '') + hour + ':' +
+    (('' + minute).length < 2 ? '0' : '') + minute + ':' +
+    (('' + second).length < 2 ? '0' : '') + second;
+
+  $("#completion_date").attr('value', output);
+  function addLead(id) {
+    $("#addLeadModal").modal('show');
+    $('#addbtn').click(function () {
+      $('#phone-section').append(`                                   
+        <div class="form-group">
+          <label class="col-md-2 control-label">Phone Number</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
+          </div>
+        </div>`)
+
+    });
+  }
+
 </script>
 
 {% endblock %}
