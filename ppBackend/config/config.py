@@ -9,8 +9,8 @@ ENVIRONMENT = "LOCAL"
 FUNCTION_LOGGING = False
 
 current_dir_path = os.path.dirname(os.path.abspath(__file__))
-static_data_path = os.path.join(current_dir_path, "static\\static_data.json")
-upload_files_path = os.path.join(os.getcwd(), "\\uploads")
+static_data_path = os.path.join(current_dir_path, "static//static_data.json")
+upload_files_path = os.path.join(os.getcwd(), "//uploads")
 
 
 #  EXPIRY TIME IN HOURS
@@ -43,7 +43,7 @@ MONGO_DB_PASSWORD = ""
 
 MONGO_DB_URI = ""
 if ENVIRONMENT == "LOCAL":
-    MONGO_DB_URI = f"mongodb://localhost:27017/ppbackend"
+    MONGO_DB_URI = f"mongodb+srv://HaseebShaikh:MhX50bJQYhDhEhDY@cluster0.vff4u.mongodb.net/ppBackend"
 if ENVIRONMENT == "STAGING":
     FUNCTION_LOGGING = True
     static_data_path = os.path.join(

@@ -41,6 +41,7 @@ def keys_validator(required_fields=[], optional_fields=[],
                 data = common_utils.posted_form_data()
             else:
                 data = common_utils.posted()
+                
             if not required_fields and not optional_fields:
                 return view_function({}, *args, **kwargs)
 

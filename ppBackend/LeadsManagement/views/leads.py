@@ -21,6 +21,7 @@ leads_bp = Blueprint("leads_bp", __name__)
 @decorators.keys_validator(
     constants.REQUIRED_FIELDS_LIST__LEAD_FOLLOWUP,
     constants.OPTIONAL_FIELDS_LIST__LEAD_FOLLOWUP,
+    request_form_data=False
 )
 def leads_create_view(data):
     # data_lead = {}
