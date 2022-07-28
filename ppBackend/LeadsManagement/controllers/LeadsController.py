@@ -29,7 +29,7 @@ class LeadsController(Controller):
             )
         current_user = common_utils.current_user()
         already_exists = cls.db_read_records(read_filter={
-            constants.LEAD__PHONE_NUMBER: data[constants.LEAD__PHONE_NUMBER],
+            constants.LEAD__PHONE_NUMBER+"__in": data[constants.LEAD__PHONE_NUMBER],
             constants.CREATED_BY+"__nin": [current_user]
         })
         if already_exists:

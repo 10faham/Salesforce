@@ -45,7 +45,7 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                    <form class="form-horizontal" action="/api/leads/create" method="POST">
+                    <form id="addLeadForm" class="form-horizontal">
                     <div class="card-box">
                         <div class="row">
                             <div class="col-md-6">
@@ -326,19 +326,39 @@
             ((''+minute).length<2 ? '0' :'') + minute + ':' +
             ((''+second).length<2 ? '0' :'') + second;
         
-        $("#yesterday").append(output);
-        $("#radio1").attr('value', output);
+    $("#yesterday").append(output);
+    $("#radio1").attr('value', output);
 
-        $('#addbtn').click( function () {
-            $('#phone-section').append(`                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Phone Number</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" name="phone_number"
-                                                placeholder="Phone Number">
-                                        </div>
-                                    </div>`)
+    $('#addbtn').click(function () {
+        $('#phone-section').append(`                                   
+            <div class="form-group">
+            <label class="col-md-2 control-label">Phone Number</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
+            </div>
+            </div>`)
+    });
+    const addLeadFormDOM = $("#addLeadForm")
+    addLeadFormDOM.submit(function (event) {
+        event.preventDefault();
+        let formData = {}
+        addLeadFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || [] ), value] )
 
-        });
+        console.log(formData,"formData")
+        $.ajax("/api/leads/create", {
+        method: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data, "data")
+            alert('Lead Added Successfully')
+        },
+        error: function (error) {
+            console.log(error, "error")
+
+        }
+        })
+    })
         
 </script>
 {% endblock %}

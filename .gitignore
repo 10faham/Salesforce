@@ -142,3 +142,6 @@ venv
 #Un-nescessary Folders
 .vscode/
 ppBackend - Copy/
+
+#zip files
+*.zip
