@@ -23,6 +23,7 @@ def create_get_view():
 @decorators.keys_validator(
     constants.REQUIRED_FIELDS_LIST__FOLLOW_UP,
     constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP,
+    request_form_data=False
 )
 def create_view(data):
     leads = {}

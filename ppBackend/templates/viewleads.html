@@ -660,7 +660,7 @@
     addLeadFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || [] ), value] )
 
     console.log(formData,"formData")
-    $.ajax("/api/leads/create", {
+    $.ajax("/api/follow_ups/create", {
       method: "POST",
       data: JSON.stringify(formData),
       contentType: "application/json",

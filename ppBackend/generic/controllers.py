@@ -115,9 +115,9 @@ class Controller:
             is_valid, error_messages = validate_data(
                 update_filter, validation_rules)
         if is_valid:
-            # update_filter.update(
-            #     {constants.UPDATED_BY: common_utils.current_user(),
-            #      constants.UPDATED_ON: common_utils.get_time()})
+            update_filter.update(
+                {constants.UPDATED_BY: common_utils.current_user(),
+                  constants.UPDATED_ON: common_utils.get_time()})
             return True, "", collection.objects(**read_filter).modify(new=True, **update_filter)
         return False, error_messages, None
 
