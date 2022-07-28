@@ -43,7 +43,7 @@ MONGO_DB_PASSWORD = ""
 
 MONGO_DB_URI = ""
 if ENVIRONMENT == "LOCAL":
-    MONGO_DB_URI = f"mongodb+srv://HaseebShaikh:MhX50bJQYhDhEhDY@cluster0.vff4u.mongodb.net/ppBackend"
+    MONGO_DB_URI = f"mongodb://localhost:27017/ppbackend"
 if ENVIRONMENT == "STAGING":
     FUNCTION_LOGGING = True
     static_data_path = os.path.join(

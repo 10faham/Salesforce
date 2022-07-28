@@ -351,7 +351,15 @@
         contentType: "application/json",
         success: function (data) {
             console.log(data, "data")
-            alert('Lead Added Successfully')
+            if (data.response_code == 200) {
+                alert('Lead Added Successfully')
+                setTimeout(function () {// wait for 5 secs(2)
+                location.reload(); // then reload the page.(3)
+                }, 300);
+            }
+            else {
+                alert(data.response_message);
+            }
         },
         error: function (error) {
             console.log(error, "error")

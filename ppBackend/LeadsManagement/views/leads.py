@@ -60,7 +60,7 @@ def leads_create_view(data):
         res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
 
     # return redirect(url_for('addlead_view', **res))
-    return render_template("./addlead.html", **rest)
+    return (rest)
     # return render_template("./addfollow_up_bylead.html", **res)
 
 

@@ -958,3 +958,8 @@ thead {
 td {
   border: none !important;
 }
+
+#addbtn {
+  font-size: 20px;
+  padding-left: 70px;
+}
