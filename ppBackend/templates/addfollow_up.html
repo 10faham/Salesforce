@@ -227,19 +227,19 @@
         ((''+minute).length<2 ? '0' :'') + minute + ':' +
         ((''+second).length<2 ? '0' :'') + second;
         
-        $("#today").append(output);
-        $("#radio").attr('value', output);
-        var day = d.getDate()-1;
+    $("#today").append(output);
+    $("#radio").attr('value', output);
+    var day = d.getDate()-1;
 
-        var output = d.getFullYear() + '-' +
-            ((''+month).length<2 ? '0' : '') + month + '-' +
-            ((''+day).length<2 ? '0' : '') + day + ' ' +
-            ((''+hour).length<2 ? '0' :'') + hour + ':' +
-            ((''+minute).length<2 ? '0' :'') + minute + ':' +
-            ((''+second).length<2 ? '0' :'') + second;
-        
-        $("#yesterday").append(output);
-        $("#radio1").attr('value', output);
+    var output = d.getFullYear() + '-' +
+        ((''+month).length<2 ? '0' : '') + month + '-' +
+        ((''+day).length<2 ? '0' : '') + day + ' ' +
+        ((''+hour).length<2 ? '0' :'') + hour + ':' +
+        ((''+minute).length<2 ? '0' :'') + minute + ':' +
+        ((''+second).length<2 ? '0' :'') + second;
+    
+    $("#yesterday").append(output);
+    $("#radio1").attr('value', output);
         
 </script>
 {% endblock %}

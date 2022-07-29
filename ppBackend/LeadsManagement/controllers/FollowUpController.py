@@ -191,7 +191,7 @@ class FollowUpController(Controller):
     @classmethod
     def read_lead_follow(cls, data):
         queryset = cls.db_read_records(
-            read_filter={constants.FOLLOW_UP__LEAD: data['lead']})
+            read_filter={constants.FOLLOW_UP__LEAD: data['lead']}).order_by("created_on")
         followup_dataset = [obj.display() for obj in queryset]
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,

@@ -43,8 +43,9 @@ def create_view(data):
     leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
     leads[constants.LEAD__FOLLOWUP_COUNT] = lead['followup_count'] + 1
 
-    res = LeadsController.db_update_single_record(read_filter = {constants.ID:data[constants.FOLLOW_UP__LEAD][constants.ID]}, update_filter = leads)
-    return redirect(url_for('follow_ups_bp.read_view'))
+    # res = LeadsController.db_update_single_record(read_filter = {constants.ID:data[constants.FOLLOW_UP__LEAD][constants.ID]}, update_filter = leads)
+    res = LeadsController.update_controller(leads)
+    return (res)
 
 @follow_ups_bp.route("/read", methods=["GET", "POST"])
 @decorators.is_authenticated
