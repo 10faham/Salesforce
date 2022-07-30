@@ -72,4 +72,4 @@ def readfp_view(data):
     data['ref'] = request.args.get('ref')
     # print(request.args.get('lead'))
     res = FollowUpController.read_lead_follow(data=data)
-    return render_template("viewfollow_leads.html", **res)
+    return res
