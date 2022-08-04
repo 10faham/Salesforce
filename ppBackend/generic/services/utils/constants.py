@@ -185,6 +185,25 @@ TOKEN__EXPIRY_TIME = "expiry_time"
 TOKEN__IS_EXPIRED = "is_expired"
 TOKEN__IS_REVOKED = "is_revoked"
 
+# Client Constants
+CLIENT = "lead"
+CLIENT__ID = "lead_id"
+CLIENT__NAME = "first_name"
+CLIENT__NIC = "nic"
+CLIENT__PHONE_NUMBER = "phone_number"
+CLIENT__EMAIL_ADDRESS = "email_address"
+CLIENT__ADDRESS = "address"
+CLIENT__ADDRESS__KEY_LIST = ["Home", "Office"]
+CLIENT__GENDER = "gender"
+CLIENT__COUNTRY = "country"
+CLIENT__CITY = "city"
+CLIENT__CLIENT_CATEGORY = "client_category"
+CLIENT__CLIENT_CATEGORY__LIST = ["Investor", "User", "Agent"]
+CLIENT__ASSIGNED_TO = "assigned_to"
+CLIENT__ASSIGNED_BY = "assigned_by"
+CLIENT__TRANSFERED = "transfered"
+CLIENT__TRANSFERED_ON = "transfered_on"
+
 # Lead Constants
 LEAD = "lead"
 LEAD__ID = "lead_id"
@@ -222,7 +241,7 @@ LEAD__FOLLOWUP_REF_ID = "followup_ref_id"
 LEAD__FOLLOWUP_TYPE = "followup_type"
 LEAD__TRANSFERED_ON = "transfered_on"
 
-# Lead Constants
+# Lead History Constants
 LEAD_HISTORY = "lead_history"
 HISTORY__ID = "history_id"
 LEAD__ID = "lead_id"
@@ -385,4 +404,18 @@ OPTIONAL_FIELDS_LIST__LEAD_FOLLOWUP = [
     FOLLOW_UP__NEXT_DEADLINE,
     FOLLOW_UP__NEXT_COMMENT,
     FOLLOW_UP__NEXT_PROJECT
+]
+
+#Clients 
+
+REQUIRED_FIELDS_LIST__CLIENTS = [
+    CLIENT__NAME,
+    CLIENT__NIC,
+    CLIENT__PHONE_NUMBER,
+    CLIENT__EMAIL_ADDRESS,
+    CLIENT__ADDRESS,
+    CLIENT__GENDER,
+    CLIENT__COUNTRY,
+    CLIENT__CITY,
+    CLIENT__CLIENT_CATEGORY,
 ]
