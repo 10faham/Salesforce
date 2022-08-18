@@ -176,7 +176,7 @@ class LeadsController(Controller):
     def search_controller(cls, data):
         query = ''
         if data.get(constants.LEAD__PHONE_NUMBER):
-            queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: data.get(constants.LEAD__PHONE_NUMBER)})
+            queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER+"__in": [data.get(constants.LEAD__PHONE_NUMBER)]})
             query = data.get(constants.LEAD__PHONE_NUMBER)
         if data.get(constants.LEAD__ID):
             queryset = cls.db_read_records(read_filter={constants.LEAD__ID: data.get(constants.LEAD__ID)})

@@ -130,61 +130,64 @@ def lead_bulk_add():
         unique = []
         lead = {}
         for index, item in enumerate(jout['data']):
+            tmp = [] 
             if item[1] != item[1]:
                 item[1] = ''
             if item[2] == item[2]:
+                tmp.append(item[2][2:-2])
+                item[2] = tmp
                 # item[2] = item[2].replace(".", "")
                 # item[2] = item[2].replace(" ", "")
                 # item[2] = re.sub('^00', '+', item[2])
                 # item[2] = re.sub('^03', '+923', item[2])
                 # item[2] = re.sub('^3', '+923', item[2])
-                queryset = LeadsController.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: item[2]})
-                if queryset:
-                    duplicates.append(index)
-                else:
-                    unique.append(item)
-                    print(item)
-                    for index, header in enumerate(jout["columns"]):
-                        lead[header] = item[index]
-                    data_lead = {
-                        key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__LEAD,
-                                                *constants.OPTIONAL_FIELDS_LIST__LEAD] if lead.get(key)
-                    }
-                    data_follow = {
-                        key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__FOLLOW_UP,
-                                                *constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP] if lead.get(key)
-                    }
-                    data_lead[constants.LEAD__FOLLOWUP_COUNT] = 1
-                    rest = LeadsController.create_controller(data=data_lead)
-                    if rest['response_code'] != 200:
-                        failed.append(index)
-                    if rest['response_code'] == 200:
-                        data_follow['lead'] = rest['response_data']['id']
-                        data_follow[constants.FOLLOW_UP__ASSIGNED_TO] = common_utils.current_user()
-                        data_follow[constants.FOLLOW_UP__COMPLETION_DATE] = datetime.now().strftime(config.DATETIME_FORMAT)
-                        data_follow[constants.FOLLOW_UP__NEXT_DEADLINE] = datetime.now().strftime(config.DATETIME_FORMAT)
-                        res = FollowUpController.create_controller(data=data_follow)
-                        leads = {}
-                        leads[constants.LEAD__ASSIGNED_TO] = data[constants.LEAD__ASSIGNED_TO]
-                        leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
-                        leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
-                        leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
-                        leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
-                        leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
-                        leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
-                        leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
-                        leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
-                        leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
-                        leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
-                        leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
-                        leads[constants.LEAD__TRANSFERED] = True
-                        leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()
-                        res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
+                # queryset = LeadsController.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER+"__in": item[2]})
+                # if queryset:
+                #     duplicates.append(index)
+                # else:
+                unique.append(item)
+                print(item)
+                for index, header in enumerate(jout["columns"]):
+                    lead[header] = item[index]
+                data_lead = {
+                    key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__LEAD,
+                                            *constants.OPTIONAL_FIELDS_LIST__LEAD] if lead.get(key)
+                }
+                data_follow = {
+                    key: lead[key] for key in [*constants.REQUIRED_FIELDS_LIST__FOLLOW_UP,
+                                            *constants.OPTIONAL_FIELDS_LIST__FOLLOW_UP] if lead.get(key)
+                }
+                data_lead[constants.LEAD__FOLLOWUP_COUNT] = 1
+                rest = LeadsController.create_controller(data=data_lead)
+                if rest['response_code'] != 200:
+                    failed.append(index)
+                if rest['response_code'] == 200:
+                    data_follow['lead'] = rest['response_data']['id']
+                    data_follow[constants.FOLLOW_UP__ASSIGNED_TO] = common_utils.current_user()
+                    data_follow[constants.FOLLOW_UP__COMPLETION_DATE] = datetime.now().strftime(config.DATETIME_FORMAT)
+                    data_follow[constants.FOLLOW_UP__NEXT_DEADLINE] = datetime.now().strftime(config.DATETIME_FORMAT)
+                    res = FollowUpController.create_controller(data=data_follow)
+                    leads = {}
+                    leads[constants.LEAD__ASSIGNED_TO] = data[constants.LEAD__ASSIGNED_TO]
+                    leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
+                    leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
+                    leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
+                    leads[constants.LEAD__LEVEL] = res['response_data'][constants.FOLLOW_UP__LEVEL]
+                    leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
+                    leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
+                    leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
+                    leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
+                    leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
+                    leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
+                    leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
+                    leads[constants.LEAD__TRANSFERED] = True
+                    leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()
+                    res = LeadsController.db_update_single_record(read_filter = {constants.ID:res['response_data'][constants.FOLLOW_UP__LEAD]['id']}, update_filter = leads)
     temp = UserController.get_user_childs(
         user=common_utils.current_user(), return_self=True)
     all_users = []
-    print(duplicates)
-    print(failed)
+    print(len(duplicates))
+    print(len(failed))
     for id in temp:
         all_users.append([str(id[constants.ID]), id[constants.USER__NAME]])
     response_data = {'all_users': all_users, 'duplicate':len(duplicates)}
