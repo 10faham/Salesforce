@@ -38,21 +38,31 @@
             </div>
             <h1>PropPioneers.com</h1>
             <h3>خواب سے تعبیر تک</h3>
-            <form method="post">
+            <form action="" method="post">
                 <div class="txt_field">
-                    <input type="text" required>
+                    <input class="form-control" type="email" name="email_address" required placeholder="Username">
                     <span></span>
-                    <label>Username</label>
+                    <label>Username/Email</label>
                 </div>
                 <div class="txt_field">
-                    <input type="password" required>
+                    <input class="form-control" type="password" name="password" required placeholder="Password">
                     <span></span>
                     <label>Password</label>
                 </div>
-
-                <div class="log">
-                    <input class="btn btn-success login waves-effect waves-light" type="log" value="Login">
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <div class="checkbox checkbox-success">
+                            <input id="checkbox-signup" type="checkbox" checked>
+                            <label for="checkbox-signup">
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
                 </div>
+                <div class="log">
+                    <input class="btn btn-success login waves-effect waves-light" type="submit" value="Login">
+                </div>
+                <div class="clearfix"></div>
             </form>
         </div>
     </div>
