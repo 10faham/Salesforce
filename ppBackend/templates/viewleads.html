@@ -101,13 +101,13 @@
                   <tbody id="lead-detail">
                     {% for obj in response_data['data'] %}
                     <tr>
-                      <td>{{obj._id}}</td>
+                      <td>{{obj.id}}</td>
                       <td scope="row">
                         {{obj.lead_id}}
                         <p>{{obj.created_on}}</p>
                       </td>
                       <td>{{obj.first_name}}</td>
-                      <td>{{obj.user.name}}</td>
+                      <td>{{obj.assigned_to}}</td>
                       <td>
                         <p>{{obj.followup_last_work}}</p>
                         <p>{{obj.followup_last_work_date}}</p>
@@ -122,15 +122,20 @@
                       </td>
                       {% endfor %}
                       <td>
-                        <a href="javascript:viewFollowup('{{obj._id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
+                        <a href="javascript:viewFollowup('{{obj.id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
                             class="mdi mdi-comment-outline"></i></a>
-                        <a href="javascript:addFollowup('{{obj._id}}');"><i class="glyphicon glyphicon-plus"></i></a>
+                        <a href="javascript:addFollowup('{{obj.id}}');"><i class="glyphicon glyphicon-plus"></i></a>
                         TLW: {{obj.followup_count}}
                       </td>
                     </tr>
                     {% endfor %}
                   </tbody>
                 </table>
+                <div class="paginate paging_simple_numbers"> 
+                  <a class="paginate_button previous">Previous</a>
+                  <span class="paginate_button">1</span>
+                  <a class="paginate_button next">Next</a>
+                </div>
               </div>
             </div>
           </div>
@@ -499,7 +504,7 @@
     "dom": 'PB<"clear">lfrtip',
     "bFilter": true,
     "aaSorting": [],
-    "pageLength": 50,
+    "pageLength": 100,
     // "stateSave": true,
     "processing": true,
     "select": { "style": 'multi+shift' },
