@@ -25,6 +25,8 @@
         <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
       
+        
+
     </head>
 
 
@@ -52,13 +54,13 @@
 
                                         <div class="form-group ">
                                             <div class="col-xs-12">
-                                                <input class="form-control" type="email" name="email_address" required="" placeholder="Username">
+                                                <input class="form-control" type="email" name="email_address" required placeholder="Username">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <div class="col-xs-12">
-                                                <input class="form-control" type="password" name="password" required="" placeholder="Password">
+                                                <input class="form-control" type="password" name="password" required placeholder="Password">
                                             </div>
                                         </div>
 
@@ -88,7 +90,7 @@
 
                                     </form>
 
-                                    <div class="clearfix"></div>
+                                   
 
                                 </div>
                             </div>
@@ -125,14 +127,13 @@
 </html>
 
 <script>
-  response_code = parseInt("{{response_code}}")
-  response_message = "{{response_message}}"
-  {% if response_code == 200 %}
-  sessionStorage.setItem("TokenObj", '{{response_data|tojson}}')
-  document.cookie = "access_token={{response_data.access_token}}"
-  document.location = "/home"
-  {% else %}
-  console.log({{response_data}})
-  {% endif %}
-
-</script>
+    response_code = parseInt("{{response_code}}")
+    response_message = "{{response_message}}"
+    {% if response_code == 200 %}
+    sessionStorage.setItem("TokenObj", '{{response_data|tojson}}')
+    document.cookie = "access_token={{response_data.access_token}}"
+    document.location = "/home"
+    {% else %}
+    console.log({{response_data}})
+    {% endif %}
+  </script>
