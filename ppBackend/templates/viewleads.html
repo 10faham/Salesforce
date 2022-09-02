@@ -74,7 +74,7 @@
           </div>
           <div class="col-xs-3">
             <div class="form-group">
-              <label class="col-sm-1 control-label">Deadline</label>
+              <label class="col-sm-1 control-label">Last Task</label>
               <select class="form-control" name="deadline" title="deadline">
               </select>
             </div>
@@ -157,6 +157,7 @@
                     {% endfor %}
                   </tbody>
                 </table>
+                <div class="info">Showing 1 of 15 entries</div>
                 <div class="paginate paging_simple_numbers"> 
                   <a class="paginate_button previous">Previous</a>
                   <span class="paginate_button">1</span>
@@ -526,7 +527,7 @@
   });
 
   var table = $('#datatable').DataTable({
-    "dom": 'PB<"clear">lfrtip',
+    "dom": 'B<"clear">frt',
     "bFilter": true,
     "aaSorting": [],
     "pageLength": 100,

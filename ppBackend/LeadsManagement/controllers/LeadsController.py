@@ -51,6 +51,13 @@ class LeadsController(Controller):
     @classmethod
     def read_controller(cls, data):
         filter = {}
+        filter_data = {}
+        filter_fields = {
+            "project":[],
+            "level": constants.LEAD__LEVEL__LIST,
+            "Task": constants.FOLLOW_UP__TYPE_LIST,
+            "Team": [],
+        }
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
@@ -92,6 +99,8 @@ class LeadsController(Controller):
             "has_next" : queryset.has_next,
             "has_prev" : queryset.has_prev
         }
+        leads_data['filter_fields'] = filter_fields
+        leads_data['filter_data'] = filter_data
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
