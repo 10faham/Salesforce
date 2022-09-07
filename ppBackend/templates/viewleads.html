@@ -167,11 +167,15 @@
                 <div class="info">Total {{response_data['pagination']['total']}}</div>
                 <div class="paginate paging_simple_numbers"> 
                   {% if response_data['pagination']['has_prev'] %}
-                  <a href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="paginate_button previous">Previous</a>
+                  <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="previous">Previous</a>
+                  {% else %}
+                  <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="paginate_button previous">Previous</a>
                   {% endif %}
-                  <span class="paginate_button">{{response_data['pagination']['page']}}</span>
+                  <span id="paginate-number" class="paginate_button">{{response_data['pagination']['page']}}</span>
                   {% if response_data['pagination']['has_next'] %}
-                  <a href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class=" next">Next</a>
+                  <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class="next">Next</a>
+                  {% else %}
+                  <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class="paginate_button next">Next</a>
                   {% endif %}
                 </div>
               </div>
@@ -736,7 +740,46 @@
       success: function (data) {
         if (data.response_code == 200) {
           console.log(data);
+          table.clear()
+          table.draw()
+          for(var i in data.response_data.data){
+            var numbers = [];
+            for(var j in data.response_data.data[i].phone_number){
+              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
+            }
+            table.row.add([
+            `${data.response_data.data[i].id}`,
+            `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
+            `${data.response_data.data[i].first_name}`,
+            `${data.response_data.data[i].assigned_to}`,
+            `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+            `${data.response_data.data[i].project}`,
+            `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
+                        <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
+                      </span>`,
+            `${numbers}`,
+            `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
+                            class="mdi mdi-comment-outline"></i></a>
+                        <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
+                        TLW: ${data.response_data.data[i].followup_count}`,
+            ]).draw();
+          };
+          $("#paginate-number").text(`${data.response_data.pagination.page}`)
+          if (data.response_data.pagination.has_next){
+            $("#paginate-next-btn").attr('href', `javascript:pagination(${data.response_data.pagination.next_num})`)
+            $("#paginate-next-btn").removeClass('paginate_button freeze-btn')
+          }
+          else{
+            $("#paginate-next-btn").addClass('paginate_button freeze-btn')
+          }
           
+          if (data.response_data.pagination.has_prev){
+            $("#paginate-prev-btn").attr('href', `javascript:pagination(${data.response_data.pagination.prev_num})`)
+            $("#paginate-prev-btn").removeClass('paginate_button freeze-btn')
+          }
+          else{
+            $("#paginate-prev-btn").addClass('paginate_button freeze-btn')
+          }
         }
       }
     })
