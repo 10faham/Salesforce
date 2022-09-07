@@ -69,6 +69,7 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Level</label>
               <select class="form-control" name="lead_level" title="lead_level">
+                <option value="">All</option>
                 <option value="New">New</option>
                 {% for obj in response_data['filter_fields']['level'] %}
                 <option value="{{obj}}">{{obj}}</option>
@@ -97,6 +98,7 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Task</label>
               <select class="form-control" name="Task" title="Task">
+                <option value="">All</option>
                 {% for obj in response_data['filter_fields']['Task'] %}
                 <option value="{{obj}}">{{obj}}</option>
                 {% endfor %}
