@@ -3,7 +3,7 @@ import pandas as pd
 import re
 from math import nan, isnan
 # Framework imports
-
+from flask_mongoengine import pagination
 # Local imports
 from ast import Constant
 from ppBackend.generic.controllers import Controller
@@ -51,6 +51,13 @@ class LeadsController(Controller):
     @classmethod
     def read_controller(cls, data):
         filter = {}
+        filter_data = {**data}
+        filter_fields = {
+            "project":[],
+            "level": constants.LEAD__LEVEL__LIST,
+            "Task": constants.FOLLOW_UP__TYPE_LIST,
+            "Team": [],
+        }
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
@@ -65,36 +72,16 @@ class LeadsController(Controller):
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
 
+        if data.get('page'):
+            page = int(data['page'])
+        else:
+            page = 1
+
         user_ids = [id[constants.ID] for id in user_childs]
         filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
-
-        lead_dataset = [obj for obj in queryset]
-        # lead_data = {}
-        # lead_id = []
-        # for obj in queryset.order_by('-'+constants.CREATED_ON):
-        #     lead_id.append(str(obj[constants.ID]))
-        #     lead_data[str(obj[constants.ID])] = {'data': obj.display_min()}
-        #     # counter = 0
-        # # final_count = 0
-        # # for id in lead_id:
-        # #     followup = FollowUpController.read_count(id)
-        # #     if followup["count"] > 0:
-        # #         final_count += 1
-        # # print(final_count)
-        # # for i in range(0, len(lead_id), 100):
-        # followup = FollowUpController.read_current_followup(lead_id)
-        # for obj in followup:
-        #     lead_data[obj['_id']].update({'followup': obj})
-
-        # for obj in queryset.order_by("-"+constants.CREATED_ON):
-        #     tmp = obj.display()
-        #     tmp['followup'] = FollowUpController.read_count(tmp['id'])
-        #     lead_data.append(tmp)
-        
-        # lead_dataset.append(
-            # [str(user.pk), user[constants.USER__NAME], lead_data])
-        # lead_dataset.append(common_utils.current_user().name)
+        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=page, per_page=50)
+        # paginated = queryset.paginate(page=1, per_page=50)
+        lead_dataset = [obj.display_min() for obj in queryset.items]
         temp = UserController.get_user_childs(
             user=common_utils.current_user(), return_self=True)
         all_users = []
@@ -107,6 +94,18 @@ class LeadsController(Controller):
         leads_data['userlevel'] = common_utils.current_user()[
             constants.USER__ROLE][constants.USER__ROLE__ROLE_ID]
         leads_data['all_users'] = all_users
+        leads_data['pagination'] = {
+            "next_num" : queryset.next_num,
+            "page" : queryset.page,
+            "pages" : queryset.pages,
+            "per_page" : queryset.per_page,
+            "prev_num" : queryset.prev_num,
+            "total" : queryset.total,
+            "has_next" : queryset.has_next,
+            "has_prev" : queryset.has_prev
+        }
+        leads_data['filter_fields'] = filter_fields
+        leads_data['filter_data'] = filter_data
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
@@ -176,7 +175,7 @@ class LeadsController(Controller):
     def search_controller(cls, data):
         query = ''
         if data.get(constants.LEAD__PHONE_NUMBER):
-            queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER: data.get(constants.LEAD__PHONE_NUMBER)})
+            queryset = cls.db_read_records(read_filter={constants.LEAD__PHONE_NUMBER+"__in": [data.get(constants.LEAD__PHONE_NUMBER)]})
             query = data.get(constants.LEAD__PHONE_NUMBER)
         if data.get(constants.LEAD__ID):
             queryset = cls.db_read_records(read_filter={constants.LEAD__ID: data.get(constants.LEAD__ID)})

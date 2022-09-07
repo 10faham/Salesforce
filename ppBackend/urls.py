@@ -13,6 +13,7 @@ from ppBackend.UserManagement.views.users import users_bp
 from ppBackend.LeadsManagement.views.leads import leads_bp
 from ppBackend.LeadsManagement.views.follow_ups import follow_ups_bp
 from ppBackend.LeadsManagement.views.reports import reports_bp
+from ppBackend.ClientsManagement.views.clients import clients_bp
 from ppBackend.generic.services.utils import common_utils
 from ppBackend.generic.services.utils.common_utils import current_user
 from ppBackend.LeadsManagement.controllers.DashboardController import DashboardController
@@ -54,3 +55,4 @@ app.register_blueprint(users_bp, url_prefix="/")
 app.register_blueprint(leads_bp, url_prefix="/api/leads")
 app.register_blueprint(follow_ups_bp, url_prefix="/api/follow_ups")
 app.register_blueprint(reports_bp, url_prefix="/api/reports")
+app.register_blueprint(clients_bp, url_prefix="/api/clients")

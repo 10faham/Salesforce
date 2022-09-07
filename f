@@ -12,3 +12,4 @@ db.leads.updateMany({},[
 
 db.follow_up.updateMany({lead:ObjectId('626675602d92c11ce1218267')},[{$set:{"assigned_to":ObjectId('619dd065945a75460afc2214')}}])
 db.leads.updateMany({lead_id:'LD-550', transfered: true},[{$set:{"assigned_to":ObjectId('619dd065945a75460afc2214')}}])
+

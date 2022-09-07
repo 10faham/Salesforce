@@ -979,6 +979,42 @@ table.dataTable tbody tr.selected>* {
   background-color: #f5f5f5 !important;
 }
 
+.paginate {
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  line-height: 1.42857143;
+  font-family: 'Varela Round', sans-serif;
+  box-sizing: border-box;
+  outline: none !important;
+  float: right;
+  text-align: right;
+  padding-top: .25em;
+  color: #333;
+}
+
+.paginate_button {
+  font-size: 14px;
+  line-height: 1.42857143;
+  font-family: 'Varela Round', sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  outline: none !important;
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: .5em 1em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  border-radius: 2px;
+  cursor: default;
+  color: #666 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
 .submit-btn {
   margin: 0 0 15px 0 ;
 }
@@ -1115,4 +1151,18 @@ form .txt_field{
 
 .login-body {
   padding-bottom: 0px !important;
+}
+
+.info {
+  font-size: 14px;
+  line-height: 1.42857143;
+  font-family: 'Varela Round', sans-serif;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-text-size-adjust: 100%;
+  box-sizing: border-box;
+  outline: none !important;
+  clear: both;
+  float: left;
+  padding-top: .755em;
+  color: #333;
 }

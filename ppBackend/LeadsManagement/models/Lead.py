@@ -158,4 +158,7 @@ class Leads(models.Model):
             constants.LEAD__LEVEL: self[constants.LEAD__LEVEL],
             constants.LEAD__ASSIGNED_TO: self[constants.LEAD__ASSIGNED_TO].fetch().name,
             constants.CREATED_ON: common_utils.epoch_to_datetime(self[constants.CREATED_ON]),
+            constants.LEAD__LAST_WORK_DATE: common_utils.epoch_to_datetime(self[constants.LEAD__LAST_WORK_DATE]),
+            constants.LEAD__LAST_WORK: self[constants.LEAD__LAST_WORK],
+            constants.LEAD__FOLLOWUP_COUNT: self[constants.LEAD__FOLLOWUP_COUNT],
         }

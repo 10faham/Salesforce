@@ -89,16 +89,12 @@ class DashboardController(Controller):
         queryset = list(cls.db_read_records(
             read_filter={**filter}).aggregate(pipeline.DASHBOARD_LEAD_COUNT))
         if queryset:
-            data['total_leads'] = queryset[0]["total"] + queryset[1]["total"]
-            data['new_leads'] = queryset[0]["new"]
-        # datefrom = datetime.combine((datetime.now() + timedelta(days = -7)).date(), time(
-        #     0, 0)).strftime(config.DATETIME_FORMAT)
-        # dateto = datetime.combine(datetime.now().date(), time(
-        #     23, 59, 59)).strftime(config.DATETIME_FORMAT)
-        # filter[constants.CREATED_ON +
-        #         "__gte"] = common_utils.convert_to_epoch1000(datefrom)
-        # filter[constants.CREATED_ON +
-        #         "__lte"] = common_utils.convert_to_epoch1000(dateto)
+            if len(queryset) > 1:
+                data['total_leads'] = queryset[0]["total"] + queryset[1]["total"]
+                data['new_leads'] = queryset[0]["new"]
+            else:
+                data['total_leads'] = queryset[0]["total"]
+                data['new_leads'] = queryset[0]["new"]
 
         followup_dataset = []
         overdue = 0
