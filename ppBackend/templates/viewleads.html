@@ -45,7 +45,7 @@
       </div>
 
       <div class="row" id="filter">
-        <form action="/api/leads/read" method="POST" id="leads_date">
+        <form action="/api/leads/read" method="GET" id="leads_date">
           <div class="col-xs-3">
             <div class="form-group">
               <label class="col-sm-5 control-label">Select Date</label>
@@ -69,14 +69,18 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Level</label>
               <select class="form-control" name="lead_level" title="lead_level">
+                <option value="New">New</option>
+                {% for obj in response_data['filter_fields']['level'] %}
+                <option value="{{obj}}">{{obj}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
           <div class="col-xs-3">
             <div class="form-group">
-              <label class="col-sm-1 control-label">Last Task</label>
-              <select class="form-control" name="deadline" title="deadline">
-              </select>
+              <label class="col-sm-6 control-label">Last Worked on</label>
+              <input type="text" class="form-control datetime-picker" title="Last Worked on"
+              name="last_work" />
             </div>
           </div>
           <div class="col-xs-5">
@@ -94,6 +98,9 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Task</label>
               <select class="form-control" name="Task" title="Task">
+                {% for obj in response_data['filter_fields']['Task'] %}
+                <option value="{{obj}}">{{obj}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -157,11 +164,15 @@
                     {% endfor %}
                   </tbody>
                 </table>
-                <div class="info">Showing 1 of 15 entries</div>
+                <div class="info">Total {{response_data['pagination']['total']}}</div>
                 <div class="paginate paging_simple_numbers"> 
-                  <a class="paginate_button previous">Previous</a>
-                  <span class="paginate_button">1</span>
-                  <a class="paginate_button next">Next</a>
+                  {% if response_data['pagination']['has_prev'] %}
+                  <a href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="paginate_button previous">Previous</a>
+                  {% endif %}
+                  <span class="paginate_button">{{response_data['pagination']['page']}}</span>
+                  {% if response_data['pagination']['has_next'] %}
+                  <a href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class=" next">Next</a>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -705,6 +716,30 @@
       }
     })
     $("#commentModal").modal('show');
+  };
+
+  function pagination(ref) {
+    var formData = {
+      date_start:'{{response_data["filter_data"]["date_start"]}}',
+      date_end:'{{response_data["filter_data"]["date_end"]}}',
+      lead_level:'{{response_data["filter_data"]["lead_level"]}}',
+      last_work:'{{response_data["filter_data"]["last_work"]}}',
+      assigned_to:'{{response_data["filter_data"]["assigned_to"]}}',
+      Task:'{{response_data["filter_data"]["Task"]}}',
+      page:ref
+    };
+    $.ajax('/api/leads/read', {
+      method: 'POST',
+      data: formData,
+      dataType: "json",
+      encode: true,
+      success: function (data) {
+        if (data.response_code == 200) {
+          console.log(data);
+          
+        }
+      }
+    })
   };
 
 </script>

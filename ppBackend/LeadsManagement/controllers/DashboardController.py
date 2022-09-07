@@ -91,9 +91,10 @@ class DashboardController(Controller):
         if queryset:
             if len(queryset) > 1:
                 data['total_leads'] = queryset[0]["total"] + queryset[1]["total"]
+                data['new_leads'] = queryset[0]["new"]
             else:
                 data['total_leads'] = queryset[0]["total"]
-            data['new_leads'] = queryset[0]["new"]
+                data['new_leads'] = queryset[0]["new"]
 
         followup_dataset = []
         overdue = 0

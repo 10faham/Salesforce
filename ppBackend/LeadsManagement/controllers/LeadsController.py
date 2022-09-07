@@ -51,7 +51,7 @@ class LeadsController(Controller):
     @classmethod
     def read_controller(cls, data):
         filter = {}
-        filter_data = {}
+        filter_data = {**data}
         filter_fields = {
             "project":[],
             "level": constants.LEAD__LEVEL__LIST,
@@ -72,9 +72,14 @@ class LeadsController(Controller):
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
 
+        if data.get('page'):
+            page = int(data['page'])
+        else:
+            page = 1
+
         user_ids = [id[constants.ID] for id in user_childs]
         filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
-        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=1, per_page=50)
+        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=page, per_page=50)
         # paginated = queryset.paginate(page=1, per_page=50)
         lead_dataset = [obj.display_min() for obj in queryset.items]
         temp = UserController.get_user_childs(

@@ -71,6 +71,9 @@ def leads_create_view(data):
 def read_view(data):
     if request.method == "POST":
         data = request.form
+        res = LeadsController.read_controller(data=data)
+        return res    
+    data = request.args
     res = LeadsController.read_controller(data=data)
     return render_template("viewleads.html", **res)
 
