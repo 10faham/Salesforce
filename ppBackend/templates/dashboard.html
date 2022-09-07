@@ -26,68 +26,169 @@
 
                 <div class="col-xs-12">
                     <div class="page-title-box">
-
-
                         <h4 class="page-title">Dashboard</h4>
                         <div class="clearfix"></div>
                     </div>
-                </div>
+                </div><!-- end col -->
+                <!-- 
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Leads">
+                                Total Leads</p>
+                            <h2>{{response_data.total_leads}}</h2>
+                        </div>
+                    </div>
+                </div>end col -->
+
+                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-layers widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
+                                New Leads</p>
+                            <h2>{{response_data.new_leads}}</h2>
+                        </div>
+                    </div>
+                </div>end col -->
+
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-account-multiple widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow">new leads</p>
+                            <h2 class="text-success"><span data-plugin="counterup">{{response_data.new_leads}}</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-account-convert widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
+                                Pending Tasks</p>
+                            <h2>{{response_data.today}}</h2>
+                        </div>
+                    </div>
+                </div>end col -->
+
+
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-account-convert widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
+                                Pending Tasks</p>
+                            <h2 class="text-warning"><span data-plugin="counterup">{{response_data.today}}</span> </h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-av-timer widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Overdue Tasks">
+                                Overdue Tasks</p>
+                            <h2>{{response_data.overdue}}</h2>
+                        </div>
+                    </div>
+                </div>end col -->
+
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-av-timer widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Overdue Tasks</p>
+                            <h2 class="text-danger"><span data-plugin="counterup">{{response_data.overdue}}</span> </h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Monthly Target</p>
+                            <h2 class="text-success"><span data-plugin="counterup">52410 </span></h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-account-multiple widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Meetings </p>
+                            <h2 class="text-danger"><span data-plugin="counterup">{{response_data.overdue}}</span> / 30
+                            </h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <div class="card-box widget-box-one">
+                        <i class="mdi mdi-currency-usd widget-one-icon"></i>
+                        <div class="wigdet-one-content">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
+                                Total Sales</p>
+                            <h2 class="text-warning"><span data-plugin="counterup">4</span> </h2>
+                        </div>
+                    </div>
+                </div><!-- end col -->
             </div>
-            <!-- end row -->
+            <!------row div-->>
 
 
-                <div class="row">
+            <div class="graph">
+                <!----Graph starts----->
+                <div class="col-lg-4">
+                    <div class="card-box">
 
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Leads">Total Leads</p>
-                                <h2>{{response_data.total_leads}}</h2>
+                        <h4 class="header-title m-t-0"> Activies Analytics </h4>
+
+                        <div class="widget-chart text-center">
+                            <div id="morris-donut-example" style="height: 245px;">
                             </div>
+                            <ul class="list-inline chart-detail-list m-b-0">
+                                <li>
+                                    <h5 class="text-danger"><i class="fa fa-circle m-r-5"></i>Total Leads</h5>
+                                </li>
+                                <li>
+                                    <h5 class="text-success"><i class="fa fa-circle m-r-5"></i>Working leads</h5>
+                                </li>
+                                <li>
+                                    <h5 class="text-success"><i class="fa fa-circle m-r-5"></i>Over Due</h5>
+                                </li>
+                            </ul>
                         </div>
-                    </div><!-- end col -->
+                    </div>
+                </div><!-- end col -->
 
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-account-convert widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">New Leads</p>
-                                <h2>{{response_data.new_leads}}</h2>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-account-convert widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">Pending Tasks</p>
-                                <h2>{{response_data.today}}</h2>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
+                <div class="col-lg-4">
+                    <div class="card-box">
 
-                    <div class="col-lg-2 col-md-4 col-sm-6">
-                        <div class="card-box widget-box-one">
-                            <i class="mdi mdi-layers widget-one-icon"></i>
-                            <div class="wigdet-one-content">
-                                <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Overdue Tasks">Overdue Tasks</p>
-                                <h2>{{response_data.overdue}}</h2>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
-                </div>
+                        <h4 class="header-title m-t-0">Statistics</h4>
+                        <div id="morris-bar-example" style="height: 285px;"></div>
+                    </div>
+                </div><!-- end col -->
 
-            <!-- end row -->
+                <div class="col-lg-4">
+                    <div class="card-box">
 
+                        <h4 class="header-title m-t-0">Monthly Analytics</h4>
+                        <div id="morris-line-example" style="height: 280px;"></div>
+                    </div>
+                </div><!-- end col -->
 
+            </div>
+            <!----Graph End----->
 
+        </div> <!-- container card -->
 
-        </div> <!-- container -->
+    </div><!-- end content -->
 
-    </div> <!-- content -->
-
-</div>
-</div>
+</div><!-- end content page -->
 
 {% endblock %}
