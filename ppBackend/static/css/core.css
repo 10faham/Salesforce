@@ -401,7 +401,7 @@ a:focus {
 }
 
 .search-box .form-control {
-  border: 2px solid rgba(152, 166, 173, 0.5);
+  border: 2px solid rgba(0, 0, 0, 0.5);
   height: 38px;
   border-radius: 30px;
   padding: 8px 45px 8px 20px;
@@ -1212,10 +1212,11 @@ table.dataTable tbody tr.selected>* {
   box-shadow: none;
 }
 
-.submit-btn  {
+.submit-btn {
   margin: 0 0 15px 0;
   margin-top: 30px;
 }
+
 .btn-filter {
   margin-top: 28px;
 }
@@ -1226,9 +1227,9 @@ table.dataTable tbody tr.selected>* {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  background: rgba(203, 238, 231, 0.25);
+  background: rgba(173, 185, 182, 0.25);
   border-radius: 10px;
-  box-shadow: 10px 10px 15px rgba(248, 245, 245, 0.05);
+  box-shadow: 10px 10px 15px rgba(27, 26, 26, 0.05);
 }
 
 .center h1 {
@@ -1253,7 +1254,7 @@ form .txt_field {
   width: 100%;
   padding: 0 5px;
   height: 40px;
-  font-size: 16px;
+  font-size: 20px;
   border: none;
   background: none;
   outline: none;
@@ -1264,7 +1265,7 @@ form .txt_field {
   top: 50%;
   left: 5px;
   transform: translateY(-50%);
-  font-size: 16px;
+  font-size: 20px;
   pointer-events: none;
   transition: .5s;
   color: #000000;
@@ -1316,25 +1317,13 @@ form .txt_field {
   left: 25%;
 }
 
+.log-col {
+  color: #000000;
+}
+
 .login:hover {
   border-color: #26d94d;
   transition: .5s;
-}
-
-.signup_link {
-  margin: 30px 0;
-  text-align: center;
-  font-size: 16px;
-  color: #ce64b7;
-}
-
-.signup_link a {
-  color: #4bcc61;
-  text-decoration: none;
-}
-
-.signup_link a:hover {
-  text-decoration: underline;
 }
 
 .img_main {
