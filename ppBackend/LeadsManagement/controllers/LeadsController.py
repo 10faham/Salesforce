@@ -72,23 +72,28 @@ class LeadsController(Controller):
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
 
-        if data.get(constants.LEAD__FOLLOWUP_TYPE):
-            filter[constants.LEAD__FOLLOWUP_TYPE] = data.get(constants.LEAD__FOLLOWUP_TYPE)
+        if data.get('Task'):
+            filter[constants.LEAD__FOLLOWUP_TYPE] = data.get('Task')
         
         if data.get(constants.LEAD__LEVEL):
             filter[constants.LEAD__LEVEL] = data.get(constants.LEAD__LEVEL)
 
         if data.get('last_work'):
-            filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.DATETIME_FORMAT)
 
         if data.get('page'):
             page = int(data['page'])
         else:
             page = 1
+        
+        if data.get('per_page'):
+            per_page = int(data('per_page'))
+        else:
+            per_page = 50
 
         user_ids = [id[constants.ID] for id in user_childs]
         filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
-        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=page, per_page=50)
+        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=page, per_page=per_page)
         # paginated = queryset.paginate(page=1, per_page=50)
         lead_dataset = [obj.display_min() for obj in queryset.items]
         temp = UserController.get_user_childs(

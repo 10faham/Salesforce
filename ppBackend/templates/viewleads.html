@@ -150,11 +150,11 @@
                       <td class="{{obj.lead_level}}">{{obj.lead_level}}
                         <p style="color: #ff0000">{{obj.new}}</p>
                       </td>
-                      {% for number in obj.phone_number%}
                       <td>
+                        {% for number in obj.phone_number%}
                         <a href="tel:{{number}}">{{number}}</a>
+                        {% endfor %}
                       </td>
-                      {% endfor %}
                       <td>
                         <a href="javascript:viewFollowup('{{obj.id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
                             class="mdi mdi-comment-outline"></i></a>
@@ -757,7 +757,7 @@
             `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
                         <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
                       </span>`,
-            `${numbers}`,
+            `${numbers.toString()}`,
             `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
                             class="mdi mdi-comment-outline"></i></a>
                         <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
