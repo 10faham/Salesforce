@@ -95,14 +95,6 @@ class DashboardController(Controller):
             else:
                 data['total_leads'] = queryset[0]["total"]
                 data['new_leads'] = queryset[0]["new"]
-        # datefrom = datetime.combine((datetime.now() + timedelta(days = -7)).date(), time(
-        #     0, 0)).strftime(config.DATETIME_FORMAT)
-        # dateto = datetime.combine(datetime.now().date(), time(
-        #     23, 59, 59)).strftime(config.DATETIME_FORMAT)
-        # filter[constants.CREATED_ON +
-        #         "__gte"] = common_utils.convert_to_epoch1000(datefrom)
-        # filter[constants.CREATED_ON +
-        #         "__lte"] = common_utils.convert_to_epoch1000(dateto)
 
         followup_dataset = []
         overdue = 0
