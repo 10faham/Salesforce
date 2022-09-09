@@ -636,7 +636,7 @@
     event.preventDefault();
     let formData = {}
     searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
-    console.log(formData, "formData")
+    // console.log(formData, "formData")
     $.ajax('/api/leads/read', {
       method: 'POST',
       data: formData,
