@@ -113,82 +113,124 @@
     </div>
     <!-- end col -->
 
+    <div class="container">
+      <!---------find leads starts-->
       <div class="row">
-        <div class="col-sm-12">
-          <div class="row">
-            <div class="table-responsive">
-              <div class="card-box table-responsive">
-                <table id="datatable" class="table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th style="width: 85px;">UID</th>
-                      <th style="width: 85px;">ID</th>
-                      <th style="width: 85px;">Name</th>
-                      <th style="width: 85px;">Assigned to</th>
-                      <th style="width: 85px;">Last Work</th>
-                      <th style="width: 85px;">Project</th>
-                      <th style="width: 85px;">Level</th>
-                      <th style="width: 85px;">Phone</th>
-                      <th style="width: 85px;">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="lead-detail">
-                    {% for obj in response_data['data'] %}
-                    <tr>
-                      <td>{{obj.id}}</td>
-                      <td scope="row">
-                        {{obj.lead_id}}
-                        <p>{{obj.created_on}}</p>
-                      </td>
-                      <td>{{obj.first_name}}</td>
-                      <td>{{obj.assigned_to}}</td>
-                      <td>
-                        <p>{{obj.followup_last_work}}</p>
-                        <p>{{obj.followup_last_work_date}}</p>
-                      </td>
-                      <td>{{obj.project}}</td>
-                      <td class="{{obj.lead_level}}">{{obj.lead_level}}
-                        <p style="color: #ff0000">{{obj.new}}</p>
-                      </td>
-                      <td>
-                        {% for number in obj.phone_number%}
-                        <a href="tel:{{number}}">{{number}}</a>
-                        {% endfor %}
-                      </td>
-                      <td>
-                        <a href="javascript:viewFollowup('{{obj.id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
-                            class="mdi mdi-comment-outline"></i></a>
-                        <a href="javascript:addFollowup('{{obj.id}}');"><i class="glyphicon glyphicon-plus"></i></a>
-                        TLW: {{obj.followup_count}}
-                      </td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                <div class="info">Total {{response_data['pagination']['total']}}</div>
-                <div class="paginate paging_simple_numbers"> 
-                  {% if response_data['pagination']['has_prev'] %}
-                  <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="previous">Previous</a>
-                  {% else %}
-                  <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')" class="paginate_button previous">Previous</a>
-                  {% endif %}
-                  <span id="paginate-number" class="paginate_button">{{response_data['pagination']['page']}}</span>
-                  {% if response_data['pagination']['has_next'] %}
-                  <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class="next">Next</a>
-                  {% else %}
-                  <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')" class="paginate_button next">Next</a>
-                  {% endif %}
-                </div>
+        <div class="col-xs-12">
+          <div class="title-box">
+            <div class="clearfix"></div>
+          </div>
+          <h6>Search Leads</h6>
+        </div>
+      </div>
+      <form id="searchForm">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Name</label>
+            <input type="text" class="form-control" name="client_name" placeholder="Name">
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="form-group">
+            <label class="col-sm-6 control-label">Phone Number</label>
+            <input type="text" class="form-control" name="phone_number" placeholder="+921234567890">
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Lead ID</label>
+            <input type="text" class="form-control" name="lead_id" placeholder="1234">
+          </div>
+        </div>
+        <div class="text-left">
+          <input class="btn btn-success btn-filter" type="submit" value="Find">
+        </div>
+      </form>
+    </div>
+    <!---------find leads end-->
+
+    <!-- end row -->
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="table-responsive">
+            <div class="card-box table-responsive">
+              <table id="datatable" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 85px;">UID</th>
+                    <th style="width: 85px;">ID</th>
+                    <th style="width: 85px;">Name</th>
+                    <th style="width: 85px;">Assigned to</th>
+                    <th style="width: 85px;">Last Work</th>
+                    <th style="width: 85px;">Project</th>
+                    <th style="width: 85px;">Level</th>
+                    <th style="width: 85px;">Phone</th>
+                    <th style="width: 85px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="lead-detail">
+                  {% for obj in response_data['data'] %}
+                  <tr>
+                    <td>{{obj.id}}</td>
+                    <td scope="row">
+                      {{obj.lead_id}}
+                      <p>{{obj.created_on}}</p>
+                    </td>
+                    <td>{{obj.first_name}}</td>
+                    <td>{{obj.assigned_to}}</td>
+                    <td>
+                      <p>{{obj.followup_last_work}}</p>
+                      <p>{{obj.followup_last_work_date}}</p>
+                    </td>
+                    <td>{{obj.project}}</td>
+                    <td class="{{obj.lead_level}}">{{obj.lead_level}}
+                      <p style="color: #ff0000">{{obj.new}}</p>
+                    </td>
+                    <td>
+                      {% for number in obj.phone_number%}
+                      <a href="tel:{{number}}">{{number}}</a>
+                      {% endfor %}
+                    </td>
+                    <td>
+                      <a href="javascript:viewFollowup('{{obj.id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
+                          class="mdi mdi-comment-outline"></i></a>
+                      <a href="javascript:addFollowup('{{obj.id}}');"><i class="glyphicon glyphicon-plus"></i></a>
+                      TLW: {{obj.followup_count}}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="info">Total {{response_data['pagination']['total']}}</div>
+              <div class="paginate paging_simple_numbers">
+                {% if response_data['pagination']['has_prev'] %}
+                <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')"
+                  class="previous">Previous</a>
+                {% else %}
+                <a id="paginate-prev-btn" href="javascript:pagination('{{response_data['pagination']['prev_num']}}')"
+                  class="paginate_button previous">Previous</a>
+                {% endif %}
+                <span id="paginate-number" class="paginate_button">{{response_data['pagination']['page']}}</span>
+                {% if response_data['pagination']['has_next'] %}
+                <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')"
+                  class="next">Next</a>
+                {% else %}
+                <a id="paginate-next-btn" href="javascript:pagination('{{response_data['pagination']['next_num']}}')"
+                  class="paginate_button next">Next</a>
+                {% endif %}
               </div>
             </div>
           </div>
-          {% if response_data.userlevel < 4 %} <div class="row">
-            <button id="transfershow" class="applyBtn btn btn-sm">Assign</button>
-            <div id="transfer-sec" class="row" style=" display:none">
-              <div class="col-sm-6">
-                <div class="card-box">
-                  <div class="row">
-                    <form class="form-horizontal" action="" method="POST" id="follow_up_form">
+        </div>
+        {% if response_data.userlevel < 4 %} <div class="row">
+          <button id="transfershow" class="applyBtn btn btn-sm">Assign</button>
+          <div id="transfer-sec" class="row" style=" display:none">
+            <div class="col-sm-6">
+              <div class="card-box">
+                <div class="row">
+                  <form class="form-horizontal" action="" method="POST" id="follow_up_form">
 
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -589,6 +631,65 @@
     }
   });
 
+  const searchFormDOM = $('#searchForm')
+  searchFormDOM.submit(function (event){
+    event.preventDefault();
+    let formData = {}
+    searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
+    console.log(formData, "formData")
+    $.ajax('/api/leads/read', {
+      method: 'POST',
+      data: formData,
+      dataType: "json",
+      encode: true,
+      success: function (data) {
+        if (data.response_code == 200) {
+          console.log(data);
+          table.clear()
+          table.draw()
+          for (var i in data.response_data.data) {
+            var numbers = [];
+            for (var j in data.response_data.data[i].phone_number) {
+              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
+            }
+            table.row.add([
+              `${data.response_data.data[i].id}`,
+              `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
+              `${data.response_data.data[i].first_name}`,
+              `${data.response_data.data[i].assigned_to}`,
+              `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+              `${data.response_data.data[i].project}`,
+              `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
+                        <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
+                      </span>`,
+              `${numbers.toString()}`,
+              `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
+                            class="mdi mdi-comment-outline"></i></a>
+                        <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
+                        TLW: ${data.response_data.data[i].followup_count}`,
+            ]).draw();
+          };
+          $("#paginate-number").text(`${data.response_data.pagination.page}`)
+          if (data.response_data.pagination.has_next) {
+            $("#paginate-next-btn").attr('href', `javascript:pagination(${data.response_data.pagination.next_num})`)
+            $("#paginate-next-btn").removeClass('paginate_button freeze-btn')
+          }
+          else {
+            $("#paginate-next-btn").addClass('paginate_button freeze-btn')
+          }
+
+          if (data.response_data.pagination.has_prev) {
+            $("#paginate-prev-btn").attr('href', `javascript:pagination(${data.response_data.pagination.prev_num})`)
+            $("#paginate-prev-btn").removeClass('paginate_button freeze-btn')
+          }
+          else {
+            $("#paginate-prev-btn").addClass('paginate_button freeze-btn')
+          }
+        }
+      }
+    })
+  })
+
   $("#follow_up_form").submit(function (event) {
     $('#transferbtn').attr("disabled", true);
     var leads_id = [];
@@ -663,7 +764,7 @@
     event.preventDefault();
     let formData = {}
     addFollowupFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || []), value])
-    console.log(formData, "formData")
+    // console.log(formData, "formData")
     $.ajax("/api/follow_ups/create", {
       method: "POST",
       data: JSON.stringify(formData),
@@ -742,42 +843,42 @@
           console.log(data);
           table.clear()
           table.draw()
-          for(var i in data.response_data.data){
+          for (var i in data.response_data.data) {
             var numbers = [];
-            for(var j in data.response_data.data[i].phone_number){
+            for (var j in data.response_data.data[i].phone_number) {
               numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
             }
             table.row.add([
-            `${data.response_data.data[i].id}`,
-            `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
-            `${data.response_data.data[i].first_name}`,
-            `${data.response_data.data[i].assigned_to}`,
-            `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
-            `${data.response_data.data[i].project}`,
-            `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
+              `${data.response_data.data[i].id}`,
+              `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
+              `${data.response_data.data[i].first_name}`,
+              `${data.response_data.data[i].assigned_to}`,
+              `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+              `${data.response_data.data[i].project}`,
+              `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
                         <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
                       </span>`,
-            `${numbers.toString()}`,
-            `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
+              `${numbers.toString()}`,
+              `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
                             class="mdi mdi-comment-outline"></i></a>
                         <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
                         TLW: ${data.response_data.data[i].followup_count}`,
             ]).draw();
           };
           $("#paginate-number").text(`${data.response_data.pagination.page}`)
-          if (data.response_data.pagination.has_next){
+          if (data.response_data.pagination.has_next) {
             $("#paginate-next-btn").attr('href', `javascript:pagination(${data.response_data.pagination.next_num})`)
             $("#paginate-next-btn").removeClass('paginate_button freeze-btn')
           }
-          else{
+          else {
             $("#paginate-next-btn").addClass('paginate_button freeze-btn')
           }
-          
-          if (data.response_data.pagination.has_prev){
+
+          if (data.response_data.pagination.has_prev) {
             $("#paginate-prev-btn").attr('href', `javascript:pagination(${data.response_data.pagination.prev_num})`)
             $("#paginate-prev-btn").removeClass('paginate_button freeze-btn')
           }
-          else{
+          else {
             $("#paginate-prev-btn").addClass('paginate_button freeze-btn')
           }
         }

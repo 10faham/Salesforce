@@ -1361,3 +1361,8 @@ form .txt_field {
   padding-top: .755em;
   color: #333;
 }
+.title-box {
+  padding: 9px;
+  border-bottom: 1px solid #eee;
+  margin: 0 -20px 20px -20px;
+}

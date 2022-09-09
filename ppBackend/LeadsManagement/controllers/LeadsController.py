@@ -91,9 +91,18 @@ class LeadsController(Controller):
         else:
             per_page = 50
 
+        if data.get('client_name'):
+            filter[constants.LEAD__FIRST_NAME] = data.get('client_name')
+
+        if data.get('lead_id'):
+            filter[constants.LEAD__ID] = data.get('lead_id')
+
+        if data.get('phone_number'):
+            filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
+            
         user_ids = [id[constants.ID] for id in user_childs]
         filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
-        queryset = cls.db_read_records(read_filter={**filter}).paginate(page=page, per_page=per_page)
+        queryset = cls.db_read_records(read_filter={**filter}).order_by('-id').paginate(page=page, per_page=per_page)
         # paginated = queryset.paginate(page=1, per_page=50)
         lead_dataset = [obj.display_min() for obj in queryset.items]
         temp = UserController.get_user_childs(
