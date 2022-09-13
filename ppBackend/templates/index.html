@@ -24,13 +24,12 @@
     <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='js/modernizr.min.js') }}" rel="stylesheet" type="text/css" />
-            <!-- jQuery  -->
-            <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <!-- jQuery  -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 
-    
+
     <script src="{{ url_for('static', filename='plugins/moment/moment.js') }}"></script>
-    <link
-        href="{{ url_for('static', filename='plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}"
+    <link href="{{ url_for('static', filename='plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css') }}"
         rel=”stylesheet”>
     <script
         src="{{ url_for('static', filename='plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js') }}"> </script>
@@ -38,10 +37,10 @@
     <script>
         const TokenObj = JSON.parse(sessionStorage.getItem('TokenObj'))
     </script>
-        {{ moment.include_moment() }}
+    {{ moment.include_moment() }}
     <script>
         response_code = parseInt("{{response_code}}")
-        
+
         {% if response_code == 401 %}
         document.location = "/"
         {% endif %}
@@ -68,7 +67,7 @@
                 <!-- Image logo -->
                 <a href="index.html" class="logo">
                     <span>
-                        <img src="{{url_for('static', filename='images/logopp.png')}}" alt="" height="50">
+                        <img src="{{url_for('static', filename='images/logopp.png')}}" alt="" height="80">
                     </span>
                     <i>
                         <img src="{{url_for('static', filename='images/logopp.png')}}" alt="" height="28">
@@ -92,7 +91,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
-                                <i class="mdi mdi-bell"></i>
+                                <i class=" mdi mdi-bell-outline"></i>
                                 <span class="badge up bg-success"></span>
                             </a>
 
@@ -100,7 +99,7 @@
 
                         <li>
                             <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
-                                <i class="mdi mdi-email"></i>
+                                <i class="mdi mdi-gmail"></i>
                                 <span class="badge up bg-danger"></span>
                             </a>
                         </li>
@@ -136,63 +135,56 @@
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
                     <ul id="sidebar-menu-item">
-                        <li class="menu-title">Navigation</li>
+                        <li class="text-center menu-title">PropPioneers.com</li>
+                        <li class="text-center menu-arrow">خواب سے تعبیر تک</li>
                         <li>
-                            <a href="/home" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span> Dashboard
+                            <a href="/home" class="waves-effect"><i class=" mdi mdi-blur"></i><span> Dashboard
                                 </span></a>
                         </li>
                         <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> Leads </span> <span
-                                    class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="waves-effect"><i class="glyphicon glyphicon-send"></i>
+                                <span> Leads </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled" id="leads-menu">
-                                <li><a href="/api/leads/read">View Leads</a></li>
-                                <li><a href="/addlead">Add Leads</a></li>
-                                <li><a href="/api/leads/search">Find Leads</a></li>
+                                <li><a href="/api/leads/read"><i class="mdi mdi-bullseye"></i>View Leads</a></li>
+                                <li><a href="/addlead"><i class="mdi mdi-bookmark-plus-outline"></i> Add Leads</a></li>
+                                <li><a href="/api/leads/search"> <i class="mdi mdi-account-search"></i> Find Leads</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="">
+                            <a href="/api/follow_ups/read" class="waves-effect"><i
+                                    class="glyphicon glyphicon-list-alt"></i> <span> To Do List </span></a>
+                        </li>
+                        <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="ti-user"></i> <span> Clients
+                                </span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled">
+                                <li><a href="#"><i class="mdi mdi-account-card-details"></i> View Cliets</a></li>
+                                <li><a href="#"><i class="mdi mdi-account-multiple-plus"></i> Add Client</a></li>
                             </ul>
                         </li>
                         <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> To Do List </span> <span
-                                    class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-city"></i> <span>
+                                    Projects </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
-                                <li><a href="/api/follow_ups/read">View Follow Ups</a></li>
+                                <li><a href="#"><i class="mdi mdi-bible"></i> Add Project</a></li>
+                                <li><a href="#"><i class="mdi mdi-account-settings"></i> Staff</a></li>
                             </ul>
                         </li>
                         <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> Clients </span> <span
-                                    class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-opencart"></i> <span>
+                                    Inventory </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
-                                <li><a href="#">View Cliets</a></li>
-                                <li><a href="#">Add Client</a></li>
+                                <li><a href="#"><i class="mdi mdi-cart-plus"></i> Add Inventory</a></li>
+                                <li><a href="#"><i class=" ti-shopping-cart-full"></i> View Inventory</a></li>
                             </ul>
                         </li>
                         <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> Projects </span> <span
-                                    class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);" class="waves-effect"><i class=" mdi mdi-chart-bar"></i>
+                                <span> Reports </span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled">
-                                <li><a href="#">Add Project</a></li>
-                                <li><a href="#">Staff</a></li>
-                            </ul>
-                        </li>
-                        <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> Inventory </span> <span
-                                    class="menu-arrow"></span></a>
-                            <ul class="list-unstyled">
-                                <li><a href="#">Add Inventory</a></li>
-                                <li><a href="#">View Inventory</a></li>
-                            </ul>
-                        </li>
-                        <li class="has_sub">
-                            <a href="javascript:void(0);" class="waves-effect"><i
-                                    class="mdi mdi-layers widget-one-icon"></i> <span> Reports </span> <span
-                                    class="menu-arrow"></span></a>
-                            <ul class="list-unstyled">
-                                <li><a href="/api/reports/kpisales">KPI Sales</a></li>
-                                <li><a href="#">Activity Sales</a></li>
+                                <a href="/api/reports/kpisales"><i class="mdi mdi-chart-line"></i>KPI Sales</a>
+                                <!-- <li><a href="#"><i class=" ti-money"></i> Activity Sales</a></li> -->
                             </ul>
                         </li>
 
@@ -257,21 +249,21 @@
         $("#user-name-h").append('<h5>' + TokenObj.user.name + '</h5>')
     </script>
 
-        <!-- jQuery  -->
-        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/detect.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/fastclick.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery.blockUI.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/waves.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery.slimscroll.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/jquery.scrollTo.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='plugins/switchery/switchery.min.js') }}"></script>
+    <!-- jQuery  -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/detect.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fastclick.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.blockUI.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/waves.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.slimscroll.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.scrollTo.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/switchery/switchery.min.js') }}"></script>
 
     <!-- Counter js  -->
     <script src="{{ url_for('static', filename='plugins/waypoints/jquery.waypoints.min.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/counterup/jquery.counterup.min.js') }}"></script>
-        
+
     <!-- Tooltipster js -->
     <script src="{{ url_for('static', filename='plugins/tooltipster/tooltipster.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='pages/jquery.tooltipster.js') }}"></script>
