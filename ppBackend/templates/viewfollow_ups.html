@@ -128,12 +128,6 @@
                                             </a>
                                         </li>
                                         <li class="">
-                                            <a href="#next7day" data-toggle="tab" aria-expanded="false">
-                                                <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
-                                                <span class="hidden-xs">Next 7 days</span>
-                                            </a>
-                                        </li>
-                                        <li class="">
                                             <a href="#all" data-toggle="tab" aria-expanded="false">
                                                 <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                 <span class="hidden-xs">All</span>
@@ -148,6 +142,7 @@
                                                 <table id="datatable" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
+                                                            <th>ID</th>
                                                             <th>#</th>
                                                             <th>Task</th>
                                                             <th>Deadline</th>
@@ -162,6 +157,7 @@
                                                     <tbody id="lead-detail">
                                                         {% for obj in response_data['overdue'] %}
                                                         <tr>
+                                                            <td>{{obj._id}}</td>
                                                             <td>{{obj.lead.lead_id}}</td>
                                                             <td>{{obj.next_task}}</td>
                                                             <td>{{obj.deadline}}</td>
@@ -169,7 +165,7 @@
                                                             <td>{{obj.project}}</td>
                                                             <td>{{obj.user.name}}</td>
                                                             <td>
-                                                            {% for number in obj.lead.phone_number%}
+                                                                {% for number in obj.lead.phone_number%}
                                                                 <a href="tel:{{number}}">{{number}}</a>
                                                                 {% endfor %}
                                                             </td>
@@ -190,10 +186,10 @@
                                         <div class="tab-pane" id="today">
                                             <div class="card-box table-responsive">
 
-                                                <table id="datatable-buttons"
-                                                    class="table table-striped table-bordered">
+                                                <table id="datatable" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
+                                                            <th>ID</th>
                                                             <th>#</th>
                                                             <th>Task</th>
                                                             <th>Deadline</th>
@@ -209,6 +205,7 @@
                                                     <tbody id="lead-detail">
                                                         {% for obj in response_data['today'] %}
                                                         <tr>
+                                                            <td>{{obj._id}}</td>
                                                             <td>{{obj.lead.lead_id}}</td>
                                                             <td>{{obj.next_task}}</td>
                                                             <td>{{obj.deadline}}</td>
@@ -216,7 +213,7 @@
                                                             <td>{{obj.project}}</td>
                                                             <td>{{obj.user.name}}</td>
                                                             <td>
-                                                            {% for number in obj.lead.phone_number%}
+                                                                {% for number in obj.lead.phone_number%}
                                                                 <a href="tel:{{number}}">{{number}}</a>
                                                                 {% endfor %}
                                                             </td>
@@ -237,10 +234,10 @@
                                         <div class="tab-pane" id="tomorrow">
                                             <div class="card-box table-responsive">
 
-                                                <table id="datatable-buttons"
-                                                    class="table table-striped table-bordered">
+                                                <table id="datatable" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
+                                                            <th>ID</th>
                                                             <th>#</th>
                                                             <th>Task</th>
                                                             <th>Deadline</th>
@@ -256,6 +253,7 @@
                                                     <tbody id="lead-detail">
                                                         {% for obj in response_data['tomorrow'] %}
                                                         <tr>
+                                                            <td>{{obj._id}}</td>
                                                             <td>{{obj.lead.lead_id}}</td>
                                                             <td>{{obj.next_task}}</td>
                                                             <td>{{obj.deadline}}</td>
@@ -263,54 +261,7 @@
                                                             <td>{{obj.project}}</td>
                                                             <td>{{obj.user.name}}</td>
                                                             <td>
-                                                            {% for number in obj.lead.phone_number%}
-                                                                <a href="tel:{{number}}">{{number}}</a>
-                                                                {% endfor %}
-                                                            </td>
-                                                            <td>
-                                                                <a
-                                                                    href="javascript:viewFollowup('{{obj._id}}','{{obj.lead.first_name}}','{{obj.lead.lead_id}}');"><i
-                                                                        class="mdi mdi-comment-outline"></i></a>
-                                                                <a href="javascript:addFollowup('{{obj._id}}');"><i
-                                                                        class="glyphicon glyphicon-plus"></i></a>
-                                                                <p>TLW: {{obj.follow_count}}</p>
-                                                            </td>
-                                                        </tr>
-                                                        {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="next7day">
-                                            <div class="card-box table-responsive">
-
-                                                <table id="datatable-buttons"
-                                                    class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Task</th>
-                                                            <th>Deadline</th>
-                                                            <th>Client</th>
-                                                            <th>Project</th>
-                                                            <th>Assigned To</th>
-                                                            <th>Phone</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-
-
-                                                    <tbody id="lead-detail">
-                                                        {% for obj in response_data['next7'] %}
-                                                        <tr>
-                                                            <td>{{obj.lead.lead_id}}</td>
-                                                            <td>{{obj.next_task}}</td>
-                                                            <td>{{obj.deadline}}</td>
-                                                            <td>{{obj.lead.first_name}}</td>
-                                                            <td>{{obj.project}}</td>
-                                                            <td>{{obj.user.name}}</td>
-                                                            <td>
-                                                            {% for number in obj.lead.phone_number%}
+                                                                {% for number in obj.lead.phone_number%}
                                                                 <a href="tel:{{number}}">{{number}}</a>
                                                                 {% endfor %}
                                                             </td>
@@ -331,10 +282,10 @@
                                         <div class="tab-pane" id="all">
                                             <div class="card-box table-responsive">
 
-                                                <table id="datatable-buttons"
-                                                    class="table table-striped table-bordered">
+                                                <table id="datatable" class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
+                                                            <th>ID</th>
                                                             <th>#</th>
                                                             <th>Task</th>
                                                             <th>Deadline</th>
@@ -350,6 +301,7 @@
                                                     <tbody id="lead-detail">
                                                         {% for obj in response_data['all'] %}
                                                         <tr>
+                                                            <td>{{obj._id}}</td>
                                                             <td>{{obj.lead.lead_id}}</td>
                                                             <td>{{obj.next_task}}</td>
                                                             <td>{{obj.deadline}}</td>
@@ -357,7 +309,7 @@
                                                             <td>{{obj.project}}</td>
                                                             <td>{{obj.user.name}}</td>
                                                             <td>
-                                                            {% for number in obj.lead.phone_number%}
+                                                                {% for number in obj.lead.phone_number%}
                                                                 <a href="tel:{{number}}">{{number}}</a>
                                                                 {% endfor %}
                                                             </td>
@@ -381,9 +333,149 @@
                         </div>
                     </div>
                 </div>
+                {% if response_data.userlevel < 4 %} <div class="row">
+                    <button id="transfershow" class="applyBtn btn btn-sm">Assign</button>
+                    <div id="transfer-sec" class="row" style=" display:none">
+                        <div class="col-sm-6">
+                            <div class="card-box">
+                                <div class="row">
+                                    <form class="form-horizontal" action="" method="POST" id="follow_up_form">
+
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Assign To *</label>
+                                                <div class="col-sm-10">
+                                                    <select id="transfer_to" class="form-control" required
+                                                        name="transfer_to" title="transfer_to">
+                                                        {% for user in response_data['all_users'] %}
+                                                        <option value="{{user[0]}}">{{user[1]}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h4 class="page-title">Current Task</h4>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Type *</label>
+                                                <div class="col-sm-10">
+                                                    <select id="type" class="form-control" required name="type"
+                                                        title="type">
+                                                        <option value=""></option>
+                                                        <option value="Call">Call</option>
+                                                        <option value="Meeting">Meeting</option>
+                                                        <option value="Email">Email</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Sub Type *</label>
+                                                <div class="col-sm-10">
+                                                    <select id="sub_type" class="form-control" required name="sub_type"
+                                                        title="sub_type">
+                                                        <option value=""></option>
+                                                        <option value="SMS">SMS</option>
+                                                        <option value="Call_attempt">Call Attempt</option>
+                                                        <option value="Followed_up">Followed Up</option>
+                                                        <option value="Whatsapp_call">Whatsapp call</option>
+                                                        <option value="Whatsapp_message">Whatsapp Message</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <input id="lead_status" type="hidden" name="lead_status" value="Interested">
+                                            <input id="completion_date" type="hidden" name="completion_date" value="">
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Comment*</label>
+                                                <div class="col-sm-10">
+                                                    <textarea id="comment" class="form-control" required title="comment"
+                                                        name="comment"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <h4 class="page-title">Next Follow up</h4>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Next Task *</label>
+                                                    <div class="col-sm-10">
+                                                        <select id="next_task" class="form-control" required
+                                                            name="next_task" title="Next Task">
+                                                            <option value=""></option>
+                                                            <option value="DoNothing">Do Nothing</option>
+                                                            <option value="ContactClient">Contact Client</option>
+                                                            <option value="FollowUp">Follow Up</option>
+                                                            <option value="ReceiveTokenPayment">Receive Token Payment
+                                                            </option>
+                                                            <option value="MeetClient">Meet Client</option>
+                                                            <option value="ArrangeMeeting">Arrange Meeting</option>
+                                                            <option value="ReceivePartialDownPayment">Receive Partial
+                                                                Down
+                                                                Payment</option>
+                                                            <option value="ReceiveCompleteDownPayment">Receive Complete
+                                                                Down
+                                                                Payment</option>
+                                                            <option value="SignSaleAgreement">Sign Sale Agreement
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Project</label>
+                                                    <div class="col-sm-10">
+                                                        <div class="col-sm-10">
+                                                            <input id="next_project" type="text" class="form-control"
+                                                                title="Project" name="next_project" value="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Deadline</label>
+                                                    <div class="col-sm-10">
+                                                        <input id="next_deadline" type="text"
+                                                            class="form-control datetime-picker" required title="next"
+                                                            name="next_deadline" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Level*</label>
+                                                    <div class="col-sm-10">
+                                                        <select id="lead_level" class="form-control" required
+                                                            name="lead_level" title="lead_level">
+                                                            <option value=""></option>
+                                                            <option value="AtomBomb">Atom-Bomb</option>
+                                                            <option value="Hot">Hot</option>
+                                                            <option value="Moderate">Moderate</option>
+                                                            <option value="Cold">Cold</option>
+                                                            <option value="SubZero">Sub-Zero</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button id="transferbtn" class="applyBtn btn btn-sm btn-success"
+                                                type="submit">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
             </div> <!-- end col -->
         </div>
-
     </div> <!-- container -->
 </div> <!-- content -->
 </div>
@@ -607,43 +699,40 @@
 
 {% block scriptfooter %}
 
-<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.bootstrap.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.buttons.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/jszip.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/pdfmake.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/vfs_fonts.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.html5.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/buttons.print.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedHeader.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.keyTable.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.responsive.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/responsive.bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.scroller.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.colVis.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/datatables/dataTables.fixedColumns.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables/datatables.min.js') }}"></script>
 <script src="{{ url_for('static', filename='plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
-<!-- Modal-Effect -->
-<script src="{{ url_for('static', filename='plugins/custombox/js/custombox.min.js') }}"></script>
-<script src="{{ url_for('static', filename='plugins/custombox/js/legacy.min.js') }}"></script>
-
 <!-- init -->
-<script src="{{ url_for('static', filename='pages/jquery.datatables.init.js') }}"></script>
 <script src="{{ url_for('static', filename='pages/jquery.form-pickers.init.js') }}"></script>
 
 <script>
+    var tables = [];
+    console.log($("table"))
     $("table").each(function () {
-        $(this).DataTable({
+        tables.push($(this).DataTable({
+            "dom": 'B<"clear">rt',
             "bFilter": true,
             "aaSorting": [],
-            "pageLength": 100
-        });
-
+            "pageLength": 100,
+            // "stateSave": true,
+            "processing": true,
+            "select": { "style": 'multi+shift' },
+            "columnDefs": [
+                {
+                    "target": 0,
+                    "visible": false,
+                    "searchable": false,
+                }
+            ],
+            "ordering": false,
+            "buttons": [
+                "selectAll",
+                "selectNone"
+            ],
+        }));
     })
     // TableManageButtons.init();
-
+console.log(tables)
     $(".datetime-picker").datetimepicker({
         format: 'YYYY-MM-DD hh:mm:ss'
     });
@@ -675,6 +764,116 @@
 
     $("#yesterday").append(output);
     $("#radio1").attr('value', output);
+
+
+    $('#transfershow').click(function () {
+
+        var x = document.getElementById("transfer-sec");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    });
+
+    const searchFormDOM = $('#searchForm')
+    searchFormDOM.submit(function (event) {
+        event.preventDefault();
+        let formData = {}
+        searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
+        // console.log(formData, "formData")
+        $.ajax('/api/leads/read', {
+            method: 'POST',
+            data: formData,
+            dataType: "json",
+            encode: true,
+            success: function (data) {
+                if (data.response_code == 200) {
+                    console.log(data);
+                    table.clear()
+                    table.draw()
+                    for (var i in data.response_data.data) {
+                        var numbers = [];
+                        for (var j in data.response_data.data[i].phone_number) {
+                            numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
+                        }
+                        table.row.add([
+                            `${data.response_data.data[i].id}`,
+                            `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
+                            `${data.response_data.data[i].first_name}`,
+                            `${data.response_data.data[i].assigned_to}`,
+                            `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+                            `${data.response_data.data[i].project}`,
+                            `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
+                    <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
+                  </span>`,
+                            `${numbers.toString()}`,
+                            `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
+                        class="mdi mdi-comment-outline"></i></a>
+                    <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
+                    TLW: ${data.response_data.data[i].followup_count}`,
+                        ]).draw();
+                    };
+                    $("#paginate-number").text(`${data.response_data.pagination.page}`)
+                    if (data.response_data.pagination.has_next) {
+                        $("#paginate-next-btn").attr('href', `javascript:pagination(${data.response_data.pagination.next_num})`)
+                        $("#paginate-next-btn").removeClass('paginate_button freeze-btn')
+                    }
+                    else {
+                        $("#paginate-next-btn").addClass('paginate_button freeze-btn')
+                    }
+
+                    if (data.response_data.pagination.has_prev) {
+                        $("#paginate-prev-btn").attr('href', `javascript:pagination(${data.response_data.pagination.prev_num})`)
+                        $("#paginate-prev-btn").removeClass('paginate_button freeze-btn')
+                    }
+                    else {
+                        $("#paginate-prev-btn").addClass('paginate_button freeze-btn')
+                    }
+                }
+            }
+        })
+    })
+
+    $("#follow_up_form").submit(function (event) {
+        $('#transferbtn').attr("disabled", true);
+        var leads_id = [];
+        for (var j = 0; j < 4; j++) {
+        for (var i = 0; i < tables[j].rows('.selected').data().length; i++) {
+            leads_id.push(tables[j].rows('.selected').data()[i][0])
+        }}
+        var tmp = JSON.stringify(leads_id);
+        var formData = {
+            lead: tmp,
+            transfer_to: $('#transfer_to').val(),
+            type: $("#type").val(),
+            sub_type: $("#sub_type").val(),
+            lead_status: $("#lead_status").val(),
+            completion_date: $("#completion_date").val(),
+            comment: $("#comment").val(),
+            next_task: $("#next_task").val(),
+            next_deadline: $("#next_deadline").val(),
+            lead_level: $("#lead_level").val()
+        };
+        $.ajax({
+            type: "POST",
+            url: "/api/leads/leadtransfer",
+            data: formData,
+            dataType: "json",
+            encode: true,
+        }).done(function (data) {
+            console.log('submitted')
+            console.log(data.response_code);
+            if (data.response_code == 200) {
+                alert('Transfer Successful')
+                setTimeout(function () {// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 300);
+            }
+        });
+        event.preventDefault();
+    });
+
 
     const addFollowupFormDOM = $("#addFollowupForm")
     addFollowupFormDOM.submit(function (event) {

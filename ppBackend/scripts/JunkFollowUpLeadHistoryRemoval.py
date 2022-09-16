@@ -54,9 +54,9 @@ def junk_follow_up_lead_history_removal(run=False):
         # print("string", string)
         data = {}
         count = 0
-        data['transfer_to'] = '619b5e56360643a46baf381c'
+        data['transfer_to'] = '6253cce240d74a484aff4cd9'
 
-        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'619b5e56360643a46baf381c'})
+        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'619b5e04360643a46baf381b', "created_by":'619dd021945a75460afc2213'})
         for lead in leadh:
             followup = FollowUpController.read_lead_follow(data = {'lead':lead['id'], 'name':'', 'ref':''})
             total = len(followup['response_data'][0])
@@ -79,7 +79,7 @@ def junk_follow_up_lead_history_removal(run=False):
             # leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
             # leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
             # leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
-            # leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
+            leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
             # leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
             leads[constants.LEAD__TRANSFERED] = False
             # leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()

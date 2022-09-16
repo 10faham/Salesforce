@@ -86,4 +86,5 @@ def login_user_view(data):
 @decorators.is_authenticated
 @decorators.keys_validator()
 def logout_user_view(_):
-    return UserController.logout_controller()
+    res = UserController.logout_controller()
+    return render_template("logout.html", **res)

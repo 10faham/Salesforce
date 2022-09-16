@@ -92,14 +92,14 @@ class LeadsController(Controller):
             per_page = 50
 
         if data.get('client_name'):
-            filter[constants.LEAD__FIRST_NAME] = data.get('client_name')
+            filter[constants.LEAD__FIRST_NAME + '__in'] = data.get('client_name')
 
         if data.get('lead_id'):
             filter[constants.LEAD__ID] = data.get('lead_id')
 
         if data.get('phone_number'):
             filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
-            
+
         user_ids = [id[constants.ID] for id in user_childs]
         filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
         queryset = cls.db_read_records(read_filter={**filter}).order_by('-id').paginate(page=page, per_page=per_page)
@@ -253,8 +253,8 @@ class LeadsController(Controller):
             constants.LEAD__ASSIGNED_BY: common_utils.current_user(), constants.LEAD__TRANSFERED: True}
             res = LeadsController.update_controller(update_filter)
 
-            followup = FollowUpController.read_lead_follow(data = {'lead':str(lead[constants.ID])})
-            for follow in followup['response_data']:
+            followup = FollowUpController.read_lead_follow(data = {'lead':str(lead[constants.ID]), 'name':"", 'ref':""})
+            for follow in followup['response_data'][0]:
                 followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
                   constants.ID: follow[constants.ID]}
                 res = FollowUpController.update_controller(followup_updatedata)

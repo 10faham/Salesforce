@@ -52,19 +52,21 @@ class FollowUpController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__gte"] = datetime.strptime(datefrom, config.FILTER_DATETIME_FORMAT)
-            filter[constants.FOLLOW_UP__NEXT_DEADLINE+"__lte"] = datetime.strptime(dateto, config.FILTER_DATETIME_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE +
+                   "__gte"] = datetime.strptime(datefrom, config.FILTER_DATETIME_FORMAT)
+            filter[constants.FOLLOW_UP__NEXT_DEADLINE +
+                   "__lte"] = datetime.strptime(dateto, config.FILTER_DATETIME_FORMAT)
 
         if data.get(constants.LEAD__ASSIGNED_TO):
-            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            user_childs = [UserController.get_user(
+                data.get(constants.LEAD__ASSIGNED_TO))]
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
-        
+
         user_ids = [str(id[constants.ID]) for id in user_childs]
         filter[constants.FOLLOW_UP__ASSIGNED_TO+"__in"] = user_ids
-        
-        
+
         followup_dataset = []
         followup_data = {}
         overdue = []
@@ -73,7 +75,8 @@ class FollowUpController(Controller):
         next7 = []
         all = []
 
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
+        queryset = cls.db_read_records(
+            read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
         followup_dataset = [obj for obj in queryset]
         # temp = {obj['_id']:{'data':obj} for obj in queryset}
         # lead_id = [temp[obj]['data']['_id'] for obj in temp]
@@ -81,7 +84,7 @@ class FollowUpController(Controller):
         # lead_data = LeadsController.read_lead_min(lead_id)
         # for obj in lead_data:
         #     temp[obj['id']].update({'lead':obj})
-            
+
         for item in followup_dataset:
             # print(datetime.now().date())
             # print(item['data']['next_deadline'].date())
@@ -90,9 +93,9 @@ class FollowUpController(Controller):
                 overdue.append(item)
             if item['deadline'].date() == now:
                 today.append(item)
-            if item['deadline'].date() == (now + timedelta(days = 1)):
+            if item['deadline'].date() == (now + timedelta(days=1)):
                 tomorrow.append(item)
-            if item['deadline'].date() > now and item['deadline'].date() <= (now + timedelta(days = 7)):
+            if item['deadline'].date() > now and item['deadline'].date() <= (now + timedelta(days=7)):
                 next7.append(item)
             all.append(item)
         # followup_dataset.append([user.name, tmp, tmp_follow])
@@ -103,14 +106,37 @@ class FollowUpController(Controller):
             #     lead_data.append(FollowUpController.read_count(['id']))
             # lead_dataset.append(
             #     [str(user.pk), user[constants.USER__NAME], lead_data])
-        user = common_utils.current_user()
+        temp = UserController.get_user_childs(
+            user=common_utils.current_user(), return_self=True)
+        all_users = []
+        for id in temp:
+            all_users.append([str(id[constants.ID]) ,id[constants.USER__NAME]])
         # followup_data['followup'] = followup_dataset
         followup_data['overdue'] = overdue
         followup_data['today'] = today
         followup_data['tomorrow'] = tomorrow
         followup_data['next7'] = next7
         followup_data['all'] = all
-        followup_data['usernamne'] = common_utils.current_user()[constants.USER__NAME]
+        followup_data['usernamne'] = common_utils.current_user()[
+            constants.USER__NAME]
+        
+        followup_data['username'] = common_utils.current_user()[
+            constants.USER__NAME]
+        followup_data['userlevel'] = common_utils.current_user()[
+            constants.USER__ROLE][constants.USER__ROLE__ROLE_ID]
+        followup_data['all_users'] = all_users
+        # followup_data['pagination'] = {
+        #     "next_num": queryset.next_num,
+        #     "page": queryset.page,
+        #     "pages": queryset.pages,
+        #     "per_page": queryset.per_page,
+        #     "prev_num": queryset.prev_num,
+        #     "total": queryset.total,
+        #     "has_next": queryset.has_next,
+        #     "has_prev": queryset.has_prev
+        # }
+        # followup_data['filter_fields'] = filter_fields
+        # followup_data['filter_data'] = filter_data
         # followup_dataset.append(user.name)
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
@@ -164,7 +190,7 @@ class FollowUpController(Controller):
         #     followup["data"] = followup["data"].display()
         temp = [obj for obj in queryset]
         return temp
-    
+
     @classmethod
     def suspend_controller(cls, data):
         current_user = common_utils.current_user()

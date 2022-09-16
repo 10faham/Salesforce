@@ -349,7 +349,6 @@
                     </div>
                   </form>
                 </div>
-                </form>
               </div>
             </div>
           </div>
@@ -584,30 +583,14 @@
   });
 
   var table = $('#datatable').DataTable({
-    "dom": 'B<"clear">frt',
+    "dom": 'B<"clear">rt',
     "bFilter": true,
     "aaSorting": [],
     "pageLength": 100,
     // "stateSave": true,
     "processing": true,
     "select": { "style": 'multi+shift' },
-    "searchPanes": {
-      "initCollapsed": true,
-      "viewTotal": true
-    },
     "columnDefs": [
-      {
-        "searchPanes": {
-          "show": true
-        },
-        "targets": [3, 5, 6]
-      },
-      {
-        "searchPanes": {
-          "show": false
-        },
-        "targets": [0, 1, 2, 4, 7, 8]
-      },
       {
         "target": 0,
         "visible": false,
@@ -620,7 +603,6 @@
       "selectNone"
     ],
   });
-
   $('#transfershow').click(function () {
 
     var x = document.getElementById("transfer-sec");

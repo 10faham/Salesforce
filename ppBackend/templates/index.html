@@ -251,7 +251,9 @@
                                             <li><a href=#>Edit User</a></li>
                                         </ul>
                                     </li>`)
-            $('#leads-menu').append('<li><a href=/api/leads/bulktransfer>Bulk transfer</a></li>')
+                                }
+        if (TokenObj.user.role.user_role_id == 1) {
+                                    $('#leads-menu').append('<li><a href=/api/leads/bulktransfer>Bulk transfer</a></li>')
             $('#leads-menu').append('<li><a href=/api/leads/bulkadd>Bulk Upload</a></li>')
         }
         $("#user-name-h").append('<h5>' + TokenObj.user.name + '</h5>')
