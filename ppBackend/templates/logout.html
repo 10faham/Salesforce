@@ -1,109 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
-        <meta name="author" content="Coderthemes">
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="assets/images/favicon.ico">
-        <!-- App title -->
-        <title>Zircos - Responsive Admin Dashboard Template</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
 
-        <!-- App css -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/core.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/components.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/icons.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/pages.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/menu.css" rel="stylesheet" type="text/css" />
-        <link href="assets/css/responsive.css" rel="stylesheet" type="text/css" />
+    <!-- App favicon -->
+    <link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="shortcut icon" />
 
-        <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+    <!-- App title -->
+    <title>SalesForce - PropPioneers</title>
 
-        <script src="assets/js/modernizr.min.js"></script>
+    <!-- App css -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/core.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/components.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/icons.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/pages.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='/js/modernizr.min.js') }}" rel="stylesheet" type="text/css" />
 
-    </head>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
 
-    <body class="bg-transparent">
 
-        <!-- HOME -->
-        <section>
-            <div class="container-alt">
-                <div class="row">
-                    <div class="col-sm-12">
+</head>
 
-                        <div class="wrapper-page">
+<body class="bg-transparent">
 
-                            <div class="m-t-40 account-pages">
-                                <div class="text-center account-logo-box">
-                                    <h2 class="text-uppercase">
-                                        <a href="index.html" class="text-success">
-                                            <span><img src="assets/images/logo.png" alt="" height="36"></span>
-                                        </a>
-                                    </h2>
-                                    <!--<h4 class="text-uppercase font-bold m-b-0">Sign In</h4>-->
-                                </div>
-                                <div class="account-content">
-                                    <div class="text-center m-b-20">
-                                        <div class="m-b-20">
-                                            <div class="checkmark">
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                                                  <circle class="path circle" fill="none" stroke="#4bd396" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
-                                                  <polyline class="path check" fill="none" stroke="#4bd396" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                                                </svg>
-                                            </div>
-                                        </div>
+    <!-- HOME -->
+    <section>
+        <div class="container-alt">
+            <div class="row">
+                <div class="col-sm-12">
 
-                                        <h3>See You Again !</h3>
+                    <div class="logo text-center m-b-20">
+                        <img src="{{url_for('static', filename='images/logopp.png')}}" class="img_main">
+                        <h3>PropPioneers.com</h3>
+                        <h3>خواب سے تعبیر تک</h3>
+                    </div>
 
-                                        <p class="text-muted font-13 m-t-10"> You are now successfully sign out. </p>
-                                    </div>
-
+                    <div class="account-content">
+                        <div class="text-center m-b-20">
+                            <div class="m-b-20">
+                                <div class="checkmark">
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                                        <circle class="path circle" fill="none" stroke="#4bd396" stroke-width="6"
+                                            stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                                        <polyline class="path check" fill="none" stroke="#4bd396" stroke-width="6"
+                                            stroke-linecap="round" stroke-miterlimit="10"
+                                            points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                                    </svg>
                                 </div>
                             </div>
-                            <!-- end card-box-->
-
-
-                            <div class="row m-t-30">
-                                <div class="col-sm-12 text-center">
-                                    <p class="text-muted">Return to <a href="page-login.html" class="text-primary m-l-5 m-r-5"><b>Log In</b></a> OR <a href="index.html" class="text-primary m-l-5"><b>Homepage</b></a></p>
-                                </div>
-                            </div>
-
+                            <h5>Successfully Logged Out</h5>
+                            <!-- <p class="text-muted font-13 m-t-10"> </p> -->
                         </div>
-                        <!-- end wrapper -->
 
                     </div>
                 </div>
+                <!-- end card-box-->
+
+                <div class="row m-t-30">
+                    <div class="col-sm-12 text-center">
+                        <p class="text-muted">A bit more to do ?
+                            <a href="/" class="text-primary m-l-5 m-r-5"><b>Login</b></a>
+                        </p>
+                    </div>
+                </div>
+
             </div>
-          </section>
-          <!-- END HOME -->
+            <!-- end wrapper -->
 
-        <script>
-            var resizefunc = [];
-        </script>
+        </div>
+        </div>
+        </div>
+    </section>
+    <!-- END HOME -->
 
-        <!-- jQuery  -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/detect.js"></script>
-        <script src="assets/js/fastclick.js"></script>
-        <script src="assets/js/jquery.blockUI.js"></script>
-        <script src="assets/js/waves.js"></script>
-        <script src="assets/js/jquery.slimscroll.js"></script>
-        <script src="assets/js/jquery.scrollTo.min.js"></script>
+    <script>
+        var resizefunc = [];
+    </script>
 
-        <!-- App js -->
-        <script src="assets/js/jquery.core.js"></script>
-        <script src="assets/js/jquery.app.js"></script>
+    <!-- jQuery  -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/detect.js"></script>
+    <script src="assets/js/fastclick.js"></script>
+    <script src="assets/js/jquery.blockUI.js"></script>
+    <script src="assets/js/waves.js"></script>
+    <script src="assets/js/jquery.slimscroll.js"></script>
+    <script src="assets/js/jquery.scrollTo.min.js"></script>
 
-    </body>
+    <!-- App js -->
+    <script src="assets/js/jquery.core.js"></script>
+    <script src="assets/js/jquery.app.js"></script>
+
+</body>
+
 </html>
