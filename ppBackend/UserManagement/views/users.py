@@ -29,6 +29,7 @@ def create_viewget(data):
 def create_view(data):
     return UserController.create_controller(data=data)
 
+
 @users_bp.route("/read", methods=["GET"])
 @decorators.is_authenticated
 @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
@@ -51,6 +52,7 @@ def read_view(data):
 def update_view(data):
     return UserController.update_controller(data=data)
 
+
 @users_bp.route("/suspend", methods=["POST"])
 @decorators.is_authenticated
 @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
@@ -61,6 +63,7 @@ def suspend_view(data):
     data = request.form
     res = UserController.suspend_controller(data=data)
     return render_template("view_user.html", **res)
+
 
 @users_bp.route("/", methods=["GET"])
 @decorators.logging
