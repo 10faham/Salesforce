@@ -707,7 +707,6 @@
 
 <script>
     var tables = [];
-    console.log($("table"))
     $("table").each(function () {
         tables.push($(this).DataTable({
             "dom": 'B<"clear">rt',
@@ -732,7 +731,6 @@
         }));
     })
     // TableManageButtons.init();
-console.log(tables)
     $(".datetime-picker").datetimepicker({
         format: 'YYYY-MM-DD hh:mm:ss'
     });
@@ -841,7 +839,7 @@ console.log(tables)
         for (var j = 0; j < 4; j++) {
         for (var i = 0; i < tables[j].rows('.selected').data().length; i++) {
             leads_id.push(tables[j].rows('.selected').data()[i][0])
-        }}
+        }};
         var tmp = JSON.stringify(leads_id);
         var formData = {
             lead: tmp,
