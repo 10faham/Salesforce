@@ -12,7 +12,8 @@ def register_scripts():
     from ppBackend.scripts import run_scripts
     run_scripts(execute_create_admin_user_if_not_exists=False, execute_phone_number_format_correction=False,
                 execute_update_id_field=False, execute_find_empty_leads=False,
-                execute_junk_follow_up_lead_history_removal=False, update_leads_execute=False, execute_find_missing = False)
+                execute_junk_follow_up_lead_history_removal=False, update_leads_execute=False, execute_find_missing=False, 
+                execute_report_generator=False)
     # Routing
     import ppBackend.urls
 

@@ -6,11 +6,11 @@ from ppBackend import app
 from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.LeadsManagement.controllers.LeadsHistoryController import LeadsHistoryController
-from ppBackend.generic.services.utils import constants, pipeline
+from ppBackend.generic.services.utils import common_utils, constants, pipeline
 
 
 
-def junk_follow_up_lead_history_removal(run=False):
+def Report_Generator(run=False):
     if not run:
         return
     with app.test_request_context():
@@ -55,34 +55,63 @@ def junk_follow_up_lead_history_removal(run=False):
         data = {}
         count = 0
         data['transfer_to'] = '6253cce240d74a484aff4cd9'
-
+        output = []
+        users = {
+            'Adeel Qureshi':0,
+            'Hafiz Taha':0,
+            'Irtiza Ahsan':0,
+            'Noor ul haq':0,
+            'Arshad':0,
+            'Taha Siddiqui':0,
+            'Anwar Sheikh':0
+        }
+        user_list = ['Adeel Qureshi','Hafiz Taha','Irtiza Ahsan','Noor ul haq','Arshad','Taha Siddiqui','Anwar Sheikh']
         leadh = LeadsController.db_read_records(read_filter={"assigned_to":'619b5e56360643a46baf381c', 
                                         "lead_comment":"NR", "updated_on__gte":1662854400000})
         for lead in leadh:
             followup = FollowUpController.read_lead_follow(data = {'lead':lead['id'], 'name':'', 'ref':''})
             total = len(followup['response_data'][0])
+            if total >= 3:
+                if followup['response_data'][0][1]['created_by'] in user_list:
+                    users[followup['response_data'][0][1]['created_by']] += 1
+                elif followup['response_data'][0][2]['created_by'] in user_list:
+                    users[followup['response_data'][0][2]['created_by']] += 1
+                else:
+                    user_list.append(followup['response_data'][0][2]['created_by'])
+                    users[followup['response_data'][0][2]['created_by']] = 1
             # transfer_to = str(followup['response_data'][0][total-1][constants.CREATED_BY].fetch()[constants.ID])
             count +=1
             print(count)
             for follow in followup['response_data'][0]:
-                followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
-                constants.ID: follow[constants.ID]}
-                res = FollowUpController.update_controller(followup_updatedata)
-            leads = {}
-            # leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
-            leads[constants.ID] = lead['id']
-            # leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]
-            leads[constants.LEAD__LEVEL] = lead['lead_level']
-            leads[constants.LEAD__FOLLOWUP_COUNT] = total
-            # leads[constants.LEAD__LAST_WORK] = res['response_data']['sub_type']
-            # leads[constants.LEAD__LAST_WORK_DATE] = res['response_data']['created_on']
-            # leads[constants.LEAD__FOLLOWUP_TYPE] = res['response_data']['type']
-            # leads[constants.LEAD__FOLLOWUP_NEXT_DEADLINE] = res['response_data']['next_deadline']
-            # leads[constants.LEAD__FOLLOWUP_NEXT_TASK] = res['response_data']['next_task']
-            # leads[constants.LEAD__PROJECT] = res['response_data']['next_project']
-            leads[constants.LEAD__ASSIGNED_TO] = data['transfer_to']
-            # leads[constants.LEAD__ASSIGNED_BY] = common_utils.current_user()
-            leads[constants.LEAD__TRANSFERED] = False
-            # leads[constants.LEAD__TRANSFERED_ON] = common_utils.get_time()
-            res = LeadsController.db_update_single_record(read_filter = {constants.ID:lead['id']}, update_filter = leads)
-            print(res)
+                tmp = []
+                tmp.append(count)
+                tmp.append(lead['lead_id'])
+                tmp.append(follow['follow_id'])
+                tmp.append(follow['created_by'])
+                tmp.append(follow['lead_level'])
+                tmp.append(common_utils.epoch_to_datetime(follow['created_on']))
+                tmp.append(follow['comment'][:20])
+                # print(tmp)
+                output.append(tmp)
+        with open('report.csv', 'a', encoding='UTF-8') as r:
+            for row in output:
+                r.write(str(row[0]))
+                r.write(',')
+                r.write(row[1])
+                r.write(',')
+                r.write(row[2])
+                r.write(',')
+                r.write(row[3])
+                r.write(',')
+                r.write(row[4])
+                r.write(',')
+                r.write(row[5])
+                r.write(',')
+                r.write(row[6].replace('\n',''))
+                r.write('\n')
+            for user in user_list:
+                r.write(user)
+                r.write(',')
+                r.write(str(users[user]))
+                r.write(',')
+            r.write('\n')
