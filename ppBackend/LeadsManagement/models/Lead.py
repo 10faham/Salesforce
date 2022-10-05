@@ -161,4 +161,5 @@ class Leads(models.Model):
             constants.LEAD__LAST_WORK_DATE: common_utils.epoch_to_datetime(self[constants.LEAD__LAST_WORK_DATE]),
             constants.LEAD__LAST_WORK: self[constants.LEAD__LAST_WORK],
             constants.LEAD__FOLLOWUP_COUNT: self[constants.LEAD__FOLLOWUP_COUNT],
+            'new': 'NEW' if self[constants.UPDATED_ON] == constants.LEAD__TRANSFERED else ''
         }

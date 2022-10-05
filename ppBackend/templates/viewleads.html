@@ -266,9 +266,9 @@
                     <h4 class="page-title">Current Task</h4>
                     <div class="col-sm-12">
                       <div class="form-group">
-                        <label class="col-sm-2 control-label">Type *</label>
+                        <label class="col-sm-2 control-label">Type</label>
                         <div class="col-sm-10">
-                          <select id="type" class="form-control" required name="type" title="type">
+                          <select id="type" class="form-control" name="type" title="type">
                             <option value=""></option>
                             <option value="Call">Call</option>
                             <option value="Meeting">Meeting</option>
@@ -279,9 +279,9 @@
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
-                        <label class="col-sm-2 control-label">Sub Type *</label>
+                        <label class="col-sm-2 control-label">Sub Type</label>
                         <div class="col-sm-10">
-                          <select id="sub_type" class="form-control" required name="sub_type" title="sub_type">
+                          <select id="sub_type" class="form-control" name="sub_type" title="sub_type">
                             <option value=""></option>
                             <option value="SMS">SMS</option>
                             <option value="Call_attempt">Call Attempt</option>
@@ -298,9 +298,9 @@
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
-                        <label class="col-sm-2 control-label">Comment*</label>
+                        <label class="col-sm-2 control-label">Comment</label>
                         <div class="col-sm-10">
-                          <textarea id="comment" class="form-control" required title="comment"
+                          <textarea id="comment" class="form-control" title="comment"
                             name="comment"></textarea>
                         </div>
                       </div>
@@ -309,9 +309,9 @@
                       <h4 class="page-title">Next Follow up</h4>
                       <div class="col-sm-12">
                         <div class="form-group">
-                          <label class="col-sm-2 control-label">Next Task *</label>
+                          <label class="col-sm-2 control-label">Next Task</label>
                           <div class="col-sm-10">
-                            <select id="next_task" class="form-control" required name="next_task" title="Next Task">
+                            <select id="next_task" class="form-control" name="next_task" title="Next Task">
                               <option value=""></option>
                               <option value="DoNothing">Do Nothing</option>
                               <option value="ContactClient">Contact Client</option>
@@ -319,10 +319,8 @@
                               <option value="ReceiveTokenPayment">Receive Token Payment</option>
                               <option value="MeetClient">Meet Client</option>
                               <option value="ArrangeMeeting">Arrange Meeting</option>
-                              <option value="ReceivePartialDownPayment">Receive Partial Down
-                                Payment</option>
-                              <option value="ReceiveCompleteDownPayment">Receive Complete Down
-                                Payment</option>
+                              <option value="ReceivePartialDownPayment">Receive Partial DownPayment</option>
+                              <option value="ReceiveCompleteDownPayment">Receive Complete DownPayment</option>
                               <option value="SignSaleAgreement">Sign Sale Agreement</option>
                             </select>
                           </div>
@@ -343,16 +341,15 @@
                         <div class="form-group">
                           <label class="col-sm-2 control-label">Deadline</label>
                           <div class="col-sm-10">
-                            <input id="next_deadline" type="text" class="form-control datetime-picker" required
-                              title="next" name="next_deadline" />
+                            <input id="next_deadline" type="text" class="form-control datetime-picker" title="next" name="next_deadline" />
                           </div>
                         </div>
                       </div>
                       <div class="col-sm-12">
                         <div class="form-group">
-                          <label class="col-sm-2 control-label">Level*</label>
+                          <label class="col-sm-2 control-label">Level</label>
                           <div class="col-sm-10">
-                            <select id="lead_level" class="form-control" required name="lead_level" title="lead_level">
+                            <select id="lead_level" class="form-control" name="lead_level" title="lead_level">
                               <option value=""></option>
                               <option value="AtomBomb">Atom-Bomb</option>
                               <option value="Hot">Hot</option>
