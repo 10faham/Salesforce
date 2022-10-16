@@ -60,8 +60,17 @@
           </div>
           <div class="col-xs-3">
             <div class="form-group">
-              <label class="col-sm-1 control-label">project</label>
-              <select class="form-control" name="Project" title="project">
+              <label class="col-sm-1 control-label">Project</label>
+              <select class="form-control" name="project" title="project">
+                {% if response_data['filter_data']['project'] %}
+                <option value="{{response_data['filter_data']['project']}}" selected>{{response_data['filter_data']['project']}}</option>
+                <option value="">All</option>
+              {% else %}
+                <option value=""></option>
+              {% endif %}
+                {% for obj in response_data['filter_fields']['project'] %}
+                <option value="{{obj}}">{{obj}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -69,6 +78,9 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Level</label>
               <select class="form-control" name="lead_level" title="lead_level">
+                {% if response_data['filter_data']['lead_level'] %}
+                <option value="{{response_data['filter_data']['lead_level']}}" selected>{{response_data['filter_data']['lead_level']}}</option>
+                {% endif %}
                 <option value="">All</option>
                 <option value="New">New</option>
                 {% for obj in response_data['filter_fields']['level'] %}
@@ -80,14 +92,19 @@
           <div class="col-xs-3">
             <div class="form-group">
               <label class="col-sm-6 control-label">Last Worked on</label>
-              <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work" />
+              <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work"/>
             </div>
           </div>
           <div class="col-xs-5">
             <div class="form-group">
               <label class="col-sm-5 control-label">Assigned To</label>
               <select class="form-control" name="assigned_to" title="assigned_to">
-                <option value="">Team {{response_data['username']}}</option>
+                {% if response_data['filter_data']['assigned_to'] %}
+                <option value="{{response_data['filter_data']['assigned_to']}}" selected>{{response_data['filter_data']['assigned_to_name']}}</option>
+                <option value="">All</option>
+                {% else %}
+                <option value="" selected>All</option>
+                {% endif %}
                 {% for user in response_data['all_users'] %}
                 <option value="{{user[0]}}">{{user[1]}}</option>
                 {% endfor %}
@@ -98,6 +115,9 @@
             <div class="form-group">
               <label class="col-sm-1 control-label">Task</label>
               <select class="form-control" name="Task" title="Task">
+                {% if response_data['filter_data']['Task'] %}
+                <option value="{{response_data['filter_data']['Task']}}" selected>{{response_data['filter_data']['Task']}}</option>
+                {% endif %}
                 <option value="">All</option>
                 {% for obj in response_data['filter_fields']['Task'] %}
                 <option value="{{obj}}">{{obj}}</option>
@@ -446,30 +466,12 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label class="col-sm-2 control-label">Status*</label>
-                      <div class="col-sm-10">
-                        <select class="form-control" required title="lead_status" name="lead_status">
-                          <option value=""></option>
-                          <option value="Interested">Interested</option>
-                          <option value="Not Interested">Not Interested</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
                       <label class="col-sm-2 control-label">Task Completion Date</label>
                       <div class="col-sm-10">
                         <div class="radio">
                           <input type="radio" name="completion_date" id="radio" value="" checked>
                           <label for="radio" id="today">
                             Today:
-                          </label>
-                        </div>
-                        <div class="radio">
-                          <input type="radio" name="completion_date" id="radio1" value="">
-                          <label for="radio1" id="yesterday">
-                            Yesterday:
                           </label>
                         </div>
                       </div>
@@ -597,6 +599,14 @@
     format: 'YYYY-MM-DD hh:mm:ss'
   });
 
+  if ("{{response_data['filter_data']['last_work']}}"){
+    $(".datetime-picker").val("{{response_data['filter_data']['last_work']}}")
+  }
+  
+  if ("{{response_data['filter_data']['date_start']}}"){
+    $('#reportrange span').html("{{response_data['filter_data']['date_start']}}" + ' to ' + "{{response_data['filter_data']['date_end']}}");
+  }
+  
   var table = $('#datatable').DataTable({
     "dom": 'B<"clear">rt',
     "bFilter": true,
@@ -699,7 +709,6 @@
       transfer_to: $('#transfer_to').val(),
       type: $("#type").val(),
       sub_type: $("#sub_type").val(),
-      lead_status: $("#lead_status").val(),
       completion_date: $("#completion_date").val(),
       comment: $("#comment").val(),
       next_task: $("#next_task").val(),
@@ -745,16 +754,6 @@
   $("#today").append(output);
   $("#radio").attr('value', output);
   var day = d.getDate() - 1;
-
-  var output = d.getFullYear() + '-' +
-    (('' + month).length < 2 ? '0' : '') + month + '-' +
-    (('' + day).length < 2 ? '0' : '') + day + ' ' +
-    (('' + hour).length < 2 ? '0' : '') + hour + ':' +
-    (('' + minute).length < 2 ? '0' : '') + minute + ':' +
-    (('' + second).length < 2 ? '0' : '') + second;
-
-  $("#yesterday").append(output);
-  $("#radio1").attr('value', output);
 
   const addFollowupFormDOM = $("#addFollowupForm")
   addFollowupFormDOM.submit(function (event) {

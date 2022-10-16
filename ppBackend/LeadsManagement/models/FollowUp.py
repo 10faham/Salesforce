@@ -27,7 +27,6 @@ class FollowUp(models.Model):
                 {"rule": "required"},
                 {"rule": "choices", "options": constants.FOLLOW_UP__LEVEL__LIST}],
             constants.FOLLOW_UP__STATUS: [
-                {"rule": "required"},
                 {"rule": "choices", "options": constants.FOLLOW_UP__STATUS__LIST}],
             constants.FOLLOW_UP__COMPLETION_DATE: [
                 {"rule": "required"}, 
@@ -62,7 +61,7 @@ class FollowUp(models.Model):
     type = db.StringField(required=True)
     sub_type = db.StringField(required=True)
     lead_level = db.StringField(required=True)
-    lead_status = db.StringField(required=True)
+    lead_status = db.StringField()
     completion_date = db.DateTimeField(required=True)
     comment = db.StringField(required=True)
     next_task = db.StringField(required=True)
@@ -91,7 +90,7 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__NEXT_COMMENT: self[constants.FOLLOW_UP__NEXT_COMMENT],
             constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.STATUS: self[constants.STATUS],
-            constants.CREATED_BY: self[constants.CREATED_BY].fetch().name,
+            constants.CREATED_BY: self[constants.CREATED_BY],
             constants.CREATED_ON: self[constants.CREATED_ON],
             constants.FOLLOW_UP__ASSIGNED_TO: self[constants.FOLLOW_UP__ASSIGNED_TO].fetch().name if self[constants.FOLLOW_UP__ASSIGNED_TO] else None,
         }

@@ -34,7 +34,7 @@ class Leads(models.Model):
             #                            }}],
             constants.LEAD__PROJECT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__SOURCE: [{"rule": "datatype", "datatype": str}],
-            constants.LEAD__STATUS: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD__STATUS__LIST}],
+            constants.LEAD__STATUS: [{"rule": "choices", "options": constants.LEAD__STATUS__LIST}],
             constants.LEAD__GENDER: [{"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
@@ -65,7 +65,7 @@ class Leads(models.Model):
     # address = db.DictField(db.StringField())
     project = db.StringField()
     lead_source = db.StringField()
-    lead_status = db.StringField(required=True)
+    lead_status = db.StringField()
     gender = db.StringField()
     country = db.StringField(required=True)
     city = db.StringField(required=True)

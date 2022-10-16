@@ -32,75 +32,102 @@
     <!-- Start content -->
     <div class="content">
         <div class="container">
-
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="page-title-box">
-                        <h4 class="page-title">View All Follow Ups</h4>
-                        <div class="clearfix"></div>
-                    </div>
+              <div class="col-xs-12">
+                <div class="page-title-box">
+                  <h4 class="page-title">View All Leads </h4>
+                  <div class="clearfix"></div>
                 </div>
+              </div>
             </div>
-            <!-- end row -->
+      
             <div class="row" id="filter">
-                <form action="/api/leads/read" method="POST" id="leads_date">
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="col-sm-5 control-label">Select Date</label>
-                            <div id="reportrange" class="pull-right form-control">
-                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                                <span></span>
-                                <input id="start" type="hidden" name="date_start" value="">
-                                <input id="end" type="hidden" name="date_end" value="">
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+              <form action="/api/leads/read" method="GET" id="leads_date">
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="col-sm-5 control-label">Select Date</label>
+                    <div id="reportrange" class="pull-right form-control">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span></span>
+                      <input id="start" type="hidden" name="date_start" value="">
+                      <input id="end" type="hidden" name="date_end" value="">
                     </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label">project</label>
-                            <select class="form-control" name="Project" title="project">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label">Level</label>
-                            <select class="form-control" name="lead_level" title="lead_level">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label">Deadline</label>
-                            <select class="form-control" name="deadline" title="deadline">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-5">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">Assigned To</label>
-                            <select class="form-control" name="assigned_to" title="assigned_to">
-                                <option value="">Team {{response_data['username']}}</option>
-                                {% for user in response_data['all_users'] %}
-                                <option value="{{user[0]}}">{{user[1]}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label">Task</label>
-                            <select class="form-control" name="Task" title="Task">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="text-right col-xs-4 submit-btn">
-                        <button class="applyBtn btn btn-sm btn-success" type="submit">Submit</button>
-                    </div>
-                </form>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label">Project</label>
+                    <select class="form-control" name="project" title="project">
+                        {% if response_data['filter_data']['project'] %}
+                          <option value="{{response_data['filter_data']['project']}}" selected>{{response_data['filter_data']['project']}}</option>
+                        {% else %}
+                          <option value=""></option>
+                        {% endif %}
+                      {% for obj in response_data['filter_fields']['project'] %}
+                      <option value="{{obj}}">{{obj}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label">Level</label>
+                    <select class="form-control" name="lead_level" title="lead_level">
+                      {% if response_data['filter_data']['lead_level'] %}
+                      <option value="{{response_data['filter_data']['lead_level']}}" selected>{{response_data['filter_data']['lead_level']}}</option>
+                      {% endif %}
+                      <option value="">All</option>
+                      <option value="New">New</option>
+                      {% for obj in response_data['filter_fields']['level'] %}
+                      <option value="{{obj}}">{{obj}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="col-sm-6 control-label">Last Worked on</label>
+                    <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work"/>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="form-group">
+                    <label class="col-sm-5 control-label">Assigned To</label>
+                    <select class="form-control" name="assigned_to" title="assigned_to">
+                      {% if response_data['filter_data']['assigned_to'] %}
+                      <option value="{{response_data['filter_data']['assigned_to']}}" selected>{{response_data['filter_data']['assigned_to_name']}}</option>
+                      <option value="">All</option>
+                      {% else %}  
+                      <option value="" selected>All</option>
+                      {% endif %}
+                      {% for user in response_data['all_users'] %}
+                      <option value="{{user[0]}}">{{user[1]}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label">Task</label>
+                    <select class="form-control" name="Task" title="Task">
+                      {% if response_data['filter_data']['Task'] %}
+                      <option value="{{response_data['filter_data']['Task']}}" selected>{{response_data['filter_data']['Task']}}</option>
+                      {% endif %}
+                      <option value="">All</option>
+                      {% for obj in response_data['filter_fields']['Task'] %}
+                      <option value="{{obj}}">{{obj}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="text-left">
+                  <button class="applyBtn btn btn-sm btn-success btn-filter" type="submit">Submit</button>
+                </div>
+              </form>
             </div>
-        </div>
+          </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="row">
@@ -569,12 +596,6 @@
                                                         Today:
                                                     </label>
                                                 </div>
-                                                <div class="radio">
-                                                    <input type="radio" name="completion_date" id="radio1" value="">
-                                                    <label for="radio1" id="yesterday">
-                                                        Yesterday:
-                                                    </label>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -704,7 +725,7 @@
     var tables = [];
     $("table").each(function () {
         tables.push($(this).DataTable({
-            "dom": 'B<"clear">rlftip',
+            "dom": 'B<"clear">rltip',
             "bFilter": true,
             "aaSorting": [],
             "pageLength": 100,
@@ -746,17 +767,6 @@
     $("#today").append(output);
     $("#radio").attr('value', output);
     var day = d.getDate() - 1;
-
-    var output = d.getFullYear() + '-' +
-        (('' + month).length < 2 ? '0' : '') + month + '-' +
-        (('' + day).length < 2 ? '0' : '') + day + ' ' +
-        (('' + hour).length < 2 ? '0' : '') + hour + ':' +
-        (('' + minute).length < 2 ? '0' : '') + minute + ':' +
-        (('' + second).length < 2 ? '0' : '') + second;
-
-    $("#yesterday").append(output);
-    $("#radio1").attr('value', output);
-
 
     $('#transfershow').click(function () {
 
@@ -840,7 +850,6 @@
             transfer_to: $('#transfer_to').val(),
             type: $("#type").val(),
             sub_type: $("#sub_type").val(),
-            lead_status: $("#lead_status").val(),
             completion_date: $("#completion_date").val(),
             comment: $("#comment").val(),
             next_task: $("#next_task").val(),

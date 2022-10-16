@@ -53,7 +53,7 @@ class LeadsController(Controller):
         filter = {}
         filter_data = {**data}
         filter_fields = {
-            "project":[],
+            "project":constants.PROJECT,
             "level": constants.LEAD__LEVEL__LIST,
             "Task": constants.FOLLOW_UP__TYPE_LIST,
             "Team": [],
@@ -68,6 +68,7 @@ class LeadsController(Controller):
         
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            filter_data['assigned_to_name'] = user_childs[0]['name']
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
@@ -78,6 +79,9 @@ class LeadsController(Controller):
         if data.get(constants.LEAD__LEVEL):
             filter[constants.LEAD__LEVEL] = data.get(constants.LEAD__LEVEL)
 
+        if data.get(constants.LEAD__PROJECT):
+            filter[constants.LEAD__PROJECT] = data.get(constants.LEAD__PROJECT)
+        
         if data.get('last_work'):
             filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.DATETIME_FORMAT)
 

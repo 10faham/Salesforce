@@ -56,14 +56,15 @@ def junk_follow_up_lead_history_removal(run=False):
         count = 0
         data['transfer_to'] = '6253cce240d74a484aff4cd9'
 
-        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'619b5e56360643a46baf381c', 
-                                        "lead_comment":"NR", "updated_on__gte":1662854400000})
+        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'62efb44dce6701eaf0fcc347', "assigned_by":'619b5e04360643a46baf381b',
+                                         "updated_on__gte":1664996401000})
         for lead in leadh:
             followup = FollowUpController.read_lead_follow(data = {'lead':lead['id'], 'name':'', 'ref':''})
             total = len(followup['response_data'][0])
             # transfer_to = str(followup['response_data'][0][total-1][constants.CREATED_BY].fetch()[constants.ID])
             count +=1
             print(count)
+            data['transfer_to'] = followup['response_data'][0][0]['created_by']
             for follow in followup['response_data'][0]:
                 followup_updatedata = {constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'],
                 constants.ID: follow[constants.ID]}

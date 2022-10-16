@@ -49,6 +49,13 @@ class FollowUpController(Controller):
     @classmethod
     def read_controller(cls, data):
         filter = {}
+        filter_data = {**data}
+        filter_fields = {
+            "project":constants.PROJECT,
+            "level": constants.LEAD__LEVEL__LIST,
+            "Task": constants.FOLLOW_UP__TYPE_LIST,
+            "Team": [],
+        }
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
@@ -56,13 +63,44 @@ class FollowUpController(Controller):
                    "__gte"] = datetime.strptime(datefrom, config.FILTER_DATETIME_FORMAT)
             filter[constants.FOLLOW_UP__NEXT_DEADLINE +
                    "__lte"] = datetime.strptime(dateto, config.FILTER_DATETIME_FORMAT)
-
+        
         if data.get(constants.LEAD__ASSIGNED_TO):
-            user_childs = [UserController.get_user(
-                data.get(constants.LEAD__ASSIGNED_TO))]
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            filter_data['assigned_to_name'] = user_childs[0]['name']
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
+
+        if data.get('Task'):
+            filter[constants.LEAD__FOLLOWUP_TYPE] = data.get('Task')
+        
+        if data.get(constants.LEAD__LEVEL):
+            filter[constants.LEAD__LEVEL] = data.get(constants.LEAD__LEVEL)
+
+        if data.get(constants.LEAD__PROJECT):
+            filter[constants.LEAD__PROJECT] = data.get(constants.LEAD__PROJECT)
+        
+        if data.get('last_work'):
+            filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.DATETIME_FORMAT)
+
+        if data.get('page'):
+            page = int(data['page'])
+        else:
+            page = 1
+        
+        if data.get('per_page'):
+            per_page = int(data('per_page'))
+        else:
+            per_page = 50
+
+        if data.get('client_name'):
+            filter[constants.LEAD__FIRST_NAME + '__in'] = data.get('client_name')
+
+        if data.get('lead_id'):
+            filter[constants.LEAD__ID] = data.get('lead_id')
+
+        if data.get('phone_number'):
+            filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
 
         user_ids = [str(id[constants.ID]) for id in user_childs]
         filter[constants.FOLLOW_UP__ASSIGNED_TO+"__in"] = user_ids
@@ -112,14 +150,16 @@ class FollowUpController(Controller):
         for id in temp:
             all_users.append([str(id[constants.ID]) ,id[constants.USER__NAME]])
         # followup_data['followup'] = followup_dataset
+
+        followup_data = {}
         followup_data['overdue'] = overdue
         followup_data['today'] = today
         followup_data['tomorrow'] = tomorrow
         followup_data['next7'] = next7
         followup_data['all'] = all
+        
         followup_data['usernamne'] = common_utils.current_user()[
             constants.USER__NAME]
-        
         followup_data['username'] = common_utils.current_user()[
             constants.USER__NAME]
         followup_data['userlevel'] = common_utils.current_user()[
@@ -138,6 +178,10 @@ class FollowUpController(Controller):
         # followup_data['filter_fields'] = filter_fields
         # followup_data['filter_data'] = filter_data
         # followup_dataset.append(user.name)
+        followup_data['data'] = ''
+        followup_data['pagination'] = ''
+        followup_data['filter_fields'] = filter_fields
+        followup_data['filter_data'] = filter_data
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
