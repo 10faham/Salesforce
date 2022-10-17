@@ -90,7 +90,7 @@ class FollowUp(models.Model):
             constants.FOLLOW_UP__NEXT_COMMENT: self[constants.FOLLOW_UP__NEXT_COMMENT],
             constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
             constants.STATUS: self[constants.STATUS],
-            constants.CREATED_BY: self[constants.CREATED_BY],
+            constants.CREATED_BY: self[constants.CREATED_BY].fetch().name,
             constants.CREATED_ON: self[constants.CREATED_ON],
             constants.FOLLOW_UP__ASSIGNED_TO: self[constants.FOLLOW_UP__ASSIGNED_TO].fetch().name if self[constants.FOLLOW_UP__ASSIGNED_TO] else None,
         }
