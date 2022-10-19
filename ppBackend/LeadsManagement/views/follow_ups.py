@@ -56,7 +56,9 @@ def create_view(data):
 )
 def read_view(data):
     if request.method == "POST":
-        data = request.form    
+        data = request.form
+        res = FollowUpController.read_controller(data=data)
+        return res  
     res = FollowUpController.read_controller(data=data)
     return render_template("viewfollow_ups.html", **res)
 

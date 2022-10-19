@@ -198,7 +198,7 @@
                                                             </td>
                                                             <td>
                                                                 <a
-                                                                    href="javascript:viewFollowup('{{obj._id}}','{{obj.lead.first_name}}','{{obj.lead.lead_id}}');"><i
+                                                                    href="javascript:viewFollowup(`{{obj._id}}`,`{{obj.lead.first_name}}`,`{{obj.lead.lead_id}}`);"><i
                                                                         class="mdi mdi-comment-outline"></i></a>
                                                                 <a href="javascript:addFollowup('{{obj._id}}');"><i
                                                                         class="glyphicon glyphicon-plus"></i></a>
@@ -245,8 +245,7 @@
                                                                 {% endfor %}
                                                             </td>
                                                             <td>
-                                                                <a
-                                                                    href="javascript:viewFollowup('{{obj._id}}','{{obj.lead.first_name}}','{{obj.lead.lead_id}}');"><i
+                                                                <a href="javascript:viewFollowup(`{{obj._id}}`,`{{obj.lead.first_name}}`,`{{obj.lead.lead_id}}`);"><i
                                                                         class="mdi mdi-comment-outline"></i></a>
                                                                 <a href="javascript:addFollowup('{{obj._id}}');"><i
                                                                         class="glyphicon glyphicon-plus"></i></a>
@@ -293,8 +292,7 @@
                                                                 {% endfor %}
                                                             </td>
                                                             <td>
-                                                                <a
-                                                                    href="javascript:viewFollowup('{{obj._id}}','{{obj.lead.first_name}}','{{obj.lead.lead_id}}');"><i
+                                                                <a href="javascript:viewFollowup(`{{obj._id}}`,`{{obj.lead.first_name}}`,`{{obj.lead.lead_id}}`);"><i
                                                                         class="mdi mdi-comment-outline"></i></a>
                                                                 <a href="javascript:addFollowup('{{obj._id}}');"><i
                                                                         class="glyphicon glyphicon-plus"></i></a>
@@ -341,8 +339,7 @@
                                                                 {% endfor %}
                                                             </td>
                                                             <td>
-                                                                <a
-                                                                    href="javascript:viewFollowup('{{obj._id}}','{{obj.lead.first_name}}','{{obj.lead.lead_id}}');"><i
+                                                                <a href="javascript:viewFollowup(`{{obj._id}}`,`{{obj.lead.first_name}}`,`{{obj.lead.lead_id}}`);"><i
                                                                         class="mdi mdi-comment-outline"></i></a>
                                                                 <a href="javascript:addFollowup('{{obj._id}}');"><i
                                                                         class="glyphicon glyphicon-plus"></i></a>
@@ -549,9 +546,9 @@
                                                     <option value="Whatsapp_call">Whatsapp call</option>
                                                     <option value="Whatsapp_message">Whatsapp Message</option>
                                                     <option value="Meeting_Confirmed">Meeting Confirmed</option>
-                                                    <option value="Meeting_Confirmed">Meeting Done</option>
-                                                    <option value="Meeting_cancelled">Meeting Cancelled</option>
-                                                    <option value="Meeting_postponed">Meeting Postponed</option>
+                                                    <option value="Meeting_Done">Meeting Done</option>
+                                                    <option value="Meeting_Cancelled">Meeting Cancelled</option>
+                                                    <option value="Meeting_Postponed">Meeting Postponed</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -568,19 +565,6 @@
                                                     <option value="Moderate">Moderate</option>
                                                     <option value="Cold">Cold</option>
                                                     <option value="SubZero">Very Cold</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Status*</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" required title="lead_status"
-                                                    name="lead_status">
-                                                    <option value=""></option>
-                                                    <option value="Interested">Interested</option>
-                                                    <option value="Not Interested">Not Interested</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -725,7 +709,7 @@
     var tables = [];
     $("table").each(function () {
         tables.push($(this).DataTable({
-            "dom": 'B<"clear">rltip',
+            "dom": 'B<"clear">rlftip',
             "bFilter": true,
             "aaSorting": [],
             "pageLength": 100,
@@ -784,7 +768,7 @@
         let formData = {}
         searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
         // console.log(formData, "formData")
-        $.ajax('/api/leads/read', {
+        $.ajax('/api/follow_ups/read', {
             method: 'POST',
             data: formData,
             dataType: "json",

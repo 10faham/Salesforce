@@ -75,7 +75,7 @@
                                             <th rowspan="2">Name</th>
                                             <th colspan="3">Leads</th>
                                             <th colspan="2">Calls</th>
-                                            <th colspan="1">Meetings</th>
+                                            <th colspan="2">Meetings</th>
                                             <th colspan="2">Whatsapp</th>
                                         </tr>
                                         <tr>
@@ -85,6 +85,7 @@
                                             <th>Connected</th>
                                             <th>Attempt</th>
                                             <th>Done</th>
+                                            <th>Confirmed</th>
                                             <th>Calls</th>
                                             <th>Msg</th>
                                         </tr>
@@ -103,17 +104,45 @@
                                             <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call,Meeting&sub-filter=Contacted_client,Followed_up"
                                                     target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a>
                                             </td>
-                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt"
+                                            <td>
+                                            {% if response_data.kpi[user]['Call']['Call_attempt'] %}
+                                                <a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Call_attempt"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a>
+                                            {% else%}
+                                            0
+                                            {% endif %}
                                             </td>
-                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
-                                                    target="_blank">{{response_data.kpi[user]['Meeting']['_sum']}}</a>
+                                            <td>
+                                            {% if response_data.kpi[user]['Meeting']['Meeting_Done'] %}
+                                                <a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Done"
+                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done']}}</a>
+                                            {% else %}
+                                            0 
+                                            {% endif %}
                                             </td>
-                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call"
+                                            <td>
+                                            {% if response_data.kpi[user]['Meeting']['Meeting_Confirmed'] %}
+                                                <a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Meeting&sub-filter=Meeting_Confirmed"
+                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Confirmed']}}</a>
+                                            {% else %}
+                                            0 
+                                            {% endif %}
+                                            </td>
+                                            <td>
+                                            {% if response_data.kpi[user]['Call']['Whatsapp_call'] %}
+                                                <a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_call"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a>
+                                            {% else %}
+                                            0
+                                            {% endif %}
                                             </td>
-                                            <td><a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_message"
+                                            <td>
+                                            {% if response_data.kpi[user]['Call']['Whatsapp_message'] %}
+                                                <a href="/api/reports/detailed-follow?id={{user}}&datefrom={{response_data.datefrom}}&dateto={{response_data.dateto}}&filter=Call&sub-filter=Whatsapp_message"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_message']}}</a>
+                                            {% else %}
+                                            0
+                                            {% endif %}
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -187,7 +216,7 @@
     console.log(table.column(6).data().sumValue());
     console.log(table.column(7).data().sumValue());
     console.log(table.column(8).data().sumValue());
-    $("#lead-detail").append('<tr><td>Total</td><td>'+table.column(1).data().sumValue()+'</td><td>'+table.column(2).data().sumValue()+'</td><td>'+table.column(3).data().sumValue()+'</td><td>'+table.column(4).data().sumValue()+'</td><td>'+table.column(5).data().sumValue()+'</td><td>'+table.column(6).data().sumValue()+'</td><td>'+table.column(7).data().sumValue()+'</td><td>'+table.column(8).data().sumValue()+'</td></tr>');
+    $("#lead-detail").append('<tr><td>Total</td><td>'+table.column(1).data().sumValue()+'</td><td>'+table.column(2).data().sumValue()+'</td><td>'+table.column(3).data().sumValue()+'</td><td>'+table.column(4).data().sumValue()+'</td><td>'+table.column(5).data().sumValue()+'</td><td>'+table.column(6).data().sumValue()+'</td><td>'+table.column(7).data().sumValue()+'</td><td>'+table.column(8).data().sumValue()+'</td><td>'+table.column(9).data().sumValue()+'</td></tr>');
 
 
 </script>

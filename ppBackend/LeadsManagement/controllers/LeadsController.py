@@ -40,6 +40,7 @@ class LeadsController(Controller):
             )
         data[constants.LEAD__ASSIGNED_TO] = current_user
         data[constants.LEAD__ASSIGNED_BY] = current_user
+        data[constants.LEAD__LAST_WORK_DATE] = common_utils.get_time()
         _, _, obj = cls.db_insert_record(
             data=data, default_validation=False)
         return response_utils.get_response_object(

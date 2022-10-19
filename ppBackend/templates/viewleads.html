@@ -232,7 +232,7 @@
                       {% endfor %}
                     </td>
                     <td>
-                      <a href="javascript:viewFollowup('{{obj.id}}','{{obj.first_name}}','{{obj.lead_id}}');"><i
+                      <a href="javascript:viewFollowup(`{{obj.id}}`,`{{obj.first_name}}`,`{{obj.lead_id}}`);"><i
                           class="mdi mdi-comment-outline"></i></a>
                       <a href="javascript:addFollowup('{{obj.id}}');"><i class="glyphicon glyphicon-plus"></i></a>
                       TLW: {{obj.followup_count}}
@@ -442,7 +442,7 @@
                           <option value="Whatsapp_call">Whatsapp call</option>
                           <option value="Whatsapp_message">Whatsapp Message</option>
                           <option value="Meeting_Confirmed">Meeting Confirmed</option>
-                          <option value="Meeting_Confirmed">Meeting Done</option>
+                          <option value="Meeting_Done">Meeting Done</option>
                           <option value="Meeting_cancelled">Meeting Cancelled</option>
                           <option value="Meeting_postponed">Meeting Postponed</option>
                         </select>
