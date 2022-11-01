@@ -24,7 +24,7 @@ def kpisales_view(data):
     data = request.form
     res = DashboardController.read_lead_count(data=data)
     data = request.form
-    res2 = DashboardFollow.read_kpi(data=data, data2=res)
+    res2 = ReportsController.read_kpi(data=data, data2=res)
     return render_template('kpisales.html', **res2)
 
 @reports_bp.route("/detailed", methods=["GET"])

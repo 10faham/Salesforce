@@ -10,7 +10,7 @@ from ppBackend.generic.services.utils import constants, pipeline
 
 
 
-def junk_follow_up_lead_history_removal(run=False):
+def junk_follow_up_lead_history_removal(run=True):
     if not run:
         return
     with app.test_request_context():
@@ -56,8 +56,8 @@ def junk_follow_up_lead_history_removal(run=False):
         count = 0
         data['transfer_to'] = '6253cce240d74a484aff4cd9'
 
-        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'62efb44dce6701eaf0fcc347', "assigned_by":'619b5e04360643a46baf381b',
-                                         "updated_on__gte":1664996401000})
+        leadh = LeadsController.db_read_records(read_filter={"assigned_to":'6346950560789778e7badc01', "assigned_by":'619b5d27360643a46baf3818',
+                                         "updated_on__gte":1667261185000})
         for lead in leadh:
             followup = FollowUpController.read_lead_follow(data = {'lead':lead['id'], 'name':'', 'ref':''})
             total = len(followup['response_data'][0])

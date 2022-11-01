@@ -174,7 +174,7 @@ class DashboardFollow(Controller):
 
         # queryset = cls.db_read_records(read_filter={**filter})
         queryset = cls.db_read_records(read_filter={**filter}).aggregate(
-            pipeline.KPI_REPORT_FOLLOW_UP)
+            pipeline.KPI_REPORT_LEAD)
         kpi_dataset = {str(user[constants.ID]): {
             "name": user[constants.USER__NAME],
             "Call": {"_sum": 0, "_connected": 0},
@@ -189,13 +189,13 @@ class DashboardFollow(Controller):
         for user in queryset:
             # if user["_id"]["created_by"] not in user_ids:
             #     continue
-            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+            kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
                                                         ['type']][user["_id"]['sub_type']] = user["count"]
-            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+            kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
                                                         ['type']]["_sum"] += user['count']
-            kpi_dataset[str(user["_id"]["created_by"])]['TLW'] += user['count']
+            kpi_dataset[str(user["_id"]["assigned_to"])]['TLW'] += user['count']
             if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up':
-                kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+                kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data')[0]:

@@ -62,9 +62,9 @@ class LeadsController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_ON +
+            filter[constants.UPDATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         
         if data.get(constants.LEAD__ASSIGNED_TO):
@@ -86,6 +86,9 @@ class LeadsController(Controller):
         if data.get('last_work'):
             filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.DATETIME_FORMAT)
 
+        if data.get('sub-task'):
+            filter[constants.LEAD__LAST_WORK + "__in"] = data.get('sub-task').split(',')
+
         if data.get('page'):
             page = int(data['page'])
         else:
@@ -97,7 +100,7 @@ class LeadsController(Controller):
             per_page = 50
 
         if data.get('client_name'):
-            filter[constants.LEAD__FIRST_NAME + '__in'] = data.get('client_name')
+            filter[constants.LEAD__FIRST_NAME + '__in'] = [data.get('client_name')]
 
         if data.get('lead_id'):
             filter[constants.LEAD__ID] = data.get('lead_id')
