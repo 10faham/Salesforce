@@ -113,7 +113,7 @@ def bulk_trasnfer(data):
 
 @leads_bp.route("/leadtransfer", methods=["POST"])
 @decorators.is_authenticated
-# @decorators.keys_validator()
+# @decorators.keys_validator(constants request_form_data=False)
 def lead_transfer():
     data = request.form
     res = LeadsController.lead_transfer(data=data)

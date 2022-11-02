@@ -75,7 +75,7 @@
                                             <th rowspan="2">Name</th>
                                             <th colspan="3">Leads</th>
                                             <th colspan="2">Calls</th>
-                                            <th colspan="2">Meetings</th>
+                                            <th colspan="1">Meetings</th>
                                             <th colspan="2">Whatsapp</th>
                                         </tr>
                                         <tr>
@@ -85,7 +85,6 @@
                                             <th>Connected</th>
                                             <th>Attempt</th>
                                             <th>Done</th>
-                                            <th>Confirmed</th>
                                             <th>Calls</th>
                                             <th>Msg</th>
                                         </tr>
@@ -118,14 +117,6 @@
                                             {% if response_data.kpi[user]['Meeting']['Meeting_Done'] %}
                                                 <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub-task=Meeting_Done"
                                                     target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done']}}</a>
-                                            {% else %}
-                                            0 
-                                            {% endif %}
-                                            </td>
-                                            <td>
-                                            {% if response_data.kpi[user]['Meeting']['Meeting_Confirmed'] %}
-                                                <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub-task=Meeting_Confirmed"
-                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Confirmed']}}</a>
                                             {% else %}
                                             0 
                                             {% endif %}

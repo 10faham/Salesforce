@@ -59,13 +59,30 @@ class LeadsController(Controller):
             "Task": constants.FOLLOW_UP__TYPE_LIST,
             "Team": [],
         }
-        if data.get(constants.DATE_FROM):
+        if data.get(constants.DATE_FROM) and data.get('new') != 'true':
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
             filter[constants.UPDATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.UPDATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+
+        if data.get('new') == 'true':
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.CREATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.CREATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+        
+        if data.get(constants.LEAD__TRANSFERED) == 'true':
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.LEAD__TRANSFERED_ON +
+                "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.LEAD__TRANSFERED_ON +
+                "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.LEAD__TRANSFERED] = True
         
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
@@ -75,6 +92,12 @@ class LeadsController(Controller):
                 user=common_utils.current_user(), return_self=True)
 
         if data.get('Task'):
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.UPDATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.UPDATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.LEAD__FOLLOWUP_TYPE] = data.get('Task')
         
         if data.get(constants.LEAD__LEVEL):
@@ -300,7 +323,7 @@ class LeadsController(Controller):
                     followup_data_new = {constants.FOLLOW_UP__COMMENT: data['comment'], 
                     constants.FOLLOW_UP__COMPLETION_DATE: datetime.now().strftime(config.DATETIME_FORMAT), constants.FOLLOW_UP__NEXT_DEADLINE: data['next_deadline'],
                     constants.FOLLOW_UP__LEVEL: data['lead_level'], constants.FOLLOW_UP__TYPE: data['type'], constants.FOLLOW_UP__ASSIGNED_TO: data['transfer_to'], 
-                    constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task'], constants.FOLLOW_UP__STATUS: data['lead_status']}
+                    constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task']}
                     followup_data_new[constants.FOLLOW_UP__LEAD] = lead['lead_id']
                     res = FollowUpController.create_controller(data=followup_data_new)
 
