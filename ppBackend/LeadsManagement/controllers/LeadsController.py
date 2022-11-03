@@ -326,7 +326,6 @@ class LeadsController(Controller):
                     constants.FOLLOW_UP__SUB_TYPE: data['sub_type'], constants.FOLLOW_UP__NEXT_TASK: data['next_task']}
                     followup_data_new[constants.FOLLOW_UP__LEAD] = lead['lead_id']
                     res = FollowUpController.create_controller(data=followup_data_new)
-
                     leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
                     leads[constants.ID] = res['response_data'][constants.FOLLOW_UP__LEAD]['id']
                     leads[constants.LEAD__COMMENT] = res['response_data'][constants.FOLLOW_UP__COMMENT]

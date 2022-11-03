@@ -7,6 +7,8 @@ from flask import Blueprint, redirect, url_for, redirect, render_template, reque
 from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpController
 from ppBackend.LeadsManagement.controllers.LeadsController import LeadsController
 from ppBackend.generic.services.utils import constants, decorators, common_utils
+from ppBackend import config
+from datetime import datetime
 
 follow_ups_bp = Blueprint("follow_ups_bp", __name__)
 
@@ -29,6 +31,7 @@ def create_view(data):
     leads = {}
     lead = LeadsController.db_read_single_record({constants.ID:data[constants.FOLLOW_UP__LEAD]})
     data[constants.FOLLOW_UP__ASSIGNED_TO] = lead[constants.LEAD__ASSIGNED_TO]
+    data[constants.FOLLOW_UP__COMPLETION_DATE] = datetime.now().strftime(config.DATETIME_FORMAT)
     res = FollowUpController.create_controller(data=data)
     leads[constants.LEAD__FOLLOWUP] = res['response_data'][constants.ID]
     leads[constants.ID] = data[constants.FOLLOW_UP__LEAD]
