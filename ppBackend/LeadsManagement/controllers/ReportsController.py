@@ -11,6 +11,7 @@ from ppBackend.LeadsManagement.controllers.FollowUpController import FollowUpCon
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
 from datetime import datetime, date, time, timedelta
+from functools import reduce 
 
 
 class ReportsController(Controller):
@@ -47,35 +48,86 @@ class ReportsController(Controller):
         )
 
     @classmethod
-    def read_followup_new(cls, data, filter={}):
-        user = common_utils.current_user()
+    def read_followup(cls, data):
         filter = {}
+        filter_data = {**data}
+        filter_fields = {
+            "project":constants.PROJECT,
+            "level": constants.LEAD__LEVEL__LIST,
+            "Task": constants.FOLLOW_UP__TYPE_LIST,
+            "Team": [],
+        }
         if data.get(constants.DATE_FROM):
-            datefrom = data.get(constants.DATE_FROM)
-            dateto = data.get(constants.DATE_TO)
-            filter[constants.UPDATED_ON +
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.CREATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.LEAD__ASSIGNED_TO] = data.get(constants.ID)
-        if data.get('type') != 'Null':
-            filter['followup_type__in'] = data.get(constants.FOLLOW_UP__TYPE).split(',')
-        if data.get('sub_type') != 'Null':
-            filter['followup_last_work__in'] = data.get(constants.FOLLOW_UP__SUB_TYPE).split(',')
-        queryset = cls.db_read_records(
-            read_filter={**filter}).aggregate(pipeline.ALL_LEADS)
-        # queryset = FollowUpController.db_read_records(read_filter={**filter})
+                
+        if data.get(constants.LEAD__ASSIGNED_TO):
+            user_childs = [UserController.get_user(data.get(constants.LEAD__ASSIGNED_TO))]
+            filter_data['assigned_to_name'] = user_childs[0]['name']
+        else:
+            user_childs = UserController.get_user_childs(
+                user=common_utils.current_user(), return_self=True)
+        user_ids = [id[constants.ID] for id in user_childs]
+        filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
 
-        # follow_up = [obj for obj in queryset]
-        # leads = []
-        # for obj in follow_up:
-        #     leads.append({**obj['lead'], 'followup': obj, 'user': obj['user']})
-        lead_data = [obj for obj in queryset]
-        # leads.append([obj['lead'] for obj in follow_up])
+        if data.get('Task'):
+            filter[constants.FOLLOW_UP__TYPE] = data.get('Task')
+        
+        if data.get('sub_task'):
+            filter[constants.FOLLOW_UP__SUB_TYPE + "__in"] = data.get('sub_task').split(',')
+
+        if data.get('page'):
+            page = int(data['page'])
+        else:
+            page = 1
+        
+        if data.get('per_page'):
+            per_page = int(data('per_page'))
+        else:
+            per_page = 50
+
+        if data.get('lead_id'):
+            filter[constants.LEAD__ID] = data.get('lead_id')
+        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(
+            pipeline.KPI_REPORT_FOLLOW_UP)
+        followups_list = []
+        for obj in queryset:
+            followups_list.append(obj['ids'])
+        followups = reduce(lambda a, b: a+b, followups_list)
+        queryset = FollowUpController.db_read_records(read_filter={constants.ID+"__in":followups}).order_by('-id').paginate(page=page, per_page=per_page)
+        followup_dataset = [obj.display_min() for obj in queryset.items]
+        temp = UserController.get_user_childs(
+            user=common_utils.current_user(), return_self=True)
+        all_users = []
+        for id in temp:
+            all_users.append([str(id[constants.ID]) ,id[constants.USER__NAME]])
+        followup_data = {}
+        followup_data['data'] = followup_dataset
+        followup_data['username'] = common_utils.current_user()[
+            constants.USER__NAME]
+        followup_data['userlevel'] = common_utils.current_user()[
+            constants.USER__ROLE][constants.USER__ROLE__ROLE_ID]
+        followup_data['all_users'] = all_users
+        followup_data['pagination'] = {
+            "next_num" : queryset.next_num,
+            "page" : queryset.page,
+            "pages" : queryset.pages,
+            "per_page" : queryset.per_page,
+            "prev_num" : queryset.prev_num,
+            "total" : queryset.total,
+            "has_next" : queryset.has_next,
+            "has_prev" : queryset.has_prev
+        }
+        followup_data['filter_fields'] = filter_fields
+        followup_data['filter_data'] = filter_data
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,
             response_message=response_codes.MESSAGE_SUCCESS,
-            response_data=lead_data
+            response_data=followup_data
         )
 
     @classmethod
@@ -86,9 +138,9 @@ class ReportsController(Controller):
         if data.get(constants.DATE_FROM):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             datefrom = datefrom[:11]
             dateto = dateto[:11]
@@ -97,28 +149,28 @@ class ReportsController(Controller):
                 0, 0)).strftime(config.DATETIME_FORMAT)
             dateto = datetime.combine(datetime.now().date(), time(
                 23, 59, 59)).strftime(config.DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom)
-            filter[constants.UPDATED_ON +
+            filter[constants.CREATED_ON +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto)
             datefrom = datetime.now().date().strftime("%d %m %Y")
             dateto = datetime.now().date().strftime("%d %m %Y")
 
         if data.get(constants.LEAD__ASSIGNED_TO):
             user_childs = [UserController.get_user(
-                data.get(constants.LEAD__ASSIGNED_TO))]
+                data.get(constants.CREATED_BY))]
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
         user_ids = [id[constants.ID] for id in user_childs]
         # user_ids = [id(constants.ID) for id in user_childs]
 
-        filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
+        filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
         # queryset = cls.db_read_records(read_filter={constants.CREATED_BY: user, **filter, **data})
 
         # queryset = cls.db_read_records(read_filter={**filter})
-        queryset = cls.db_read_records(read_filter={**filter}).aggregate(
-            pipeline.KPI_REPORT_LEAD)
+        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(
+            pipeline.KPI_REPORT_FOLLOW_UP)
         kpi_dataset = {str(user[constants.ID]): {
             "name": user[constants.USER__NAME],
             "Call": {"_sum": 0, "_connected": 0},
@@ -133,13 +185,13 @@ class ReportsController(Controller):
         for user in queryset:
             # if user["_id"]["created_by"] not in user_ids:
             #     continue
-            kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
+            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                         ['type']][user["_id"]['sub_type']] = user["count"]
-            kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
+            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                         ['type']]["_sum"] += user['count']
-            kpi_dataset[str(user["_id"]["assigned_to"])]['TLW'] += user['count']
+            kpi_dataset[str(user["_id"]["created_by"])]['TLW'] += user['count']
             if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up':
-                kpi_dataset[str(user["_id"]["assigned_to"])][user["_id"]
+                kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                             ['type']]['_connected'] += user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data')[0]:

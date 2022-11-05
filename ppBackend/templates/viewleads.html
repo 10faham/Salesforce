@@ -605,7 +605,7 @@
     event.preventDefault();
     let formData = {}
     searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
-    // console.log(formData, "formData")
+    console.log(formData, "formData")
     $.ajax('/api/leads/read', {
       method: 'POST',
       data: formData,
@@ -831,6 +831,7 @@
       last_work: '{{response_data["filter_data"]["last_work"]}}',
       assigned_to: '{{response_data["filter_data"]["assigned_to"]}}',
       Task: '{{response_data["filter_data"]["Task"]}}',
+      new: '{{response_data["filter_data"]["new"]}}',
       page: ref
     };
     $.ajax('/api/leads/read', {

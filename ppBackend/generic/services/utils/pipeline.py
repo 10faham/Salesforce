@@ -21,17 +21,19 @@ KPI_REPORT_FOLLOW_UP = [
     {
         '$group': {
             '_id': {
-                'created_by': '$created_by',
-                'type': '$type',
+                'created_by': '$created_by', 
+                'type': '$type', 
                 'sub_type': '$sub_type'
-            },
+            }, 
+            'ids': {
+                '$push': {
+                    '$toString': '$_id'
+                }
+            }, 
             'count': {
                 '$sum': 1
             }
         }
-    },
-    {
-        "$sort": {"created_by": 1}
     }
 ]
 
@@ -41,11 +43,6 @@ KPI_REPORT_LEAD_COUNT = [
             '_id': '$created_by', 
             'lead_count': {
                 '$count': {}
-            }, 
-            'transfered': {
-                '$sum': {
-                    '$toInt': '$transfered'
-                }
             }
         }
     }

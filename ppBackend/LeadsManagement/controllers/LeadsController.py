@@ -62,17 +62,9 @@ class LeadsController(Controller):
         if data.get(constants.DATE_FROM) and data.get('new') != 'true':
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.UPDATED_ON +
+            filter[constants.LEAD__LAST_WORK_DATE +
                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
-                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
-
-        if data.get('new') == 'true':
-            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
-            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.CREATED_ON +
-                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.CREATED_ON +
+            filter[constants.LEAD__LAST_WORK_DATE +
                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
         
         if data.get(constants.LEAD__TRANSFERED) == 'true':
@@ -90,6 +82,19 @@ class LeadsController(Controller):
         else:
             user_childs = UserController.get_user_childs(
                 user=common_utils.current_user(), return_self=True)
+
+        user_ids = [id[constants.ID] for id in user_childs]
+        filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
+
+        if data.get('new') == 'true':
+            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+            filter[constants.CREATED_ON +
+                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.CREATED_ON +
+                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.CREATED_BY+"__in"] = [str(id) for id in user_ids]
+            del filter[constants.LEAD__ASSIGNED_TO +"__in"]
 
         if data.get('Task'):
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
@@ -109,8 +114,8 @@ class LeadsController(Controller):
         if data.get('last_work'):
             filter[constants.LEAD__LAST_WORK_DATE + "__lte"] =  common_utils.convert_to_epoch1000(data.get('last_work'), format=config.DATETIME_FORMAT)
 
-        if data.get('sub-task'):
-            filter[constants.LEAD__LAST_WORK + "__in"] = data.get('sub-task').split(',')
+        if data.get('sub_task'):
+            filter[constants.LEAD__LAST_WORK + "__in"] = data.get('sub_task').split(',')
 
         if data.get('page'):
             page = int(data['page'])
@@ -130,9 +135,6 @@ class LeadsController(Controller):
 
         if data.get('phone_number'):
             filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
-
-        user_ids = [id[constants.ID] for id in user_childs]
-        filter[constants.LEAD__ASSIGNED_TO+"__in"] = [str(id) for id in user_ids]
         queryset = cls.db_read_records(read_filter={**filter}).order_by('-id').paginate(page=page, per_page=per_page)
         # paginated = queryset.paginate(page=1, per_page=50)
         lead_dataset = [obj.display_min() for obj in queryset.items]

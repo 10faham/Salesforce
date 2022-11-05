@@ -98,16 +98,16 @@
                                                     target="_blank">{{response_data.kpi[user]['lead_count']}}</a></td>
                                             <td><a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=true&new=&Task=&last_work="
                                                     target="_blank">{{response_data.kpi[user]['transfered']}}</a></td>
-                                            <td><a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=&last_work="
+                                            <td><a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=&last_work="
 
                                                 target="_blank">{{response_data.kpi[user]['TLW']}}</a></td>
-                                            <td><a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub-task=Contacted_client,Followed_up"
+                                            <td><a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub_task=Contacted_client,Followed_up"
                                                 
                                                     target="_blank">{{response_data.kpi[user]['Call']['_connected']}}</a>
                                             </td>
                                             <td>
                                             {% if response_data.kpi[user]['Call']['Call_attempt'] %}
-                                                <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub-task=Call_attempt"
+                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub_task=Call_attempt"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Call_attempt']}}</a>
                                             {% else%}
                                             0
@@ -115,7 +115,7 @@
                                             </td>
                                             <td>
                                             {% if response_data.kpi[user]['Meeting']['Meeting_Done'] %}
-                                                <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub-task=Meeting_Done"
+                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done"
                                                     target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done']}}</a>
                                             {% else %}
                                             0 
@@ -123,7 +123,7 @@
                                             </td>
                                             <td>
                                             {% if response_data.kpi[user]['Call']['Whatsapp_call'] %}
-                                                <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub-task=Whatsapp_call"
+                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub_task=Whatsapp_call"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_call']}}</a>
                                             {% else %}
                                             0
@@ -131,7 +131,7 @@
                                             </td>
                                             <td>
                                             {% if response_data.kpi[user]['Call']['Whatsapp_message'] %}
-                                            <a href="/api/leads/read?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub-task=Whatsapp_message"
+                                            <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub_task=Whatsapp_message"
                                                     target="_blank">{{response_data.kpi[user]['Call']['Whatsapp_message']}}</a>
                                             {% else %}
                                             0

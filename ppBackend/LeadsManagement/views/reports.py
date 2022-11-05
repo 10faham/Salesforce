@@ -27,24 +27,23 @@ def kpisales_view(data):
     res2 = ReportsController.read_kpi(data=data, data2=res)
     return render_template('kpisales.html', **res2)
 
-@reports_bp.route("/detailed", methods=["GET"])
+@reports_bp.route("/detailed", methods=["GET","POST"])
 @decorators.is_authenticated
-@decorators.keys_validator([constants.ID, 'datefrom', 'dateto', constants.LEAD__TRANSFERED], request_form_data=False)
+@decorators.keys_validator()
 def read_lead_new(data):
-    data[constants.DATE_TO] = data["dateto"]
-    data[constants.DATE_FROM] = data["datefrom"]
-    res = ReportsController.read_lead_new(data=data)
-    return render_template('kpileads.html', **res)
+    if request.method == "POST":
+        data = request.form
+        res = ReportsController.read_followup(data=data)
+        return res
+    else:
+        data = request.args
+    res = ReportsController.read_followup(data=data)
+    return render_template('viewfollowups_leads.html', **res)
 
 @reports_bp.route("/detailed-follow", methods=["GET"])
 @decorators.is_authenticated
 @decorators.keys_validator()
-def read_followup_new(data):
-    data[constants.ID] = request.args.get('id')
-    data[constants.DATE_FROM] = request.args.get('datefrom')
-    data[constants.DATE_TO] = request.args.get('dateto')
-    data[constants.LEAD__TRANSFERED] = request.args.get('transfered')
-    data[constants.FOLLOW_UP__TYPE] = request.args.get('filter')
-    data[constants.FOLLOW_UP__SUB_TYPE] = request.args.get('sub-filter')
-    res = ReportsController.read_followup_new(data=data)
+def read_followup_view(data):
+    data = request.args
+    res = ReportsController.read_followup(data=data)
     return render_template('kpileads.html', **res)

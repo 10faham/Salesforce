@@ -94,3 +94,17 @@ class FollowUp(models.Model):
             constants.CREATED_ON: self[constants.CREATED_ON],
             constants.FOLLOW_UP__ASSIGNED_TO: self[constants.FOLLOW_UP__ASSIGNED_TO].fetch().name if self[constants.FOLLOW_UP__ASSIGNED_TO] else None,
         }
+
+    def display_min(self):
+        return {
+            constants.ID: str(self[constants.ID]),
+            constants.FOLLOWUP__ID: self[constants.FOLLOWUP__ID],
+            constants.FOLLOW_UP__LEAD: self[constants.FOLLOW_UP__LEAD].fetch().display_min(),
+            constants.FOLLOW_UP__TYPE: self[constants.FOLLOW_UP__TYPE],
+            constants.FOLLOW_UP__SUB_TYPE: self[constants.FOLLOW_UP__SUB_TYPE],
+            constants.FOLLOW_UP__LEVEL: self[constants.FOLLOW_UP__LEVEL],
+            constants.FOLLOW_UP__COMPLETION_DATE: self[constants.FOLLOW_UP__COMPLETION_DATE],
+            constants.FOLLOW_UP__NEXT_TASK: self[constants.FOLLOW_UP__NEXT_TASK],
+            constants.FOLLOW_UP__NEXT_DEADLINE: self[constants.FOLLOW_UP__NEXT_DEADLINE],
+            constants.FOLLOW_UP__COMMENT: self[constants.FOLLOW_UP__COMMENT],
+        }
