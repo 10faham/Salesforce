@@ -15,14 +15,10 @@ class Leads(models.Model):
             constants.LEAD__FIRST_NAME: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__LAST_NAME: [{"rule": "datatype", "datatype": str}],
             constants.LEAD__NIC: [{"rule": "datatype", "datatype": str}],
-            # constants.LEAD__PHONE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__LANDLINE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__PHONE_NUMBER: [{"rule": "datatype", "datatype": list},
                                            {"rule": "collection_format", "datatype": list,
                                             "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
-            # constants.LEAD__LANDLINE_NUMBER: [{"rule": "datatype", "datatype": list},
-            #                                   {"rule": "collection_format", "datatype": list,
-            #                                   "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
             constants.LEAD__EMAIL_ADDRESS: [{"rule": "email"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD__ADDRESS: [{"rule": "datatype", "datatype": str}],
             # constants.LEAD__ADDRESS: [{"rule": "datatype", "datatype": dict},
@@ -56,13 +52,10 @@ class Leads(models.Model):
     first_name = db.StringField(required=True)
     last_name = db.StringField()
     nic = db.StringField()
-    # phone_number = db.ListField(db.StringField())
-    # landline_number = db.ListField(db.StringField())
     phone_number = db.ListField()
     landline_number = db.StringField()
     email_address = db.StringField()
     address = db.StringField()
-    # address = db.DictField(db.StringField())
     project = db.StringField()
     lead_source = db.StringField()
     lead_status = db.StringField()

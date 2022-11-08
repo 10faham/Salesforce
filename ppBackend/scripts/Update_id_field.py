@@ -2,7 +2,7 @@
 
 
 # Local imports
-from ppBackend import app
+from ppBackend import app 
 from ppBackend.LeadsManagement.controllers.LeadsHistoryController import LeadsHistoryController
 from ppBackend.config import config
 from ppBackend.generic.services.utils import common_utils, constants
@@ -19,7 +19,7 @@ def update_id_field(run=False):
         return
     with app.test_request_context():
         count = 0
-        queryset = LeadsController.db_read_records(read_filter={}, deleted_records=True)
+        queryset = LeadsHistoryController.db_read_records(read_filter={}, deleted_records=True)
         # for index, obj in enumerate(queryset):
         #     obj['lead_id'] = f'LD-{index + 1}'
         #     obj.save()
@@ -31,7 +31,7 @@ def update_id_field(run=False):
             new[constants.LEAD__PHONE_NUMBER] = [lead[constants.LEAD__PHONE_NUMBER]]
             new[constants.ID] = str(lead[constants.ID])
 
-            res = LeadsController.db_update_single_record(read_filter = {constants.ID:lead[constants.ID]}, update_filter = new, deleted_records=True)
+            res = LeadsHistoryController.db_update_single_record(read_filter = {constants.ID:lead[constants.ID]}, update_filter = new, deleted_records=True)
             count += 1
             print(count)
             print(res)

@@ -18,26 +18,12 @@ class LeadHistory(models.Model):
             constants.LEAD_HISTORY__FIRST_NAME: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__LAST_NAME: [{"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__NIC: [{"rule": "datatype", "datatype": str}],
-            constants.LEAD_HISTORY__PHONE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__LANDLINE_NUMBER: [{"rule": "phone_number"}, {"rule": "datatype", "datatype": str}],
-            # constants.LEAD_HISTORY__PHONE_NUMBER: [{"rule": "datatype", "datatype": list},
-            #                                {"rule": "collection_format", "datatype": list,
-            #                                 "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
-            # constants.LEAD_HISTORY__LANDLINE_NUMBER: [{"rule": "datatype", "datatype": list},
-            #                                   {"rule": "collection_format", "datatype": list,
-            #                                   "validation_rules": [{"rule": "required"}, {"rule": "phone_number"}]}],
             constants.LEAD_HISTORY__EMAIL_ADDRESS: [{"rule": "email"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__ADDRESS: [{"rule": "datatype", "datatype": str}],
-            # constants.LEAD_HISTORY__ADDRESS: [{"rule": "datatype", "datatype": dict},
-            #                           {"rule": "collection_format", "datatype": dict,
-            #                            "validation_rules": {
-            #                                "key": [{"rule": "required"},
-            #                                        {"rule": "choices", "options": constants.LEAD_HISTORY__ADDRESS__KEY_LIST}],
-            #                                "value": [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
-            #                            }}],
             constants.LEAD_HISTORY__PROJECT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__SOURCE: [{"rule": "datatype", "datatype": str}],
-            constants.LEAD_HISTORY__STATUS: [{"rule": "required"}, {"rule": "choices", "options": constants.LEAD_HISTORY__STATUS__LIST}],
+            constants.LEAD_HISTORY__STATUS: [{"rule": "choices", "options": constants.LEAD_HISTORY__STATUS__LIST}],
             constants.LEAD_HISTORY__GENDER: [{"rule": "required"}, {"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD_HISTORY__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
@@ -60,16 +46,13 @@ class LeadHistory(models.Model):
     first_name = db.StringField(required=True)
     last_name = db.StringField()
     nic = db.StringField()
-    # phone_number = db.ListField(db.StringField())
-    # landline_number = db.ListField(db.StringField())
-    phone_number = db.StringField()
+    phone_number = db.ListField()
     landline_number = db.StringField()
     email_address = db.StringField()
     address = db.StringField()
-    # address = db.DictField(db.StringField())
     project = db.StringField()
     lead_source = db.StringField()
-    lead_status = db.StringField(required=True)
+    lead_status = db.StringField()
     gender = db.StringField(required=True)
     country = db.StringField(required=True)
     city = db.StringField(required=True)

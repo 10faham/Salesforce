@@ -59,7 +59,7 @@ class LeadsController(Controller):
             "Task": constants.FOLLOW_UP__TYPE_LIST,
             "Team": [],
         }
-        if data.get(constants.DATE_FROM) and data.get('new') != 'true':
+        if data.get(constants.DATE_FROM) and data.get('new') != 'true' and data.get('transfered') != 'true':
             datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
             dateto = data.get(constants.DATE_TO) + ' 23:59:59'
             filter[constants.LEAD__LAST_WORK_DATE +
