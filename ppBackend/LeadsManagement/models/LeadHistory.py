@@ -24,7 +24,7 @@ class LeadHistory(models.Model):
             constants.LEAD_HISTORY__PROJECT: [{"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__SOURCE: [{"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__STATUS: [{"rule": "choices", "options": constants.LEAD_HISTORY__STATUS__LIST}],
-            constants.LEAD_HISTORY__GENDER: [{"rule": "required"}, {"rule": "choices", "options": constants.GENDER_LIST}],
+            constants.LEAD_HISTORY__GENDER: [{"rule": "choices", "options": constants.GENDER_LIST}],
             constants.LEAD_HISTORY__COUNTRY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__CITY: [{"rule": "required"}, {"rule": "datatype", "datatype": str}],
             constants.LEAD_HISTORY__COMMENT: [{"rule": "datatype", "datatype": str}],
@@ -53,7 +53,7 @@ class LeadHistory(models.Model):
     project = db.StringField()
     lead_source = db.StringField()
     lead_status = db.StringField()
-    gender = db.StringField(required=True)
+    gender = db.StringField()
     country = db.StringField(required=True)
     city = db.StringField(required=True)
     client_category = db.StringField()
