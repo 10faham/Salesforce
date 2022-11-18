@@ -97,12 +97,13 @@ class LeadsController(Controller):
             del filter[constants.LEAD__ASSIGNED_TO +"__in"]
 
         if data.get('Task'):
-            datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
-            dateto = data.get(constants.DATE_TO) + ' 23:59:59'
-            filter[constants.UPDATED_ON +
-                   "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
-            filter[constants.UPDATED_ON +
-                   "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+            if data.get(constants.DATE_FROM):
+                datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+                dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+                filter[constants.UPDATED_ON +
+                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.UPDATED_ON +
+                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.LEAD__FOLLOWUP_TYPE] = data.get('Task')
         
         if data.get(constants.LEAD__LEVEL):
