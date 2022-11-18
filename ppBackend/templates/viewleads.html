@@ -52,6 +52,7 @@
               <div id="reportrange" class="pull-right form-control">
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                 <span></span>
+                
                 <input id="start" type="hidden" name="date_start" value="">
                 <input id="end" type="hidden" name="date_end" value="">
               </div>
@@ -92,7 +93,11 @@
           <div class="col-xs-3">
             <div class="form-group">
               <label class="col-sm-6 control-label">Last Worked on</label>
-              <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work"/>
+              {% if response_data['filter_data']['assigned_to'] %}
+              <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work" value="{{response_data['filter_data']['assigned_to']}}"/>
+              {% else %}
+              <input type="text" class="form-control datetime-picker" title="Last Worked on" name="last_work" value=""/>
+              {% endif %}
             </div>
           </div>
           <div class="col-xs-5">
@@ -126,44 +131,49 @@
             </div>
           </div>
           <div class="text-left">
-            <button class="applyBtn btn btn-sm btn-success btn-filter" type="submit">Submit</button>
           </div>
-        </form>
       </div>
     </div>
     <!-- end col -->
 
     <div class="container">
       <!---------find leads starts-->
-      <div class="row">
         <div class="col-xs-12">
-          <div class="title-box">
-            <div class="clearfix"></div>
-          </div>
           <h6>Search Leads</h6>
         </div>
-      </div>
-      <form id="searchForm">
+      
         <div class="col-xs-3">
           <div class="form-group">
             <label class="col-sm-3 control-label">Name</label>
-            <input type="text" class="form-control" name="client_name" placeholder="Name">
+            {% if response_data['filter_data']['client_name'] %}
+            <input type="text" class="form-control" name="client_name" value="{{response_data['filter_data']['client_name']}}" placeholder="Name">
+            {% else %}
+            <input type="text" class="form-control" name="client_name" value="" placeholder="Name">
+            {% endif %}
           </div>
         </div>
         <div class="col-xs-3">
           <div class="form-group">
             <label class="col-sm-6 control-label">Phone Number</label>
-            <input type="text" class="form-control" name="phone_number" placeholder="+921234567890">
+            {% if response_data['filter_data']['phone_number'] %}
+            <input type="text" class="form-control" name="phone_number" value="{{response_data['filter_data']['phone_number']}}" placeholder="+921234567890">
+            {% else %}
+            <input type="text" class="form-control" name="phone_number" value="" placeholder="+921234567890">
+            {% endif %}
           </div>
         </div>
         <div class="col-xs-3">
           <div class="form-group">
             <label class="col-sm-3 control-label">Lead ID</label>
-            <input type="text" class="form-control" name="lead_id" placeholder="1234">
+            {% if response_data['filter_data']['lead_id'] %}
+            <input type="text" class="form-control" name="lead_id" value="{{response_data['filter_data']['lead_id']}}" placeholder="1234">
+            {% else %}
+            <input type="text" class="form-control" name="lead_id" value="" placeholder="1234">
+            {% endif %}
           </div>
         </div>
         <div class="text-left">
-          <input class="btn btn-success btn-filter" type="submit" value="Find">
+          <input class="btn btn-success btn-filter" type="submit" value="Submit">
         </div>
       </form>
     </div>
@@ -567,6 +577,8 @@
   
   if ("{{response_data['filter_data']['date_start']}}"){
     $('#reportrange span').html("{{response_data['filter_data']['date_start']}}" + ' to ' + "{{response_data['filter_data']['date_end']}}");
+    $('#start').val("{{response_data['filter_data']['date_start']}}")
+    $('#end').val("{{response_data['filter_data']['date_end']}}")
   }
   
   var table = $('#datatable').DataTable({
@@ -590,6 +602,7 @@
       "selectNone"
     ],
   });
+
   $('#transfershow').click(function () {
 
     var x = document.getElementById("transfer-sec");
@@ -600,64 +613,6 @@
     }
   });
 
-  const searchFormDOM = $('#searchForm')
-  searchFormDOM.submit(function (event){
-    event.preventDefault();
-    let formData = {}
-    searchFormDOM.serializeArray().forEach(({ name, value }) => formData[name] = value)
-    console.log(formData, "formData")
-    $.ajax('/api/leads/read', {
-      method: 'POST',
-      data: formData,
-      dataType: "json",
-      encode: true,
-      success: function (data) {
-        if (data.response_code == 200) {
-          console.log(data);
-          table.clear()
-          table.draw()
-          for (var i in data.response_data.data) {
-            var numbers = [];
-            for (var j in data.response_data.data[i].phone_number) {
-              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
-            }
-            table.row.add([
-              `${data.response_data.data[i].id}`,
-              `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
-              `${data.response_data.data[i].first_name}`,
-              `${data.response_data.data[i].assigned_to}`,
-              `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
-              `${data.response_data.data[i].project}`,
-              `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
-                        <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
-                      </span>`,
-              `${numbers.toString()}`,
-              `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
-                            class="mdi mdi-comment-outline"></i></a>
-                        <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
-                        TLW: ${data.response_data.data[i].followup_count}`,
-            ]).draw();
-          };
-          $("#paginate-number").text(`${data.response_data.pagination.page}`)
-          if (data.response_data.pagination.has_next) {
-            $("#paginate-next-btn").attr('href', `javascript:pagination(${data.response_data.pagination.next_num})`)
-            $("#paginate-next-btn").removeClass('paginate_button freeze-btn')
-          }
-          else {
-            $("#paginate-next-btn").addClass('paginate_button freeze-btn')
-          }
-
-          if (data.response_data.pagination.has_prev) {
-            $("#paginate-prev-btn").attr('href', `javascript:pagination(${data.response_data.pagination.prev_num})`)
-            $("#paginate-prev-btn").removeClass('paginate_button freeze-btn')
-          }
-          else {
-            $("#paginate-prev-btn").addClass('paginate_button freeze-btn')
-          }
-        }
-      }
-    })
-  })
 
   $("#transfer_form").submit(function (event) {
     $('#transferbtn').attr("disabled", true);
@@ -832,6 +787,7 @@
       assigned_to: '{{response_data["filter_data"]["assigned_to"]}}',
       Task: '{{response_data["filter_data"]["Task"]}}',
       new: '{{response_data["filter_data"]["new"]}}',
+      day: '{{response_data["filter_data"]["day"]}}',
       page: ref
     };
     $.ajax('/api/leads/read', {

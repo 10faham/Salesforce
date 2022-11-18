@@ -420,10 +420,11 @@ REQUIRED_FIELDS_LIST__CLIENTS = [
 #temp fields
 
 PROJECT = [
-    'Anabia Residency',
+    'Anabia Residency & Mall',
     'Crown Residency',
     'Tricon',
     'MZN Tower',
     'MZN Villas',
-    'Gul Mohar'
+    'Gul Mohar',
+    'New Nazimabad Appartments'
 ]

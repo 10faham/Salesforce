@@ -102,6 +102,11 @@ class FollowUpController(Controller):
         if data.get('phone_number'):
             filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
 
+        if data.get('day'):
+            filter_day = data.get('day')
+        else:
+            filter_day = 'overdue'
+
         user_ids = [str(id[constants.ID]) for id in user_childs]
         filter[constants.FOLLOW_UP__ASSIGNED_TO+"__in"] = user_ids
 

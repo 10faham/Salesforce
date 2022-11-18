@@ -12,7 +12,7 @@ from ppBackend.LeadsManagement.controllers.LeadsHistoryController import LeadsHi
 from ppBackend.UserManagement.controllers.UserController import UserController
 from ppBackend.generic.services.utils import constants, response_codes, response_utils, common_utils, pipeline
 from ppBackend import config
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class LeadsController(Controller):
@@ -128,15 +128,31 @@ class LeadsController(Controller):
             per_page = 50
 
         if data.get('client_name'):
-            filter[constants.LEAD__FIRST_NAME + '__in'] = [data.get('client_name')]
+            filter[constants.LEAD__FIRST_NAME + '__icontains'] = data.get('client_name')
 
         if data.get('lead_id'):
             filter[constants.LEAD__ID] = data.get('lead_id')
 
         if data.get('phone_number'):
             filter[constants.LEAD__PHONE_NUMBER] = data.get('phone_number')
+
+        if data.get('day'):
+            now = datetime.utcnow().date()
+            if data.get('day') == 'overdue':
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = now
+            if data.get('day') == 'today':
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = now
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=1))
+            if data.get('day') == 'tomorrow':
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = (now + timedelta(days=1))
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=2))
+            if data.get('day') == 'all':
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = (now + timedelta(days=1))
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=2))                
+                del filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] 
+                del filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"]
+
         queryset = cls.db_read_records(read_filter={**filter}).order_by('-id').paginate(page=page, per_page=per_page)
-        # paginated = queryset.paginate(page=1, per_page=50)
         lead_dataset = [obj.display_min() for obj in queryset.items]
         temp = UserController.get_user_childs(
             user=common_utils.current_user(), return_self=True)

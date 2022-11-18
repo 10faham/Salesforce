@@ -1366,3 +1366,9 @@ form .txt_field {
   border-bottom: 1px solid #eee;
   margin: 0 -20px 20px -20px;
 }
+
+.tabs {
+  float:left;
+}
+
+

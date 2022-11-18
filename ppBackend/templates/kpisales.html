@@ -115,8 +115,8 @@
                                             </td>
                                             <td>
                                             {% if response_data.kpi[user]['Meeting']['Meeting_Done'] %}
-                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done"
-                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done']}}</a>
+                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done,Meeting_Confirmed"
+                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done'] + response_data.kpi[user]['Meeting']['Meeting_Confirmed']}}</a>
                                             {% else %}
                                             0 
                                             {% endif %}

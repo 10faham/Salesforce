@@ -67,8 +67,8 @@ def leads_create_view(data):
 @leads_bp.route("/read", methods=["GET", "POST"])
 @decorators.is_authenticated
 # @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
-@decorators.keys_validator()
-def read_view(data):
+# @decorators.keys_validator()
+def read_view():
     if request.method == "POST":
         data = request.form
         res = LeadsController.read_controller(data=data)
@@ -77,6 +77,18 @@ def read_view(data):
     res = LeadsController.read_controller(data=data)
     return render_template("viewleads.html", **res)
 
+@leads_bp.route("/followups", methods=["GET", "POST"])
+@decorators.is_authenticated
+# @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
+@decorators.keys_validator()
+def followup_view(data):
+    if request.method == "POST":
+        data = request.form
+        res = LeadsController.read_controller(data=data)
+        return res    
+    data = request.args
+    res = LeadsController.read_controller(data=data)
+    return render_template("viewfollow_ups.html", **res)
 
 @leads_bp.route("/update", methods=["PUT"])
 @decorators.is_authenticated
