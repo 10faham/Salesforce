@@ -1371,4 +1371,22 @@ form .txt_field {
   float:left;
 }
 
+.AtomBomb {
+color:#ffA600
+}
 
+.Hot {
+color:#ff0000
+}
+
+.Moderate{
+color:#008000
+}
+
+.Cold{
+color:#0000ff
+}
+
+.SubZero{
+color:#00ffff
+}

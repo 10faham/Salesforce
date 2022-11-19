@@ -211,10 +211,9 @@
                     <th style="width: 85px;">ID</th>
                     <th style="width: 85px;">Name</th>
                     <th style="width: 85px;">Assigned to</th>
-                    <th style="width: 85px;">Last Work</th>
+                    <th style="width: 150px;">Last Work</th>
                     <th style="width: 85px;">Project</th>
-                    <th style="width: 85px;">Level</th>
-                    <th style="width: 85px;">Phone</th>
+                    <th style="width: 110px;">Phone</th>
                     <th style="width: 85px;">Actions</th>
                   </tr>
                 </thead>
@@ -229,12 +228,11 @@
                     <td>{{obj.first_name}}</td>
                     <td>{{obj.assigned_to}}</td>
                     <td>
-                      <p>{{obj.followup_last_work}}</p>
+                      <p><i class="typcn typcn-thermometer {{obj.lead_level}}" data-toggle="tooltip" data-placement="top" title="{{obj.lead_level}}" data-original-title="{{obj.lead_level}}"></i>
+                        {{obj.followup_last_work}}</p>
                       <p>{{obj.followup_last_work_date}}</p>
                     </td>
                     <td>{{obj.project}}</td>
-                    <td class="{{obj.lead_level}}">{{obj.lead_level}}
-                      <p style="color: #ff0000">{{obj.new}}</p>
                     </td>
                     <td>
                       {% for number in obj.phone_number%}
@@ -803,18 +801,16 @@
           for (var i in data.response_data.data) {
             var numbers = [];
             for (var j in data.response_data.data[i].phone_number) {
-              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
+              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a><br>`)
             }
             table.row.add([
               `${data.response_data.data[i].id}`,
               `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
               `${data.response_data.data[i].first_name}`,
               `${data.response_data.data[i].assigned_to}`,
-              `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+              `<p><i class="typcn typcn-thermometer ${data.response_data.data[i].lead_level}" data-toggle="tooltip" data-placement="top" title="${data.response_data.data[i].lead_level}" data-original-title="${data.response_data.data[i].lead_level}"></i>
+                        ${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
               `${data.response_data.data[i].project}`,
-              `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
-                        <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
-                      </span>`,
               `${numbers.toString()}`,
               `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
                             class="mdi mdi-comment-outline"></i></a>

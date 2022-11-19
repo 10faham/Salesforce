@@ -129,7 +129,19 @@
               </select>
             </div>
           </div>
-          <div class="text-left">
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label class="col-sm-6 control-label">Next Task</label>
+              <select class="form-control" name="Next_task" title="Next_task">
+                {% if response_data['filter_data']['Next_task'] %}
+                <option value="{{response_data['filter_data']['Next_task']}}" selected>{{response_data['filter_data']['Next_task']}}</option>
+                {% endif %}
+                <option value="">All</option>
+                {% for obj in response_data['filter_fields']['Next_task'] %}
+                <option value="{{obj}}">{{obj}}</option>
+                {% endfor %}
+              </select>
+            </div>
           </div>
       </div>
     </div>
@@ -163,7 +175,7 @@
         </div>
         <div class="col-xs-3">
           <div class="form-group">
-            <label class="col-sm-3 control-label">Lead ID</label>
+            <label class="col-sm-6 control-label">Lead ID</label>
             {% if response_data['filter_data']['lead_id'] %}
             <input type="text" class="form-control" name="lead_id" value="{{response_data['filter_data']['lead_id']}}" placeholder="1234">
             {% else %}
@@ -175,6 +187,9 @@
           <input class="btn btn-success btn-filter" type="submit" value="Submit">
         </div>
         <div class="text-left tabs">
+          {% if response_data['filter_data']['day'] %}
+          <input type="hidden" name="day" value="{{response_data['filter_data']['day']}}">
+          {% endif %}
           {% if response_data['filter_data']['day'] == 'overdue' %}
           <input class="btn btn-success btn-filter active" type="submit" name="day" value="overdue" placeholder="Overdue">
           {% else %}
@@ -231,12 +246,13 @@
                   <tr>
                     <th style="width: 85px;">UID</th>
                     <th style="width: 85px;">ID</th>
-                    <th style="width: 85px;">Name</th>
+                    <th style="width: 85px;">Client</th>
                     <th style="width: 85px;">Assigned to</th>
-                    <th style="width: 85px;">Last Work</th>
+                    <th style="width: 150px;">Last Work</th>
+                    <th style="width: 85px;">Next Task</th>
+                    <th style="width: 85px;">Deadline</th>
                     <th style="width: 85px;">Project</th>
-                    <th style="width: 85px;">Level</th>
-                    <th style="width: 85px;">Phone</th>
+                    <th style="width: 110px;">Phone</th>
                     <th style="width: 85px;">Actions</th>
                   </tr>
                 </thead>
@@ -251,16 +267,17 @@
                     <td>{{obj.first_name}}</td>
                     <td>{{obj.assigned_to}}</td>
                     <td>
-                      <p>{{obj.followup_last_work}}</p>
+                      <p><i class="typcn typcn-thermometer {{obj.lead_level}}" data-toggle="tooltip" data-placement="top" title="{{obj.lead_level}}" data-original-title="{{obj.lead_level}}"></i>
+                        {{obj.followup_last_work}}</p>
                       <p>{{obj.followup_last_work_date}}</p>
                     </td>
+                    <td>{{obj.followup_next_task}}</td>
+                    <td>{{obj.next_deadline}}</td>
                     <td>{{obj.project}}</td>
-                    <td class="{{obj.lead_level}}">{{obj.lead_level}}
-                      <p style="color: #ff0000">{{obj.new}}</p>
                     </td>
                     <td>
                       {% for number in obj.phone_number%}
-                      <a href="tel:{{number}}">{{number}}</a>
+                      <br> <a href="tel:{{number}}">{{number}}</a>
                       {% endfor %}
                     </td>
                     <td>
@@ -824,18 +841,18 @@
           for (var i in data.response_data.data) {
             var numbers = [];
             for (var j in data.response_data.data[i].phone_number) {
-              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a>`)
+              numbers.push(`<a href="tel:${data.response_data.data[i].phone_number[j]}">${data.response_data.data[i].phone_number[j]}</a><br>`)
             }
             table.row.add([
               `${data.response_data.data[i].id}`,
               `${data.response_data.data[i].lead_id} <p>${data.response_data.data[i].created_on}</p>`,
               `${data.response_data.data[i].first_name}`,
               `${data.response_data.data[i].assigned_to}`,
-              `<p>${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+              `<p><i class="typcn typcn-thermometer ${data.response_data.data[i].lead_level}" data-toggle="tooltip" data-placement="top" title="${data.response_data.data[i].lead_level}" data-original-title="${data.response_data.data[i].lead_level}"></i>
+                        ${data.response_data.data[i].followup_last_work}</p><p>${data.response_data.data[i].followup_last_work_date}</p>`,
+              `${data.response_data.data[i].followup_next_task}`,
+              `${data.response_data.data[i].next_deadline}`,
               `${data.response_data.data[i].project}`,
-              `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
-                        <p style="color: #ff0000">${data.response_data.data[i].new || ""}</p>
-                      </span>`,
               `${numbers.toString()}`,
               `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
                             class="mdi mdi-comment-outline"></i></a>

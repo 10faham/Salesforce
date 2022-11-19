@@ -57,6 +57,7 @@ class LeadsController(Controller):
             "project":constants.PROJECT,
             "level": constants.LEAD__LEVEL__LIST,
             "Task": constants.FOLLOW_UP__TYPE_LIST,
+            "Next_task": constants.FOLLOW_UP__NEXT_TASK_LIST,
             "Team": [],
         }
         if data.get(constants.DATE_FROM) and data.get('new') != 'true' and data.get('transfered') != 'true':
@@ -106,6 +107,16 @@ class LeadsController(Controller):
                     "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
             filter[constants.LEAD__FOLLOWUP_TYPE] = data.get('Task')
         
+        if data.get('Next_task'):
+            if data.get(constants.DATE_FROM):
+                datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+                dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+                filter[constants.UPDATED_ON +
+                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.UPDATED_ON +
+                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+            filter[constants.LEAD__FOLLOWUP_NEXT_TASK] = data.get('Next_task')
+
         if data.get(constants.LEAD__LEVEL):
             filter[constants.LEAD__LEVEL] = data.get(constants.LEAD__LEVEL)
 
