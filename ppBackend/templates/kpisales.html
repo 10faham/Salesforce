@@ -75,7 +75,7 @@
                                             <th rowspan="2">Name</th>
                                             <th colspan="3">Leads</th>
                                             <th colspan="2">Calls</th>
-                                            <th colspan="1">Meetings</th>
+                                            <th colspan="2">Meetings</th>
                                             <th colspan="2">Whatsapp</th>
                                         </tr>
                                         <tr>
@@ -85,6 +85,7 @@
                                             <th>Connected</th>
                                             <th>Attempt</th>
                                             <th>Done</th>
+                                            <th>Arranged</th>
                                             <th>Calls</th>
                                             <th>Msg</th>
                                         </tr>
@@ -114,18 +115,41 @@
                                             {% endif %}
                                             </td>
                                             <td>
-                                            {% if response_data.kpi[user]['Meeting']['Meeting_Done'] %}
-                                                {% if response_data.kpi[user]['Meeting']['Meeting_Confirmed']%}
+                                            {% if response_data.kpi[user]['Meeting']['Meeting_Done'] or response_data.kpi[user]['Meeting']['Meeting_Confirmed']%}
+                                                {% if response_data.kpi[user]['Meeting']['Meeting_Confirmed'] and response_data.kpi[user]['Meeting']['Meeting_Done'] %}
                                                 <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done,Meeting_Confirmed"
                                                     target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done'] + response_data.kpi[user]['Meeting']['Meeting_Confirmed']}}</a>
                                                 {% else %}
+                                                {% if response_data.kpi[user]['Meeting']['Meeting_Confirmed'] %}
+                                                <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done,Meeting_Confirmed"
+                                                    target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Confirmed']}}</a> 
+                                                {% else %}     
                                                 <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Meeting&sub_task=Meeting_Done,Meeting_Confirmed"
                                                     target="_blank">{{response_data.kpi[user]['Meeting']['Meeting_Done']}}</a>      
+                                                {% endif %}                                          
                                                 {% endif %}                                          
                                             {% else %}
                                             0 
                                             {% endif %}
                                             </td>
+                                            <td>
+                                                {% if response_data.kpi[user]['ArrangeMeeting'] or response_data.kpi[user]['MeetClient'] %}
+                                                    {% if response_data.kpi[user]['MeetClient'] and response_data.kpi[user]['ArrangeMeeting'] %}
+                                                    <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=&sub_task=&Next_task=ArrangeMeeting,MeetClient"
+                                                        target="_blank">{{response_data.kpi[user]['ArrangeMeeting'] + response_data.kpi[user]['MeetClient']}}</a>
+                                                    {% else %}
+                                                    {% if response_data.kpi[user]['MeetClient'] %}
+                                                    <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=&sub_task=&Next_task=ArrangeMeeting,MeetClient"
+                                                        target="_blank">{{response_data.kpi[user]['MeetClient']}}</a>
+                                                    {% else %}
+                                                    <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=&sub_task=&Next_task=ArrangeMeeting,MeetClient"
+                                                        target="_blank">{{response_data.kpi[user]['ArrangeMeeting']}}</a>
+                                                    {% endif %}                                          
+                                                    {% endif %}                                          
+                                                {% else %}
+                                                0 
+                                                {% endif %}
+                                                </td>
                                             <td>
                                             {% if response_data.kpi[user]['Call']['Whatsapp_call'] %}
                                                 <a href="/api/reports/detailed?date_start={{response_data.datefrom}}&date_end={{response_data.dateto}}&assigned_to={{user}}&transfered=&new=&Task=Call&sub_task=Whatsapp_call"

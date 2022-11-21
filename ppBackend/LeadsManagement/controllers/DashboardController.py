@@ -79,7 +79,7 @@ class DashboardController(Controller):
     def get_dashboard_stats(cls):
         user = common_utils.current_user()
         data = {
-            "user":user[constants.USER__NAME],
+            "user":[user[constants.USER__NAME], str(user[constants.ID])],
             "total_leads" : 0,
             "new_leads" : 0,
         }
@@ -92,24 +92,13 @@ class DashboardController(Controller):
             if len(queryset) > 1:
                 data['total_leads'] = queryset[0]["total"] + queryset[1]["total"]
                 data['new_leads'] = queryset[0]["new"]
+                data['pending'] = queryset[0]['pending'] + queryset[1]['pending']
+                data['overdue'] = queryset[0]['overdue'] + queryset[1]['overdue']
             else:
                 data['total_leads'] = queryset[0]["total"]
                 data['new_leads'] = queryset[0]["new"]
-
-        followup_dataset = []
-        overdue = 0
-        today = 0
-
-        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(pipeline.LAST_FOLLOWUP)
-        followup_dataset = [obj for obj in queryset]
-        for item in followup_dataset:
-            now = datetime.utcnow().date()
-            if item['deadline'].date() < now:
-                overdue += 1
-            if item['deadline'].date() == now:
-                today += 1
-        data["overdue"] = overdue
-        data["today"] = today
+                data['pending'] = queryset[0]['pending']
+                data['overdue'] = queryset[0]['overdue']
 
         return response_utils.get_response_object(
             response_code=response_codes.CODE_SUCCESS,

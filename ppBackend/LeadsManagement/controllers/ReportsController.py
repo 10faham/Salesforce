@@ -193,12 +193,16 @@ class ReportsController(Controller):
             if user["_id"]['sub_type'] == 'Contacted_client' or user["_id"]['sub_type'] == 'Followed_up':
                 kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
                                                             ['type']]['_connected'] += user["count"]
+        queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(
+            pipeline.KPI_REPORT_FOLLOW_UP_MEETINGS)
+        for user in queryset:
+            kpi_dataset[str(user["_id"]["created_by"])][user["_id"]
+                                            ['next_task']] = user["count"]
         if data2.get('response_code'):
             for obj in data2.get('response_data')[0]:
                 kpi_dataset[obj['id']]['lead_count'] = obj['lead_count']
             for obj in data2.get('response_data')[1]:
                 kpi_dataset[obj['id']]['transfered'] = obj['transfered']
-
         out_data = {
             'kpi': kpi_dataset,
             'dateto': dateto,

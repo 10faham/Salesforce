@@ -30,30 +30,9 @@
                         <div class="clearfix"></div>
                     </div>
                 </div><!-- end col -->
-                <!-- 
-                <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="card-box widget-box-one">
-                        <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
-                        <div class="wigdet-one-content">
-                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Leads">
-                                Total Leads</p>
-                            <h2>{{response_data.total_leads}}</h2>
-                        </div>
-                    </div>
-                </div>end col -->
-
-                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="card-box widget-box-one">
-                        <i class="mdi mdi-layers widget-one-icon"></i>
-                        <div class="wigdet-one-content">
-                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
-                                New Leads</p>
-                            <h2>{{response_data.new_leads}}</h2>
-                        </div>
-                    </div>
-                </div>end col -->
 
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="#">
                     <div class="card-box widget-box-one">
                         <i class="mdi mdi-account-multiple widget-one-icon"></i>
                         <div class="wigdet-one-content">
@@ -62,21 +41,11 @@
                             </h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
 
-                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="card-box widget-box-one">
-                        <i class="mdi mdi-account-convert widget-one-icon"></i>
-                        <div class="wigdet-one-content">
-                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Pending Tasks">
-                                Pending Tasks</p>
-                            <h2>{{response_data.today}}</h2>
-                        </div>
-                    </div>
-                </div>end col -->
-
-
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="/api/leads/followups?&assigned_to={{response_data.user[1]}}&day=today">
                     <div class="card-box widget-box-one">
                         <i class="mdi mdi-account-convert widget-one-icon"></i>
                         <div class="wigdet-one-content">
@@ -85,20 +54,11 @@
                             <h2 class="text-warning"><span data-plugin="counterup">{{response_data.today}}</span> </h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
 
-                <!-- <div class="col-lg-2 col-md-4 col-sm-6">
-                    <div class="card-box widget-box-one">
-                        <i class="mdi mdi-av-timer widget-one-icon"></i>
-                        <div class="wigdet-one-content">
-                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Overdue Tasks">
-                                Overdue Tasks</p>
-                            <h2>{{response_data.overdue}}</h2>
-                        </div>
-                    </div>
-                </div>end col -->
-
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="/api/leads/followups?&assigned_to={{response_data.user[1]}}&day=overdue">
                     <div class="card-box widget-box-one">
                         <i class="mdi mdi-av-timer widget-one-icon"></i>
                         <div class="wigdet-one-content">
@@ -106,18 +66,22 @@
                             <h2 class="text-danger"><span data-plugin="counterup">{{response_data.overdue}}</span> </h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
 
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="#">
                     <div class="card-box widget-box-one">
                         <div class="wigdet-one-content">
                             <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Monthly Target</p>
                             <h2 class="text-success"><span data-plugin="counterup">52410 </span></h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
 
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="#">
                     <div class="card-box widget-box-one">
                         <i class="mdi mdi-account-multiple widget-one-icon"></i>
                         <div class="wigdet-one-content">
@@ -126,8 +90,11 @@
                             </h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
+
                 <div class="col-lg-2 col-md-4 col-sm-6">
+                    <a href="#">
                     <div class="card-box widget-box-one">
                         <i class="mdi mdi-currency-usd widget-one-icon"></i>
                         <div class="wigdet-one-content">
@@ -136,10 +103,10 @@
                             <h2 class="text-warning"><span data-plugin="counterup">4</span> </h2>
                         </div>
                     </div>
+                    </a>
                 </div><!-- end col -->
             </div>
             <!------row div-->>
-
 
             <div class="graph">
                 <!----Graph starts----->

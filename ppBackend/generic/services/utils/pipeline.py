@@ -1,3 +1,5 @@
+from datetime import datetime, date, time, timedelta
+
 KPI_REPORT_LEAD = [
     {
         '$group': {
@@ -24,6 +26,25 @@ KPI_REPORT_FOLLOW_UP = [
                 'created_by': '$created_by', 
                 'type': '$type', 
                 'sub_type': '$sub_type'
+            }, 
+            'ids': {
+                '$push': {
+                    '$toString': '$_id'
+                }
+            }, 
+            'count': {
+                '$sum': 1
+            }
+        }
+    }
+]
+
+KPI_REPORT_FOLLOW_UP_MEETINGS = [
+    {
+        '$group': {
+            '_id': {
+                'created_by': '$created_by', 
+                'next_task': '$next_task'
             }, 
             'ids': {
                 '$push': {
@@ -74,6 +95,36 @@ DASHBOARD_LEAD_COUNT = [
                         {
                             '$eq': [
                                 '$updated_on', '$transfered_on'
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }, 
+            'overdue': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$lt': [
+                                {
+                                    '$dayOfMonth': '$next_deadline'
+                                }, {
+                                    '$dayOfMonth': datetime.now()
+                                }
+                            ]
+                        }, 1, 0
+                    ]
+                }
+            }, 
+            'pending': {
+                '$sum': {
+                    '$cond': [
+                        {
+                            '$eq': [
+                                {
+                                    '$dayOfMonth': '$next_deadline'
+                                }, {
+                                    '$dayOfMonth': datetime.now()
+                                }
                             ]
                         }, 1, 0
                     ]

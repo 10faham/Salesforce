@@ -187,9 +187,6 @@
           <input class="btn btn-success btn-filter" type="submit" value="Submit">
         </div>
         <div class="text-left tabs">
-          {% if response_data['filter_data']['day'] %}
-          <input type="hidden" name="day" value="{{response_data['filter_data']['day']}}">
-          {% endif %}
           {% if response_data['filter_data']['day'] == 'overdue' %}
           <input class="btn btn-success btn-filter active" type="submit" name="day" value="overdue" placeholder="Overdue">
           {% else %}
