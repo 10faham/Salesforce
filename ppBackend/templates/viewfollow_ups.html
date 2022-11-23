@@ -202,10 +202,10 @@
           {% else %}
           <input class="btn btn-success btn-filter" type="submit" name="day" value="tomorrow">
           {% endif %}
-          {% if response_data['filter_data']['day'] == 'all' %}
-          <input class="btn btn-success btn-filter active" type="submit" name="day" value="all">
+          {% if response_data['filter_data']['day'] == 'next' %}
+          <input class="btn btn-success btn-filter active" type="submit" name="day" value="next">
           {% else %}
-          <input class="btn btn-success btn-filter" type="submit" name="day" value="all">
+          <input class="btn btn-success btn-filter" type="submit" name="day" value="next">
           {% endif %}
         </div>
       </form>

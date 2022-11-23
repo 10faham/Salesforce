@@ -158,9 +158,12 @@ class LeadsController(Controller):
             if data.get('day') == 'tomorrow':
                 filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = (now + timedelta(days=1))
                 filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=2))
+            if data.get('day') == 'next':
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = (now + timedelta(days=1))
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=8))                
             if data.get('day') == 'all':
                 filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] = (now + timedelta(days=1))
-                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=2))                
+                filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"] = (now + timedelta(days=8))                
                 del filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__gte"] 
                 del filter[constants.LEAD__FOLLOWUP_NEXT_DEADLINE + "__lt"]
 
