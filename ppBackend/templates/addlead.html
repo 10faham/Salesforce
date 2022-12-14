@@ -320,44 +320,51 @@
     $("#yesterday").append(output);
     $("#radio1").attr('value', output);
     var phoneFieldCount = 1;
+    var phoneFieldObjects = [];
     $('#phone-section').append(`                                   
-            <div class="form-group">
+            <div id="phone${phoneFieldCount}" class="form-group">
             <label class="col-md-2 control-label">Phone Number</label>
             <div class="col-md-10">
                 <input id="phoneField${phoneFieldCount}" type="text" class="form-control">
             </div>
             </div>`)
     var input = document.querySelector("#phoneField" + phoneFieldCount);
-    var iti = window.intlTelInput(input, {
+    phoneFieldObjects.push(window.intlTelInput(input, {
         autoPlaceholder:"polite",
         formatOnDisplay:true,
         initialCountry:"pk",
         placeholderNumberType:"MOBILE",
         preferredCountries: ["pk","ae","sa","us","gb" ],
         utilsScript: "{{ url_for('static', filename='js/utils.js') }}",
-        hiddenInput:"phone_number",
-      });
+      }));
+
+    function removebtn(ref){
+        $("#phone" + ref).remove();
+        delindex = phoneFieldObjects.findIndex((field) => field.id==ref)
+        phoneFieldObjects.splice((delindex-1),1)
+    };
 
     $('#addbtn').click(function () {
         phoneFieldCount += 1;
         $('#phone-section').append(`                                   
-            <div class="form-group">
+            <div id="phone${phoneFieldCount}" class="form-group">
             <label class="col-md-2 control-label">Phone Number</label>
             <div class="col-md-10">
                 <input id="phoneField${phoneFieldCount}" type="text" class="form-control">
+                <a href="javascript:removebtn(${phoneFieldCount})" id="removebtn" style="font-size: 20px">
+                                        <i class="mdi mdi-close-circle-outline"></i></a>
             </div>
             </div>`)
         var input = document.querySelector("#phoneField" + phoneFieldCount);
-        var iti = window.intlTelInput(input, {
+        phoneFieldObjects.push( window.intlTelInput(input, {
             autoPlaceholder:"polite",
             formatOnDisplay:true,
             initialCountry:"pk",
             placeholderNumberType:"MOBILE",
             preferredCountries: ["pk","ae","sa","us","gb" ],
             utilsScript: "{{ url_for('static', filename='js/utils.js') }}",
-            hiddenInput:"phone_number",
-
-        });
+        }));
+        console.log(phoneFieldObjects);
     });
     const addLeadFormDOM = $("#addLeadForm")
     addLeadFormDOM.submit(function (event) {
@@ -365,11 +372,8 @@
         let formData = {}
         addLeadFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || [] ), value] )
         var numbers = [];
-        for (let i = 1; i <= phoneFieldCount; i++) {
-            var ele = document.querySelector('#phoneField'+ i);
-            var itl = window.intlTelInputGlobals.getInstance(ele);
-            console.log(i,itl.getNumber());
-            numbers.push(itl.getNumber())
+        for (let i = 0; i < phoneFieldObjects.length; i++) {
+            numbers.push(phoneFieldObjects[i].getNumber())
         }
         formData["phone_number"] = numbers;
         console.log("formData",formData);
