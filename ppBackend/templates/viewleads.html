@@ -241,7 +241,7 @@
                     </td>
                     <td>
                       <a href="javascript:viewFollowup(`{{obj.id}}`,`{{obj.first_name}}`,`{{obj.lead_id}}`);"><i
-                          class="mdi mdi-comment-outline"></i></a>
+                          class="mdi mdi-comment-outline" data-toggle="tooltip" data-placement="left" title="{{obj.lead_comment}}" data-original-title="{{obj.lead_comment}}"></i></a>
                       <a href="javascript:addFollowup('{{obj.id}}');"><i class="glyphicon glyphicon-plus"></i></a>
                       TLW: {{obj.followup_count}}
                     </td>
@@ -813,7 +813,7 @@
               `${data.response_data.data[i].project}`,
               `${numbers.toString()}`,
               `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
-                            class="mdi mdi-comment-outline"></i></a>
+                            class="mdi mdi-comment-outline" data-toggle="tooltip" data-placement="left" title="${data.response_data.data[i].lead_comment}" data-original-title="${data.response_data.data[i].lead_comment}"></i></a>
                         <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
                         TLW: ${data.response_data.data[i].followup_count}`,
             ]).draw();

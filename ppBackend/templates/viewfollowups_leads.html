@@ -106,7 +106,7 @@
                     </td>
                     <td>
                       <a href="javascript:viewFollowup(`{{obj.lead.id}}`,`{{obj.lead.first_name}}`,`{{obj.lead.lead_id}}`);"><i
-                          class="mdi mdi-comment-outline"></i></a>
+                          class="mdi mdi-comment-outline" data-toggle="tooltip" data-placement="left" title="{{obj.comment}}" data-original-title="{{obj.comment}}"></i></a>
                       TLW: {{obj.lead.followup_count}}
                     </td>
                   </tr>
@@ -247,7 +247,7 @@
                       </span>`,
               `${numbers.toString()}`,
               `<a href="javascript:viewFollowup('${data.response_data.data[i].id}','${data.response_data.data[i].first_name}','${data.response_data.data[i].lead_id}');"><i
-                            class="mdi mdi-comment-outline"></i></a>
+                            class="mdi mdi-comment-outline" data-toggle="tooltip" data-placement="left" title="${data.response_data.data[i].lead_comment}" data-original-title="${data.response_data.data[i].lead_comment}"></i></a>
                         <a href="javascript:addFollowup('${data.response_data.data[i].id}');"><i class="glyphicon glyphicon-plus"></i></a>
                         TLW: ${data.response_data.data[i].followup_count}`,
             ]).draw();
@@ -338,7 +338,7 @@
               `<span class="${data.response_data.data[i].lead_level}">${data.response_data.data[i].lead_level}
                       </span>`,
               `<a href="javascript:viewFollowup('${data.response_data.data[i].lead.id}','${data.response_data.data[i].lead.first_name}','${data.response_data.data[i].lead.lead_id}');"><i
-                            class="mdi mdi-comment-outline"></i></a>
+                            class="mdi mdi-comment-outline" data-toggle="tooltip" data-placement="left" title="${data.response_data.data[i].lead_comment}" data-original-title="${data.response_data.data[i].lead_comment}"></i></a>
                         TLW: ${data.response_data.data[i].lead.followup_count}`,
             ]).draw();
           };

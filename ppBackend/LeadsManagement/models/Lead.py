@@ -156,5 +156,6 @@ class Leads(models.Model):
             constants.LEAD__FOLLOWUP_NEXT_TASK: self[constants.LEAD__FOLLOWUP_NEXT_TASK],
             constants.LEAD__FOLLOWUP_COUNT: self[constants.LEAD__FOLLOWUP_COUNT],
             constants.LEAD__FOLLOWUP_NEXT_DEADLINE: self[constants.LEAD__FOLLOWUP_NEXT_DEADLINE],
+            constants.LEAD__COMMENT: self[constants.LEAD__COMMENT][0:250] + "...",
             'new': 'NEW' if self[constants.UPDATED_ON] == constants.LEAD__TRANSFERED else ''
         }
