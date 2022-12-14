@@ -90,6 +90,18 @@ class ReportsController(Controller):
         else:
             per_page = 50
 
+        if data.get('Next_task'):
+            if data.get(constants.DATE_FROM):
+                datefrom = data.get(constants.DATE_FROM) + ' 00:00:00'
+                dateto = data.get(constants.DATE_TO) + ' 23:59:59'
+                filter[constants.UPDATED_ON +
+                    "__gte"] = common_utils.convert_to_epoch1000(datefrom, format=config.FILTER_DATETIME_FORMAT)
+                filter[constants.UPDATED_ON +
+                    "__lte"] = common_utils.convert_to_epoch1000(dateto, format=config.FILTER_DATETIME_FORMAT)
+            del filter[constants.CREATED_ON + "__gte"]
+            del filter[constants.CREATED_ON + "__lte"]
+            filter[constants.FOLLOW_UP__NEXT_TASK + "__in"] = data.get('Next_task').split(',')
+
         if data.get('lead_id'):
             filter[constants.LEAD__ID] = data.get('lead_id')
         queryset = FollowUpController.db_read_records(read_filter={**filter}).aggregate(

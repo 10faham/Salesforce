@@ -63,13 +63,7 @@
                                         </div>
                                     </div>
                                     <div id="phone-section">
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Phone Number</label>
-                                        <div class="col-md-10">
-                                            <input type="text" class="form-control" name="phone_number"
-                                                placeholder="Phone Number">
-                                        </div>
-                                    </div>
+
                                 </div>
                                     <div class="form-group">
                                         <a href="#" id="addbtn">
@@ -325,23 +319,59 @@
         
     $("#yesterday").append(output);
     $("#radio1").attr('value', output);
+    var phoneFieldCount = 1;
+    $('#phone-section').append(`                                   
+            <div class="form-group">
+            <label class="col-md-2 control-label">Phone Number</label>
+            <div class="col-md-10">
+                <input id="phoneField${phoneFieldCount}" type="text" class="form-control">
+            </div>
+            </div>`)
+    var input = document.querySelector("#phoneField" + phoneFieldCount);
+    var iti = window.intlTelInput(input, {
+        autoPlaceholder:"polite",
+        formatOnDisplay:true,
+        initialCountry:"pk",
+        placeholderNumberType:"MOBILE",
+        preferredCountries: ["pk","ae","sa","us","gb" ],
+        utilsScript: "{{ url_for('static', filename='js/utils.js') }}",
+        hiddenInput:"phone_number",
+      });
 
     $('#addbtn').click(function () {
+        phoneFieldCount += 1;
         $('#phone-section').append(`                                   
             <div class="form-group">
             <label class="col-md-2 control-label">Phone Number</label>
             <div class="col-md-10">
-                <input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
+                <input id="phoneField${phoneFieldCount}" type="text" class="form-control">
             </div>
             </div>`)
+        var input = document.querySelector("#phoneField" + phoneFieldCount);
+        var iti = window.intlTelInput(input, {
+            autoPlaceholder:"polite",
+            formatOnDisplay:true,
+            initialCountry:"pk",
+            placeholderNumberType:"MOBILE",
+            preferredCountries: ["pk","ae","sa","us","gb" ],
+            utilsScript: "{{ url_for('static', filename='js/utils.js') }}",
+            hiddenInput:"phone_number",
+
+        });
     });
     const addLeadFormDOM = $("#addLeadForm")
     addLeadFormDOM.submit(function (event) {
         event.preventDefault();
         let formData = {}
         addLeadFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || [] ), value] )
-
         console.log(formData,"formData")
+        var numbers = [];
+        for (let i = 0; i < phoneFieldCount; i++) {
+            var ele = document.querySelector('#phoneField'+ phoneFieldCount);
+            var itl = window.intlTelInputGlobals.getInstance(ele);
+            numbers.push(itl.getNumber())
+        }
+        formData["phone_number"] = numbers;
         $.ajax("/api/leads/create", {
         method: "POST",
         data: JSON.stringify(formData),
