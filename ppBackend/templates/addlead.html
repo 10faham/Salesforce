@@ -364,14 +364,15 @@
         event.preventDefault();
         let formData = {}
         addLeadFormDOM.serializeArray().forEach(({ name, value }) => name !== "phone_number" ? formData[name] = value : formData[name] = [...(formData[name] || [] ), value] )
-        console.log(formData,"formData")
         var numbers = [];
-        for (let i = 0; i < phoneFieldCount; i++) {
-            var ele = document.querySelector('#phoneField'+ phoneFieldCount);
+        for (let i = 1; i <= phoneFieldCount; i++) {
+            var ele = document.querySelector('#phoneField'+ i);
             var itl = window.intlTelInputGlobals.getInstance(ele);
+            console.log(i,itl.getNumber());
             numbers.push(itl.getNumber())
         }
         formData["phone_number"] = numbers;
+        console.log("formData",formData);
         $.ajax("/api/leads/create", {
         method: "POST",
         data: JSON.stringify(formData),
