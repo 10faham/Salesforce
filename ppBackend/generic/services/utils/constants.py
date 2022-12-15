@@ -423,7 +423,7 @@ REQUIRED_FIELDS_LIST__CLIENTS = [
 PROJECT = [
     'Anabia Residency & Mall',
     'Crown Residency',
-    'Tricon',
+    'Tricon Business Center',
     'MZN Tower',
     'MZN Villas',
     'Gul Mohar',

@@ -44,7 +44,8 @@ def dashboard_view(data):
 
 @app.route("/addlead", methods=["GET"])
 def addlead_view():
-    return render_template('addlead.html')
+    res = {"projects" : constants.PROJECT}
+    return render_template('addlead.html', **res)
 
 @app.route("/api/static-data", methods=["GET"])
 def static_data_view():

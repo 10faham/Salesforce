@@ -256,8 +256,11 @@
                                         <label class="col-sm-2 control-label">Project</label>
                                         <div class="col-sm-10">
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control"
-                                                    title="Project" name="next_project" value="" />
+                                                <select class="form-control" name="project" title="project">
+                                                    {% for obj in projects %}
+                                                    <option value="{{obj}}">{{obj}}</option>
+                                                    {% endfor %}
+                                                  </select>
                                             </div>
                                         </div>
                                     </div>
@@ -319,7 +322,7 @@
         
     $("#yesterday").append(output);
     $("#radio1").attr('value', output);
-    var phoneFieldCount = 1;
+    var phoneFieldCount = 0;
     var phoneFieldObjects = [];
     $('#phone-section').append(`                                   
             <div id="phone${phoneFieldCount}" class="form-group">
@@ -341,7 +344,7 @@
     function removebtn(ref){
         $("#phone" + ref).remove();
         delindex = phoneFieldObjects.findIndex((field) => field.id==ref)
-        phoneFieldObjects.splice((delindex-1),1)
+        phoneFieldObjects.splice((delindex),1)
     };
 
     $('#addbtn').click(function () {
