@@ -46,8 +46,11 @@ class UserController(Controller):
 
     @classmethod
     def update_controller(cls, data):
+        if data[constants.USER__PASSWORD]:
+            data[constants.USER__PASSWORD] = common_utils.encrypt_password(
+                password=data[constants.USER__PASSWORD])
         is_valid, error_messages, obj = cls.db_update_single_record(
-            read_filter={constants.ID: data[constants.ID]}, update_filter=data
+            read_filter={constants.ID: data[constants.ID]}, update_filter=data, default_validation=False
         )
         if not is_valid:
             return response_utils.get_response_object(

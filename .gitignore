@@ -145,3 +145,6 @@ ppBackend - Copy/
 
 #zip files
 *.zip
+
+#ignore folders
+ignore/

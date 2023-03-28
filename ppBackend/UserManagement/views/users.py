@@ -42,7 +42,7 @@ def read_view(data):
     return render_template("view_user.html", **res)
 
 
-@users_bp.route("/update", methods=["PUT"])
+@users_bp.route("/update", methods=["POST"])
 @decorators.is_authenticated
 @decorators.roles_allowed([constants.ROLE_ID_ADMIN])
 @decorators.keys_validator(
