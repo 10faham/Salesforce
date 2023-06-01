@@ -49,13 +49,14 @@ def keys_validator(required_fields=[], optional_fields=[],
                 key: data.get(key) for key in required_fields
                 if data.get(key) not in [None, "", [], {}]}
 
-            if set(validated_keys) != set(required_fields):
-                message = "Missing parameters keys: {}".format(
-                    ' '.join(set(required_fields) - set(validated_keys)))
-                response = response_utils.get_response_object(
-                    response_code=response_codes.CODE_MISSING_PARAMETERS,
-                    response_message=message)
-                return response
+            if len(required_fields) > 0:
+                if set(validated_keys) != set(required_fields):
+                    message = "Missing parameters keys: {}".format(
+                        ' '.join(set(required_fields) - set(validated_keys)))
+                    response = response_utils.get_response_object(
+                        response_code=response_codes.CODE_MISSING_PARAMETERS,
+                        response_message=message)
+                    return response 
             available_fields = []
             available_fields.extend(required_fields)
             available_fields.extend(optional_fields)
