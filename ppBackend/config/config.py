@@ -49,7 +49,7 @@ if ENVIRONMENT == "STAGING":
     static_data_path = os.path.join(
         current_dir_path, "static/static_data.json")
     upload_files_path = os.path.join(current_dir_path, "static/uploads")
-    MONGO_DB_URI = f"mongodb://192.168.100.8:27017/ppbackend"
+    MONGO_DB_URI = f"mongodb://192.168.18.19:27017/ppbackend"
     # MONGO_DB_URI = f"mongodb+srv://{MONGO_DB_USER}:{MONGO_DB_PASSWORD}@clusterX.aq4vs.mongodb.net/ppbackend?"\
     #     "retryWrites=true&w=majority"
 
