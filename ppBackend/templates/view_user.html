@@ -49,6 +49,7 @@
                                             <th>Manager ID</th>
                                             <th>Phone</th>
                                             <th>Actions</th>
+                                            <th>Details</th>
                                         </tr>
                                     </thead>
                                     <tbody id="lead-detail">
@@ -71,7 +72,51 @@
                                                     <input type="submit" class="mdi mdi-file-restore" value="Suspend">
                                                     </form>
                                                 </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" onclick="setUserDetails('{{obj.id}}', '{{obj.name}}', '{{obj.email_address}}', '{{obj.phone_number}}')">Update {{obj.name}}</button>
+                                                </td>
+                                                
                                         </tr>
+                                        <!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update User: <span id="userName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for updating the user -->
+                <form class="" action="/update" method="POST" id="update_user_modal" onsubmit="handleUpdateResponse()">
+                    <input type="hidden" name="id" value="{{obj.id}}">
+                    <!-- Other input fields for updating user details -->
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{obj.name}}" required>
+                    
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" value="{{obj.email_address}}" required>
+                
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" value="{{obj.phone_number}}" required>
+                
+                    <!-- Password field -->
+                    <label for="password">Password:</label>
+                    <input type="text" id="password" name="password" value="{{obj.password}}" required>
+                    
+                    <!-- Hidden field to store update status -->
+                    <input type="hidden" id="update_user_id" name="id" value="">
+                    
+                    <!-- Add other input fields as needed -->
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -123,5 +168,28 @@
     // TableManageButtons.init();
 
 </script>
+
+<script>
+    function setUserDetails(id, name, email, phone) {
+        document.getElementById('update_user_id').value = id;
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        document.getElementById('phone').value = phone;
+    }
+
+    function handleUpdateResponse() {
+        const updateStatus = document.getElementById('updateStatus');
+        const successAlert = 'User updated successfully!';
+        const failureAlert = 'Failed to update user.';
+
+        // Check the update status and show alert
+        if (updateStatus.value === 'success') {
+            alert(successAlert);
+        } else if (updateStatus.value === 'failure') {
+            alert(failureAlert);
+        }
+    }
+</script>
+
 
 {% endblock %}

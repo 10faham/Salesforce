@@ -76,15 +76,17 @@
     <script>
         response_code = parseInt("{{response_code}}")
         response_message = "{{response_message}}"
+        
         {% if response_code == 200 %}
         sessionStorage.setItem("TokenObj", '{{response_data|tojson}}')
         document.cookie = "access_token={{response_data.access_token}}"
         document.location = "/home"
         {% else %}
         console.log({{ response_data }})
+        console.log([{ 'password': 'Password must contain a single UpperCase character' }]);
         {% endif %}
-    </script>
 
+    </script>
 </body>
 
 </html>
