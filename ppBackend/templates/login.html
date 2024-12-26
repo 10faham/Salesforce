@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+
+    <!-- App favicon -->
+    <link href="{{ url_for('static', filename='images/favicon.ico') }}" rel="shortcut icon" />
+
+    <!-- App title -->
+    <title>SalesForce - PropPioneers</title>
+
+    <!-- App css -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/core.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/components.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/icons.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/pages.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/menu.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='/js/modernizr.min.js') }}" rel="stylesheet" type="text/css" />
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+
+</head>
+
+<body class="login-body">
+    <div class="body-image" style="background-image:url('{{url_for('static', filename='images/01.jpg')}}')">
+        <div class="center">
+            <div class="logo">
+                <img src="{{url_for('static', filename='images/logopp.png')}}" class="img_main">
+            </div>
+            <h1>PropPioneers.com</h1>
+            <h3>خواب سے تعبیر تک</h3>
+            <form action="" method="post">
+                <div class="txt_field">
+                    <input class="form-control log-col" type="email" name="email_address" required
+                        placeholder="Username">
+                    <span></span>
+                    <label>Email</label>
+                </div>
+                <div class="txt_field">
+                    <input class="form-control log-col" type="password" name="password" required placeholder="Password">
+                    <span></span>
+                    <label>Password</label>
+                </div>
+                <div class="log">
+                    <input class="btn btn-success login waves-effect waves-light" type="submit" value="Login">
+                </div>
+                <div class="clearfix"></div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- jQuery  -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/detect.js"></script>
+    <script src="assets/js/fastclick.js"></script>
+    <script src="assets/js/jquery.blockUI.js"></script>
+    <script src="assets/js/waves.js"></script>
+    <script src="assets/js/jquery.slimscroll.js"></script>
+    <script src="assets/js/jquery.scrollTo.min.js"></script>
+
+    <!-- App js -->
+    <script src="assets/js/jquery.core.js"></script>
+    <script src="assets/js/jquery.app.js"></script>
+
+    <script>
+        response_code = parseInt("{{response_code}}")
+        response_message = "{{response_message}}"
+        {% if response_code == 200 %}
+        sessionStorage.setItem("TokenObj", '{{response_data|tojson}}')
+        document.cookie = "access_token={{response_data.access_token}}"
+        document.location = "/home"
+        {% else %}
+        console.log({{ response_data }})
+        {% endif %}
+    </script>
+
+</body>
+
+</html>

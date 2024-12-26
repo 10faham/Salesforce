@@ -1,0 +1,88 @@
+{
+    "statuses": [
+        {
+            "id": 1,
+            "name": "active"
+        },
+        {
+            "id": 2,
+            "name": "inactive"
+        },
+        {
+            "id": 3,
+            "name": "suspended"
+        }
+    ],
+    "user_roles_and_rights": [
+        {
+            "manager": null,
+            "name": "admin",
+            "rights": [],
+            "title": "Admin User",
+            "user_role_id": 1
+        },
+        {
+            "manager": 1,
+            "name": "gm",
+            "rights": [],
+            "title": "General Manager",
+            "user_role_id": 2
+        },
+        {
+            "manager": 2,
+            "name": "dgm",
+            "rights": [],
+            "title": "Deputy General Manager",
+            "user_role_id": 3
+        },
+        {
+            "manager": 3,
+            "name": "am",
+            "rights": [],
+            "title": "Manager User",
+            "user_role_id": 4
+        },
+        {
+            "manager": 4,
+            "name": "agent",
+            "rights": [],
+            "title": "Agent",
+            "user_role_id": 5
+        },
+        {
+            "manager": 3,
+            "name": "dgm_agent",
+            "rights": [],
+            "title": "DGM Agent",
+            "user_role_id": 6
+        },
+        {
+            "manager": 3,
+            "name": "dgm_lancer",
+            "rights": [],
+            "title": "DGM Freelancer",
+            "user_role_id": 7
+        },
+        {
+            "manager": 4,
+            "name": "am_lancer",
+            "rights": [],
+            "title": "AM freelancer",
+            "user_role_id": 8
+        },
+        {
+            "manager": null,
+            "name": "default",
+            "rights": [],
+            "title": "default",
+            "user_role_id": 999
+        }
+    ],
+
+    "gender": [
+        "Male",
+        "Female",
+        "Other"
+    ]
+
+}
